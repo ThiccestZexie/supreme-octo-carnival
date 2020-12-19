@@ -12,6 +12,11 @@ import java.net.URL;
 public class ResourceTester
 {
     public static void main(String[] args) {
+        testResourceText();
+        testResourceImage();
+    }
+
+    private static void testResourceText() {
         // Reading a text file from *resources* is a bit cumbersome.
         // We don't know if the file is stored directly in the file system
         // or inside an *archive* (JAR file), so should access it
@@ -28,20 +33,30 @@ public class ResourceTester
         try (final BufferedReader reader = new BufferedReader(new InputStreamReader(readme.openStream()))) {
             System.out.println("Contents of the file:");
 
-            // Read and print strings until you get null
+            // Read and print strings until you get null, which indicates "end of file"
+            // for Reader objects
             String str = reader.readLine();
             while (str != null) {
                 System.out.println(str);
                 str = reader.readLine();
             }
         } catch (IOException e) {
-            // Needs to be handled somehow...
+            // TODO: Needs to be handled somehow.  This code is incomplete and should be
+            //  extended by course participants.
             e.printStackTrace();
         }
+    }
 
+
+    private static void testResourceImage() {
+        // Like above, we need to access the image through a resource.
         final URL image = ClassLoader.getSystemResource("images/hello_world.png");
 
+        // The ImageIcon class can read an entire image directly from any URL.
         ImageIcon icon = new ImageIcon(image);
+
+        // We won't go all the way to showing the image here, but we can print
+        // some information about it!
         System.out.println("Read an image with width " + icon.getIconWidth() + " and height " + icon.getIconHeight());
     }
 }
