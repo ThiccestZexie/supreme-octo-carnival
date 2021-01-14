@@ -1,4 +1,4 @@
-package se.liu.liuid123;
+package se.liu.tddd78.examples;
 
 /**
  * A simple test class used to verify that your development environment is working.

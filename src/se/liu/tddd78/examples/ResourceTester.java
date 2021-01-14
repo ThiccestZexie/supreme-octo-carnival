@@ -1,4 +1,4 @@
-package se.liu.liuid123;
+package se.liu.tddd78.examples;
 
 import javax.swing.*;
 import java.io.BufferedReader;
