@@ -1,0 +1,1 @@
+This file makes sure the folder does not disappear from Git if it becomes empty.
