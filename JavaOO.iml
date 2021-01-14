@@ -11,5 +11,6 @@
     <orderEntry type="library" name="miglayout-swing" level="project" />
     <orderEntry type="library" name="gson" level="project" />
     <orderEntry type="library" name="commons-cli-1.4" level="project" />
+    <orderEntry type="library" name="tddd78-annotations" level="project" />
   </component>
 </module>
