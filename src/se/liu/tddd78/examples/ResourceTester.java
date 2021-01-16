@@ -12,11 +12,11 @@ import java.net.URL;
 public class ResourceTester
 {
     public static void main(String[] args) {
-        testResourceText();
-        testResourceImage();
+        testLoadingTextResource();
+        testLoadingImageResource();
     }
 
-    private static void testResourceText() {
+    private static void testLoadingTextResource() {
         // Reading a text file from *resources* is a bit cumbersome.
         // We don't know if the file is stored directly in the file system
         // or inside an *archive* (JAR file), so should access it
@@ -48,7 +48,7 @@ public class ResourceTester
     }
 
 
-    private static void testResourceImage() {
+    private static void testLoadingImageResource() {
         // Like above, we need to access the image through a resource.
         final URL image = ClassLoader.getSystemResource("images/hello_world.png");
 
