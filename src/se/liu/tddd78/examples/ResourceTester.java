@@ -52,6 +52,12 @@ public class ResourceTester
         // Like above, we need to access the image through a resource.
         final URL image = ClassLoader.getSystemResource("images/hello_world.png");
 
+        // If the image does not exist, image will be null, and a NullPointerException
+        // will be thrown when the ImageIcon is created below.  This is OK in this
+        // very specific case, because each *resource* is an integral part of the
+        // program.  It cannot be missing unless the project is damaged,
+        // in which case all bets are off in any case.
+
         // The ImageIcon class can read an entire image directly from any URL.
         ImageIcon icon = new ImageIcon(image);
 
