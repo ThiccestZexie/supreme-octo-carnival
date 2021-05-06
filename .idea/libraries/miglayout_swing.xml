@@ -2,12 +2,15 @@
   <library name="miglayout-swing">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/libs/miglayout/miglayout-swing-5.3-20201107.230034-455.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/miglayout/miglayout-core-5.3.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/libs/miglayout/miglayout-swing-5.3-20201107.230034-455-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/miglayout/miglayout-core-5.3-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/libs/miglayout/miglayout-swing-5.3-20201107.230034-455-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/miglayout/miglayout-core-5.3-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
