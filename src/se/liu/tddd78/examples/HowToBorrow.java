@@ -2,7 +2,20 @@ package se.liu.tddd78.examples;
 
 import se.liu.jonkv82.annotations.BorrowedCode;
 
-@SuppressWarnings("InnerClassFieldHidesOuterClassField")
+/*
+    Detta kan vara användbart i projektet, där man behöver markera eventuell
+    kod som har lånats från andra källor.  Klasser, fält, metoder och
+    konstruktorer som har lånats ska då annoteras med @BorrowedCode och
+    källan ska anges.
+
+    Markerar man en hel klass behöver man så klart inte markera dess fält
+    och metoder separat, men vi vill ändå visa var markeringen ska placeras
+    i alla dessa fall.
+
+    Mer information kommer på websidorna inför projektstarten.
+ */
+
+@BorrowedCode(source = "Somewhere")
 public class HowToBorrow
 {
     @BorrowedCode(source = "Somewhere") private int x = 10;
@@ -20,11 +33,8 @@ public class HowToBorrow
     }
 
     @BorrowedCode(source = "Somewhere")
-    @SuppressWarnings("InnerClassFieldHidesOuterClassField")
     private class Foo
     {
-        @SuppressWarnings("InnerClassFieldHidesOuterClassField")
-        // noinspection Foo , Bar
-        int x;
+        int y;
     }
 }
