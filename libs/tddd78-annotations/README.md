@@ -1,4 +1,4 @@
-Detta bibliotek innehåller ett par experimentella annoteringar (annotations)
-som kanske eller kanske inte kommer att användas i TDDD78 / TDDE30 / 729A85 under 2021.
+Detta bibliotek innehåller ett par experimentella annoteringar (annotations) som kan komma att användas i TDDD78 / TDDE30 / 729A85 under
+2022.
 
-Om vi kommer att använda dessa kommer de att dokumenteras i instruktionerna.
+Om vi använder dessa kommer de att dokumenteras i instruktionerna.
