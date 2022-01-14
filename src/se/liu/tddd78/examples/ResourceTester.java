@@ -18,9 +18,13 @@ public class ResourceTester
 
     private static void testLoadingTextResource() {
         // Reading a text file from *resources* is a bit cumbersome.
+
         // We don't know if the file is stored directly in the file system
-        // or inside an *archive* (JAR file), so should access it
-        // as a "resource" identified by an URL.
+        // or inside an *archive* (JAR file), so we should access it
+        // as a "resource" identified by an URL.  Here we want to open a
+        // file that is in the root of the resource folder (and again, that
+        // folder could actually exist inside a JAR file, so that you can't
+        // open it using an ordinary filename).
         final URL readme = ClassLoader.getSystemResource("README.md");
 
         // Then we can use this URL to open an *input stream*,
@@ -41,8 +45,8 @@ public class ResourceTester
                 str = reader.readLine();
             }
         } catch (IOException e) {
-            // TODO: Needs to be handled somehow.  This code is incomplete and should be
-            //  extended by course participants.
+            // TODO: Exceptions need to be handled somehow.  This code is incomplete
+            //  and the rest is left as an exercise for course participants.
             e.printStackTrace();
         }
     }
