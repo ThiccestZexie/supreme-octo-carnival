@@ -3,6 +3,13 @@ package se.liu.tddd78.examples;
 import se.liu.jonkv82.annotations.BorrowedCode;
 
 /*
+    Detta är en förberedelse för en framtida övergång till ett nytt sätt
+    att markera lånad kod.  För tillfället används ett äldre sätt istället;
+    se https://www.ida.liu.se/~TDDD78/labs/2022/project/borrowing för
+    mer info!
+
+    -----------------------------------------------------
+
     Detta kan vara användbart i projektet, där man behöver markera eventuell
     kod som har lånats från andra källor.  Klasser, fält, metoder och
     konstruktorer som har lånats ska då annoteras med @BorrowedCode och
@@ -16,11 +23,11 @@ import se.liu.jonkv82.annotations.BorrowedCode;
  */
 
 @BorrowedCode(source = "Somewhere")
-public class HowToBorrow
+public class HowToBorrowInTheFuture
 {
     @BorrowedCode(source = "Somewhere") private int x = 10;
 
-    @BorrowedCode(source = "Somewhere") public HowToBorrow() {
+    @BorrowedCode(source = "Somewhere") public HowToBorrowInTheFuture() {
     }
 
     /**
