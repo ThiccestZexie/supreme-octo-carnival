@@ -12,5 +12,6 @@
     <orderEntry type="library" name="gson" level="project" />
     <orderEntry type="library" name="commons-cli" level="project" />
     <orderEntry type="library" name="tddd78-annotations" level="project" />
+    <orderEntry type="library" name="annotations-20.1.0" level="project" />
   </component>
 </module>
