@@ -4,9 +4,8 @@ import java.awt.*;
 
 public class GamePlayer extends GameEntity
 {
-    private String Name;
+    private String name;
     private int level;
-    private JComponent awooga;
     //...
     private Dimension size;
     private Point coord;
@@ -16,8 +15,7 @@ public class GamePlayer extends GameEntity
     {
 	this.coord = coord;
 	this.size = new Dimension(50,50);
-	this.Name = name;
-	this.awooga = new JLabel("Penis head");
+	this.name = name;
     }
 
     public Point getCoord() {
@@ -25,7 +23,7 @@ public class GamePlayer extends GameEntity
     }
 
     public Dimension getSize() {
-	return size;
+		return size;
     }
     public String getName(){
 		 return name;

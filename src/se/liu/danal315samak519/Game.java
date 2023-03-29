@@ -3,11 +3,13 @@ package se.liu.danal315samak519;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Game
 {
     private List<FrameListener> frameListeners = new ArrayList<>();
     private GameMap map;
     private GamePlayer player;
+    private GameInputHandler gameInputHandler;
 
     public Game(final GameMap map, final GamePlayer player) {
 	this.map = map;

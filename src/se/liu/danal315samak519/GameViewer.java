@@ -8,7 +8,7 @@ public class GameViewer
 {
     private GameComponent gameComponent;
 
-    private static final int TIMER_DELAY = 500;
+    private static final int TIMER_DELAY = 2;
 
     public void show(){
 	// Initisalise frame
@@ -17,6 +17,7 @@ public class GameViewer
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	//Add component
+	GameInputHandler gameInputHandler = new GameInputHandler();
 	Game game = new Game(GameMap.START, new GamePlayer("DanelSamuel", new Point(10,10)));
 	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);
