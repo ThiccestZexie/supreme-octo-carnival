@@ -13,6 +13,11 @@ public class Game
 	this.map = map;
 	this.player = player;
     }
+
+    public void tick(){
+	player.tick();
+    }
+
     public void addPlayer(final GamePlayer player) {
    	 this.player = player;
     }
@@ -41,5 +46,14 @@ public class Game
 	notifyListeners();
     }
 
+    public int getPlayerVelocityX(){
+	return player.getVelocityX();
+    }
+    public int getPlayerVelocityY(){
+	return player.getVelocityY();
+    }
 
+    public void setPlayerVelocity(final int vx, final int vy) {
+	player.setVelocity(vx, vy);
+    }
 }

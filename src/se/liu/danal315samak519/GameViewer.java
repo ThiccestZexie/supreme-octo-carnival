@@ -13,7 +13,7 @@ public class GameViewer
     public void show(){
 	// Initisalise frame
 	JFrame frame = new JFrame("Gamers");
-	frame.setPreferredSize(new Dimension(400, 300));
+	frame.setPreferredSize(new Dimension(800, 400));
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	//Add component
@@ -32,6 +32,7 @@ public class GameViewer
 	    @Override public void actionPerformed(final ActionEvent e)
 	    {
 			gameComponent.frameChanged();
+			gameComponent.game.tick();
 	    }
     };
 

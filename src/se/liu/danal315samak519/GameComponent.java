@@ -7,7 +7,7 @@ public class GameComponent extends JComponent implements FrameListener
 {
     // Create the main Gamecomponent (Game screen with map, entities, gui)...
 
-    private Game game;
+    public Game game;
     public GameComponent(Game game)
     {
 	this.map = map;

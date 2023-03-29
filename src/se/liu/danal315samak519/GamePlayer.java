@@ -1,6 +1,5 @@
 package se.liu.danal315samak519;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class GamePlayer extends GameEntity
@@ -11,6 +10,7 @@ public class GamePlayer extends GameEntity
     //...
     private Dimension size;
     private Point coord;
+    private int velX, velY;
 
     public GamePlayer(String name, final Point coord)
     {
@@ -38,5 +38,21 @@ public class GamePlayer extends GameEntity
 
     public void nudge(final int dx, final int dy) {
 		coord.translate(dx, dy);
+    }
+
+    public void setVelocity(final int vx, final int vy) {
+	this.velX = vx;
+	this.velY = vy;
+    }
+
+    public void tick() {
+	nudge(velX, velY);
+    }
+
+    public int getVelocityX() {
+	return velX;
+    }
+    public int getVelocityY() {
+	return velY;
     }
 }
