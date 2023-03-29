@@ -27,4 +27,16 @@ public class GamePlayer extends GameEntity
     public Dimension getSize() {
 	return size;
     }
+    public String getName(){
+		 return name;
+    }
+
+    public void moveTo(final int x, final int y)
+    {
+		coord.move(x,y);
+    }
+
+    public void nudge(final int dx, final int dy) {
+		coord.translate(dx, dy);
+    }
 }

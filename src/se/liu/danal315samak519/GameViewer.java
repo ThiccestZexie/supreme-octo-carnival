@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 
 public class GameViewer
 {
+    private GameComponent gameComponent;
 
     private static final int TIMER_DELAY = 500;
 
@@ -16,9 +17,8 @@ public class GameViewer
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	//Add component
-	GameComponent gameComponent = new GameComponent(GameMap.START);
-
-	gameComponent.addPlayer(new GamePlayer("DanielSamuel", new Point(50, 50)));
+	Game game = new Game(GameMap.START, new GamePlayer("DanelSamuel", new Point(10,10)));
+	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);
 
 	// Show it
@@ -31,7 +31,7 @@ public class GameViewer
     {
 	    @Override public void actionPerformed(final ActionEvent e)
 	    {
-		    System.out.println("hi");
+			gameComponent.frameChanged();
 	    }
     };
 
