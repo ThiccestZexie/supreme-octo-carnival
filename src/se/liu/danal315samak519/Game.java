@@ -1,5 +1,6 @@
 package se.liu.danal315samak519;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,5 +59,16 @@ public class Game
 
     public void setPlayerVelocity(final int vx, final int vy) {
 	player.setVelocity(vx, vy);
+    }
+    public void addEnemy(Point coords)
+    {
+	gameEntityList.add(new GameEnemy(coords));
+    }
+
+    public void setPlayerVelocityY(final int vy) {
+	setPlayerVelocity(getPlayerVelocityX(), vy);
+    }
+    public void setPlayerVelocityX(final int vx) {
+	setPlayerVelocity(vx, getPlayerVelocityY());
     }
 }

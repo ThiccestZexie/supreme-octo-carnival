@@ -18,7 +18,11 @@ public class GameViewer
 
 	//Add component
 	GameInputHandler gameInputHandler = new GameInputHandler();
-	Game game = new Game(GameMap.START, new GamePlayer("DanelSamuel", new Point(10,10)));
+	Game game = new Game(GameMap.START, new GamePlayer("DanelSamuel", new Point(10,10), Color.green));
+	game.addEnemy(new Point(100, 600));
+	game.addEnemy(new Point(523, 321));
+	game.addEnemy(new Point(132, 60));
+
 	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);
 
