@@ -3,7 +3,6 @@ package se.liu.danal315samak519;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 public class GameComponent extends JComponent implements FrameListener
 {
@@ -11,6 +10,7 @@ public class GameComponent extends JComponent implements FrameListener
     private final int CONSTANTNUDGE = 1;
 
     public Game game;
+
     public GameComponent(Game game)
     {
 	setKeyBindings();
@@ -20,44 +20,33 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
 
-
-    public void repaintMap(final Rectangle r) {
-	this.repaint(r);
-    }
-
     private void paintPlayer(final Graphics g){
 	GamePlayer player = game.getPlayer();
 	Point playerCoord = player.getCoord();
 	Dimension playerSize = player.getSize();
-	g.setColor(Color.BLACK);
+	g.setColor(player.getColor());
 	g.fillRect(playerCoord.x, playerCoord.y, playerSize.width, playerSize.height);
+    }
+
+    private void paintEntities(final Graphics g){
+	paintPlayer(g);
+	for (GameEntity gE: game.gameEntityList) {
+	    Point entityCoord = gE.getCoord();
+	    Dimension entitySize = gE.getSize();
+	    g.setColor(gE.getColor());
+	    g.fillRect(entityCoord.x, entityCoord.y, entitySize.width, entitySize.height);
+	}
     }
 
 
     @Override protected void paintComponent(final Graphics g) {
 	super.paintComponent(g);
-	paintPlayer(g);
+	paintEntities(g);
 	paintMap(g);
     }
 
     private void paintMap(final Graphics g) {
     }
-
-
-	public void moveDir(KeyEvent e){
-	    if(e.getKeyCode() == 39 ){
-		game.nudgePlayer(5,0 );
-	    }
-	    if(e.getKeyCode() == 40 ){
-		game.nudgePlayer(0,5 );
-	    }
-	    if(e.getKeyCode() == 38 ){
-		game.nudgePlayer(0,-5 );
-	    }
-	    if(e.getKeyCode() == 37 ){
-		game.nudgePlayer(-5,0 );
-	    }
-	}
 
     private void setKeyBindings()
     {
@@ -106,24 +95,18 @@ public class GameComponent extends JComponent implements FrameListener
 		    this.dir = dir;
 	}
 	    public void actionPerformed(ActionEvent e) {
-		switch (dir){
-		    case UP, DOWN -> game.setPlayerVelocity(game.getPlayerVelocityX(), 0);
-		    case RIGHT, LEFT -> game.setPlayerVelocity(0, game.getPlayerVelocityY());
-		}
+		    if(dir == Direction.UP && game.getPlayerVelocityY() < 0){
+			game.setPlayerVelocityY(0);
+		    }
+		    if(dir == Direction.DOWN && game.getPlayerVelocityY() > 0){
+			game.setPlayerVelocityY(0);
+		    }
+		    if(dir == Direction.RIGHT && game.getPlayerVelocityX() > 0){
+			game.setPlayerVelocityX(0);
+		    }
+		    if(dir == Direction.LEFT && game.getPlayerVelocityX() < 0){
+			game.setPlayerVelocityX(0);
+		    }
 		}
     }
-
-//    public boolean setMap(GameMap map){
-//	if(changing map is allowed){
-//	    this.map = map;
-//	    return true;
-//	}
-//	else{
-//	    return false;
-//	}
-//    }
-
-
-
-
 }

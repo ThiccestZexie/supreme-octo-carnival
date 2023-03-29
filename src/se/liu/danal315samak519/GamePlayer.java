@@ -6,51 +6,14 @@ public class GamePlayer extends GameEntity
 {
     private String name;
     private int level;
-    //...
-    private Dimension size;
-    private Point coord;
-    private int velX, velY;
-
-    public GamePlayer(String name, final Point coord)
+    public GamePlayer(String name, final Point coord, final Color color	)
     {
-	this.coord = coord;
-	this.size = new Dimension(50,50);
+	super(coord, color);
 	this.name = name;
     }
 
-    public Point getCoord() {
-	return coord;
-    }
-
-    public Dimension getSize() {
-		return size;
-    }
     public String getName(){
-		 return name;
+	 return name;
     }
 
-    public void moveTo(final int x, final int y)
-    {
-		coord.move(x,y);
-    }
-
-    public void nudge(final int dx, final int dy) {
-		coord.translate(dx, dy);
-    }
-
-    public void setVelocity(final int vx, final int vy) {
-	this.velX = vx;
-	this.velY = vy;
-    }
-
-    public void tick() {
-	nudge(velX, velY);
-    }
-
-    public int getVelocityX() {
-	return velX;
-    }
-    public int getVelocityY() {
-	return velY;
-    }
 }

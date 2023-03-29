@@ -9,6 +9,7 @@ public class Game
     private List<FrameListener> frameListeners = new ArrayList<>();
     private GameMap map;
     private GamePlayer player;
+    public List<GameEntity> gameEntityList = new ArrayList<>();
     private GameInputHandler gameInputHandler;
 
     public Game(final GameMap map, final GamePlayer player) {
