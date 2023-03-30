@@ -6,9 +6,7 @@ import java.awt.event.ActionEvent;
 
 public class GameComponent extends JComponent implements FrameListener
 {
-    // Create the main Gamecomponent (Game screen with map, entities, gui)...
-    private final int CONSTANTNUDGE = 1;
-
+    private static final int CONSTANTNUDGE = 1;
     public Game game;
 
     public GameComponent(Game game)
@@ -19,25 +17,23 @@ public class GameComponent extends JComponent implements FrameListener
 
     }
 
-
-    private void paintPlayer(final Graphics g){
-	GamePlayer player = game.getPlayer();
+    private void paintPlayer(final Graphics g) {
+	Player player = game.getPlayer();
 	Point playerCoord = player.getCoord();
 	Dimension playerSize = player.getSize();
 	g.setColor(player.getColor());
 	g.fillRect(playerCoord.x, playerCoord.y, playerSize.width, playerSize.height);
     }
 
-    private void paintEntities(final Graphics g){
+    private void paintEntities(final Graphics g) {
 	paintPlayer(g);
-	for (GameEntity gE: game.gameEntityList) {
+	for (Entity gE : game.getEntityList()) {
 	    Point entityCoord = gE.getCoord();
 	    Dimension entitySize = gE.getSize();
 	    g.setColor(gE.getColor());
 	    g.fillRect(entityCoord.x, entityCoord.y, entitySize.width, entitySize.height);
 	}
     }
-
 
     @Override protected void paintComponent(final Graphics g) {
 	super.paintComponent(g);
@@ -48,65 +44,77 @@ public class GameComponent extends JComponent implements FrameListener
     private void paintMap(final Graphics g) {
     }
 
+    /**
+     * Adds new keystrokes to the input mapping
+     *
+     * @param keyStrokeString the keystroke as a string (for example "pressed SPACE")
+     * @param action          which AbstractAction to be performed when the keystroke is used
+     */
+    private void addNewKeyBinding(String keyStrokeString, AbstractAction action) {
+	this.getInputMap().put(KeyStroke.getKeyStroke(keyStrokeString), keyStrokeString);
+	this.getActionMap().put(keyStrokeString, action);
+    }
+
     private void setKeyBindings()
     {
-	    this.getInputMap().put(KeyStroke.getKeyStroke("pressed UP"), "moveUp");
-	    this.getInputMap().put(KeyStroke.getKeyStroke("pressed DOWN"), "moveDown");
-	    this.getInputMap().put(KeyStroke.getKeyStroke("pressed LEFT"), "moveLeft");
-	    this.getInputMap().put(KeyStroke.getKeyStroke("pressed RIGHT"), "moveRight");
+	// Pressing keys
+	addNewKeyBinding("pressed UP", new MoveAction(Direction.UP));
+	addNewKeyBinding("pressed DOWN", new MoveAction(Direction.DOWN));
+	addNewKeyBinding("pressed LEFT", new MoveAction(Direction.LEFT));
+	addNewKeyBinding("pressed RIGHT", new MoveAction(Direction.RIGHT));
 
-	    this.getInputMap().put(KeyStroke.getKeyStroke("released UP"), "stopUp");
-	    this.getInputMap().put(KeyStroke.getKeyStroke("released DOWN"), "stopDown");
-	    this.getInputMap().put(KeyStroke.getKeyStroke("released LEFT"), "stopLeft");
-	    this.getInputMap().put(KeyStroke.getKeyStroke("released RIGHT"), "stopRight");
-
-	    this.getActionMap().put("moveUp", new ActionMove(Direction.UP));
-	    this.getActionMap().put("moveDown", new ActionMove(Direction.DOWN));
-	    this.getActionMap().put("moveLeft", new ActionMove(Direction.LEFT));
-	    this.getActionMap().put("moveRight", new ActionMove(Direction.RIGHT));
-
-	    this.getActionMap().put("stopUp", new ActionStop(Direction.UP));
-	    this.getActionMap().put("stopDown", new ActionStop(Direction.DOWN));
-	    this.getActionMap().put("stopLeft", new ActionStop(Direction.LEFT));
-	    this.getActionMap().put("stopRight", new ActionStop(Direction.RIGHT));
+	// Releasing keys
+	addNewKeyBinding("released UP", new StopAction(Direction.UP));
+	addNewKeyBinding("released DOWN", new StopAction(Direction.DOWN));
+	addNewKeyBinding("released LEFT", new StopAction(Direction.LEFT));
+	addNewKeyBinding("released RIGHT", new StopAction(Direction.RIGHT));
     }
 
     @Override public void frameChanged() {
 	this.repaint();
     }
 
-	    private class ActionMove extends AbstractAction{
-			private final Direction dir;
-			private ActionMove(Direction dir){
-			    this.dir = dir;
-			}
-			public void actionPerformed(ActionEvent e) {
-				switch (dir){
-				    case UP -> game.setPlayerVelocity(game.getPlayerVelocityX(), -CONSTANTNUDGE);
-				    case DOWN -> game.setPlayerVelocity(game.getPlayerVelocityX(), CONSTANTNUDGE);
-				    case RIGHT -> game.setPlayerVelocity(CONSTANTNUDGE, game.getPlayerVelocityY());
-				    case LEFT -> game.setPlayerVelocity(-CONSTANTNUDGE, game.getPlayerVelocityY());
-				}
-			}
-	    }
-    private class ActionStop extends AbstractAction{
-		private final Direction dir;
-		private ActionStop(Direction dir){
-		    this.dir = dir;
+    private class MoveAction extends AbstractAction
+    {
+	private final Direction dir;
+
+	private MoveAction(Direction dir) {
+	    this.dir = dir;
 	}
-	    public void actionPerformed(ActionEvent e) {
-		    if(dir == Direction.UP && game.getPlayerVelocityY() < 0){
-			game.setPlayerVelocityY(0);
-		    }
-		    if(dir == Direction.DOWN && game.getPlayerVelocityY() > 0){
-			game.setPlayerVelocityY(0);
-		    }
-		    if(dir == Direction.RIGHT && game.getPlayerVelocityX() > 0){
-			game.setPlayerVelocityX(0);
-		    }
-		    if(dir == Direction.LEFT && game.getPlayerVelocityX() < 0){
-			game.setPlayerVelocityX(0);
-		    }
-		}
+
+	public void actionPerformed(ActionEvent e) {
+	    int speed = game.getPlayer().getSpeed();
+	    switch (dir) {
+		case UP -> game.setPlayerVelY(-speed);
+		case DOWN -> game.setPlayerVelY(speed);
+		case RIGHT -> game.setPlayerVelX(speed);
+		case LEFT -> game.setPlayerVelX(-speed);
+	    }
+	}
+    }
+
+    private class StopAction extends AbstractAction
+    {
+	private final Direction dir;
+
+	private StopAction(Direction dir) {
+	    this.dir = dir;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+	    // Cancel velocity in appropiate direction!!
+	    if (dir == Direction.UP && game.getPlayerVelY() < 0) {
+		game.setPlayerVelY(0);
+	    }
+	    if (dir == Direction.DOWN && game.getPlayerVelY() > 0) {
+		game.setPlayerVelY(0);
+	    }
+	    if (dir == Direction.RIGHT && game.getPlayerVelX() > 0) {
+		game.setPlayerVelX(0);
+	    }
+	    if (dir == Direction.LEFT && game.getPlayerVelX() < 0) {
+		game.setPlayerVelX(0);
+	    }
+	}
     }
 }

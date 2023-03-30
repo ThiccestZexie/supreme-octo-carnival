@@ -2,11 +2,12 @@ package se.liu.danal315samak519;
 
 import java.awt.*;
 
-public class GamePlayer extends GameEntity
+public class Player extends Entity
 {
     private String name;
     private int level;
-    public GamePlayer(String name, final Point coord, final Color color	)
+
+    public Player(String name, final Point coord, final Color color	)
     {
 	super(coord, color);
 	this.name = name;

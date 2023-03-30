@@ -2,10 +2,10 @@ package se.liu.danal315samak519;
 
 import java.awt.*;
 
-public class GameEnemy extends GameEntity
+public class Enemy extends Entity
 {
 
-    public GameEnemy(final Point coord)
+    public Enemy(final Point coord)
     {
 		super(coord, Color.red);
 

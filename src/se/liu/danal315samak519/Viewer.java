@@ -4,21 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class GameViewer
+public class Viewer
 {
+    private static final int TIMER_DELAY = 2;
     private GameComponent gameComponent;
 
-    private static final int TIMER_DELAY = 2;
-
-    public void show(){
+    public void show() {
 	// Initisalise frame
 	JFrame frame = new JFrame("Gamers");
 	frame.setPreferredSize(new Dimension(800, 400));
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	//Add component
-	GameInputHandler gameInputHandler = new GameInputHandler();
-	Game game = new Game(GameMap.START, new GamePlayer("DanelSamuel", new Point(10,10), Color.green));
+	Player player = new Player("DanelSamuel", new Point(10, 10), Color.green);
+	player.setSpeed(2);
+	Game game = new Game(player);
 	game.addEnemy(new Point(100, 600));
 	game.addEnemy(new Point(523, 321));
 	game.addEnemy(new Point(132, 60));
@@ -27,24 +27,23 @@ public class GameViewer
 	frame.add(gameComponent);
 
 	// Show it
-	startTimer();
 	frame.setVisible(true);
 	frame.pack();
+	startTimer();
     }
-
-    private final Action doSomething = new AbstractAction()
-    {
-	    @Override public void actionPerformed(final ActionEvent e)
-	    {
-			gameComponent.frameChanged();
-			gameComponent.game.tick();
-	    }
-    };
 
     public void startTimer()
     {
-	    final Timer clockTimer = new Timer(TIMER_DELAY, doSomething);
-	    clockTimer.setCoalesce(true);
-	    clockTimer.start();
+	final Timer clockTimer = new Timer(TIMER_DELAY, doSomething);
+	clockTimer.setCoalesce(true);
+	clockTimer.start();
     }
+    private final Action doSomething = new AbstractAction()
+    {
+	@Override public void actionPerformed(final ActionEvent e)
+	{
+	    gameComponent.frameChanged();
+	    gameComponent.game.tick();
+	}
+    };
 }

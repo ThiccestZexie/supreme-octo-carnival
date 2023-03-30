@@ -1,6 +1,6 @@
 package se.liu.danal315samak519;
 
-public enum GameMap
+public enum Map
 {
     START
 }
