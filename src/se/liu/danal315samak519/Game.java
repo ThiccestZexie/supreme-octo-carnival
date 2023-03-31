@@ -21,6 +21,9 @@ public class Game
     }
 
     public void addPlayer(final Player player) {
+	if (player != null) {
+	    throw new IllegalStateException("Cannot add player, already one present!");
+	}
 	this.player = player;
     }
 

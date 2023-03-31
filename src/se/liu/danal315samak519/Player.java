@@ -7,15 +7,13 @@ public class Player extends Entity
     private String name;
     private int level;
 
-    public Player(String name, final Point coord, final Color color	)
+    public Player(String name, final Point coord, final Color color)
     {
 	super(coord, color);
 	this.name = name;
-
     }
 
-    public String getName(){
-	 return name;
+    public String getName() {
+	return name;
     }
-
 }

@@ -29,16 +29,18 @@ public class Viewer
 	// Show it
 	frame.setVisible(true);
 	frame.pack();
+	// FORCE THE GAME TO START ON TOP OF OTHER WINDOWS
+	frame.toFront();
 	startTimer();
     }
 
     public void startTimer()
     {
-	final Timer clockTimer = new Timer(TIMER_DELAY, doSomething);
+	final Timer clockTimer = new Timer(TIMER_DELAY, doTimerTick);
 	clockTimer.setCoalesce(true);
 	clockTimer.start();
     }
-    private final Action doSomething = new AbstractAction()
+    private final Action doTimerTick = new AbstractAction()
     {
 	@Override public void actionPerformed(final ActionEvent e)
 	{
