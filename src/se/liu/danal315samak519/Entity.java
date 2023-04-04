@@ -5,11 +5,13 @@ import java.awt.*;
 public class Entity
 {
     //...
-    private Dimension size;
-    private Point coord;
-    private int speed;
-    private int velX, velY;
-    private Color color;
+    protected Dimension size;
+    protected Point coord;
+    protected Direction dir;
+    protected int speed;
+    protected int velX, velY;
+    protected Color color;
+    protected boolean isGarbage = false;
 
     public Entity(final Point coord, final Color color) {
 	this.size = new Dimension(50, 50); // HARDCODED SIZE OF 50,50 px TODO

@@ -81,6 +81,10 @@ public class Game
 	player.setCurrentVelocity(vx, vy);
     }
 
+    public void setPlayerDirection(final Direction dir){
+		player.setDir(dir);
+    }
+
     public void addEnemy(Point coords)
     {
 	entityList.add(new Enemy(coords));

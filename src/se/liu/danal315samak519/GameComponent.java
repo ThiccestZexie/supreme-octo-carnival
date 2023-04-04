@@ -57,6 +57,9 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void setKeyBindings()
     {
+	//Primary Keys
+	addNewKeyBinding("SPACE", new AttackAction());
+
 	// Pressing keys
 	addNewKeyBinding("pressed UP", new MoveAction(Direction.UP));
 	addNewKeyBinding("pressed DOWN", new MoveAction(Direction.DOWN));
@@ -93,7 +96,11 @@ public class GameComponent extends JComponent implements FrameListener
 	    game.setPlayerDirection(dir);
 	}
     }
-
+	private class AttackAction extends AbstractAction{
+		public void actionPerformed(ActionEvent e){
+		    game.addPlayerSword();
+		}
+	}
     private class StopAction extends AbstractAction
     {
 	private final Direction dir;
