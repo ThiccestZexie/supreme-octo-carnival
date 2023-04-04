@@ -17,7 +17,16 @@ public class Game
     }
 
     public void tick() {
+	removeGarbage();
 	player.tick();
+	for(Entity e: entityList){
+	    e.tick();
+	}
+    }
+
+    private void removeGarbage() {
+
+	entityList.removeIf(Entity::getIsGarbage);
     }
 
     public void addPlayer(final Player player) {
@@ -75,6 +84,10 @@ public class Game
     public void addEnemy(Point coords)
     {
 	entityList.add(new Enemy(coords));
+    }
+
+    public void addPlayerSword(){
+	entityList.add(player.getSword());
     }
 
     public List<Entity> getEntityList() {

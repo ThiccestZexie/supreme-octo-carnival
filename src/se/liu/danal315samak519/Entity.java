@@ -15,10 +15,28 @@ public class Entity
 	this.size = new Dimension(50, 50); // HARDCODED SIZE OF 50,50 px TODO
 	this.coord = coord;
 	this.color = color;
+	dir = Direction.DOWN;
+	isGarbage = false;
+    }
+
+    public Direction getDir() {
+	return dir;
+    }
+
+    public void setDir(final Direction dir) {
+	this.dir = dir;
     }
 
     public Point getCoord() {
 	return coord;
+    }
+
+    public int getX(){
+	return getCoord().x;
+    }
+
+    public int getY(){
+	return getCoord().y;
     }
 
     public Color getColor() {
@@ -27,6 +45,12 @@ public class Entity
 
     public Dimension getSize() {
 	return size;
+    }
+    public int getWidth() {
+	return (int) size.getWidth();
+    }
+    public int getHeight() {
+	return(int) size.getHeight();
     }
 
     public int getSpeed() {
@@ -62,5 +86,16 @@ public class Entity
 
     public int getVelY() {
 	return velY;
+    }
+    public int getLifeSpan(){
+	// Returns -1 becuase they are immortal!!! as in they dont die of age...
+	return -1;
+    }
+    public boolean getIsGarbage(){
+	return isGarbage;
+    }
+
+    public WeaponEntity getSword(){
+		return new WeaponEntity(this.coord,  Color.BLACK, this );
     }
 }

@@ -90,6 +90,7 @@ public class GameComponent extends JComponent implements FrameListener
 		case RIGHT -> game.setPlayerVelX(speed);
 		case LEFT -> game.setPlayerVelX(-speed);
 	    }
+	    game.setPlayerDirection(dir);
 	}
     }
 
