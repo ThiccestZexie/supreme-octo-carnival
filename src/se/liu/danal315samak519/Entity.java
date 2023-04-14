@@ -11,12 +11,14 @@ public class Entity
     protected int speed;
     protected int velX, velY;
     protected Color color;
+    protected Rectangle hitBox;
     protected boolean isGarbage = false;
 
     public Entity(final Point coord, final Color color) {
 	this.size = new Dimension(50, 50); // HARDCODED SIZE OF 50,50 px TODO
 	this.coord = coord;
 	this.color = color;
+	this.hitBox = new Rectangle(size);
 	dir = Direction.DOWN;
 	isGarbage = false;
     }
