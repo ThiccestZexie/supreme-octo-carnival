@@ -11,6 +11,7 @@ public class WeaponEntity extends Entity
 	super(coord,	 color);
 	size = new Dimension(60, 10);
 	this.owner = owner;
+	this.hitBox = new Rectangle(size);
 	this.coord = new Point((owner.getX() + owner.getWidth()),
 			       (owner.getY()+ (owner.getHeight()/2)) - (this.getHeight()/2));
 	 lifeSpan = 5;

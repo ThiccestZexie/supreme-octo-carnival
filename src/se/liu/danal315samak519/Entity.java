@@ -27,12 +27,24 @@ public class Entity
 	return dir;
     }
 
+    public Rectangle getHitBox(){
+	return hitBox;
+    }
+
     public void setDir(final Direction dir) {
 	this.dir = dir;
     }
 
     public Point getCoord() {
 	return coord;
+    }
+    public boolean isHit(WeaponEntity weapon)
+    {
+	if (this.hitBox.intersects(weapon.getHitBox()))
+	{
+	    return true;
+	}
+	return false;
     }
 
     public int getX(){
