@@ -14,5 +14,6 @@
     <orderEntry type="library" name="tddd78-annotations" level="project" />
     <orderEntry type="library" name="annotations-24.0.0" level="project" />
     <orderEntry type="library" name="opencsv" level="project" />
+    <orderEntry type="library" name="commons-lang" level="project" />
   </component>
 </module>

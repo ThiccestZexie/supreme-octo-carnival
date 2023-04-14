@@ -103,4 +103,8 @@ public class Game
     public World getWorld(){
 	return world;
     }
+
+    public void setWorld(final World world) {
+	this.world = world;
+    }
 }

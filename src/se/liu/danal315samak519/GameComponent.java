@@ -14,8 +14,8 @@ public class GameComponent extends JComponent implements FrameListener
 
     public GameComponent(Game game)
     {
-	setKeyBindings();
 	this.game = game;
+	setKeyBindings();
 	game.addFrameListener(this);
 
     }
@@ -46,9 +46,14 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintMap(final Graphics g) {
 	World world = game.getWorld();
-	for (int y = 0; y < world.getHeight(); y++) {
-	    for (int x = 0; x < world.getWidth(); x++) {
-		Tile currentTile = world.getTileAt(x, y);
+	for (int row = 0; row < world.getHeight(); row++) {
+	    for (int col = 0; col < world.getWidth(); col++) {
+		Tile tile = world.getTile(col, row);
+		int tileX = tile.getPosition().x;
+		int tileY = tile.getPosition().y;
+		int tileWidth = tile.getWidth();
+		int tileHeight = tile.getHeight();
+		g.drawImage(tile.getImage(), tileX, tileY, tileWidth, tileHeight, null);
 	    }
 	}
     }
@@ -105,11 +110,14 @@ public class GameComponent extends JComponent implements FrameListener
 	    game.setPlayerDirection(dir);
 	}
     }
-	private class AttackAction extends AbstractAction{
-		public void actionPerformed(ActionEvent e){
-		    game.addPlayerSword();
-		}
+
+    private class AttackAction extends AbstractAction
+    {
+	public void actionPerformed(ActionEvent e) {
+	    game.addPlayerSword();
 	}
+    }
+
     private class StopAction extends AbstractAction
     {
 	private final Direction dir;
