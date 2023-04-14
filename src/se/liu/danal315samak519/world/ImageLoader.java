@@ -29,7 +29,7 @@ public class ImageLoader
     public static void main(String[] args) throws IOException {
 	int testTileWidth = 32;
 	int testTileHeight = 32;
-	ImageLoader imageLoader = new ImageLoader("E:\\OneDrive - Linköpings universitet\\Kurser\\TDDE30\\Projekt\\tileset\\TX Tileset Grass.png", testTileWidth, testTileHeight);
+	ImageLoader imageLoader = new ImageLoader("TX Tileset Grass.png", testTileWidth, testTileHeight);
 
 	// Test getting the tile image at (0, 0)
 	BufferedImage tileImage = imageLoader.getTileAsBufferedImage(0, 0);
