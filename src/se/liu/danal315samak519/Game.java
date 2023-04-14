@@ -1,5 +1,7 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.map.Map;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;

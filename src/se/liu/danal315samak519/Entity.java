@@ -98,6 +98,6 @@ public class Entity
     }
 
     public WeaponEntity getSword(){
-		return new WeaponEntity(this.coord,  Color.BLACK, this );
+	return new WeaponEntity(this.coord,  Color.BLACK, this );
     }
 }
