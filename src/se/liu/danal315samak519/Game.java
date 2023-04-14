@@ -1,6 +1,6 @@
 package se.liu.danal315samak519;
 
-import se.liu.danal315samak519.map.Map;
+import se.liu.danal315samak519.world.World;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ public class Game
 {
     public List<Entity> entityList = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
-    private Map map;
     private Player player;
+    private World world;
 
     public Game(final Player player) {
 	this.player = player;
@@ -98,5 +98,9 @@ public class Game
 
     public List<Entity> getEntityList() {
 	return entityList;
+    }
+
+    public World getWorld(){
+	return world;
     }
 }

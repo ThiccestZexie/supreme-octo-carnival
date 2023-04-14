@@ -1,5 +1,8 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.world.Tile;
+import se.liu.danal315samak519.world.World;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -42,6 +45,12 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintMap(final Graphics g) {
+	World world = game.getWorld();
+	for (int y = 0; y < world.getHeight(); y++) {
+	    for (int x = 0; x < world.getWidth(); x++) {
+		Tile currentTile = world.getTileAt(x, y);
+	    }
+	}
     }
 
     /**
