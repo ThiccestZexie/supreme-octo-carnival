@@ -19,6 +19,7 @@ public class Viewer
 	Player player = new Player("DanelSamuel", new Point(10, 10), Color.green);
 	player.setSpeed(2);
 	Game game = new Game(player);
+
 	game.addEnemy(new Point(100, 600));
 	game.addEnemy(new Point(523, 321));
 	game.addEnemy(new Point(132, 60));

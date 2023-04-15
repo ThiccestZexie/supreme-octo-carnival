@@ -19,10 +19,15 @@ public class Game
     public void tick() {
 	removeGarbage();
 	player.tick();
-	for(Entity e: entityList){
+	for (Entity e : entityList) {
 	    e.tick();
+		if (e instanceof Player ||e instanceof Enemy){
+		    for (Entity q : entityList)
+			e.isHit(q);
+		}
 	}
     }
+
 
     private void removeGarbage() {
 
@@ -92,6 +97,7 @@ public class Game
 
     public void addPlayerSword(){
 	entityList.add(player.getSword());
+
     }
 
     public List<Entity> getEntityList() {

@@ -28,7 +28,7 @@ public class Entity
     }
 
     public Rectangle getHitBox(){
-	return hitBox;
+	return this.hitBox;
     }
 
     public void setDir(final Direction dir) {
@@ -38,14 +38,16 @@ public class Entity
     public Point getCoord() {
 	return coord;
     }
-    public boolean isHit(WeaponEntity weapon)
+    public boolean isHit(Entity e)
     {
-	if (this.hitBox.intersects(weapon.getHitBox()))
-	{
-	    return true;
-	}
+		if (this.hitBox.intersects(e.getHitBox()))
+		{
+		    this.isGarbage = true;
+		    return true;
+		}
 	return false;
     }
+
 
     public int getX(){
 	return getCoord().x;
