@@ -3,6 +3,7 @@ package se.liu.danal315samak519;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Game
@@ -16,18 +17,25 @@ public class Game
 	this.player = player;
     }
 
-    public void tick() {
+    public void tick()
+    {
 	removeGarbage();
 	player.tick();
 	for (Entity e : entityList) {
+	    checkForHits(e);
 	    e.tick();
-		if (e instanceof Player ||e instanceof Enemy){
-		    for (Entity q : entityList)
-			e.isHit(q);
-		}
-	}
+
+	    }
     }
 
+    public void checkForHits(Entity e)
+    	{
+		for(Entity w : entityList){
+		    if(!Objects.equals(e,w)){
+			e.isHit(w);
+		    }
+		}
+	}
 
     private void removeGarbage() {
 
@@ -97,8 +105,8 @@ public class Game
 
     public void addPlayerSword(){
 	entityList.add(player.getSword());
-
     }
+
 
     public List<Entity> getEntityList() {
 	return entityList;

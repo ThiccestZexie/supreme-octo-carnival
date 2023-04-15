@@ -19,6 +19,7 @@ public class Entity
 	this.coord = coord;
 	this.color = color;
 	this.hitBox = new Rectangle(size);
+	this.hitBox.setLocation(coord);
 	dir = Direction.DOWN;
 	isGarbage = false;
     }
@@ -38,14 +39,15 @@ public class Entity
     public Point getCoord() {
 	return coord;
     }
-    public boolean isHit(Entity e)
+    public void isHit(Entity e)
     {
-		if (this.hitBox.intersects(e.getHitBox()))
+	if (this.hitBox.getBounds().intersects(e.getHitBox()))
 		{
-		    this.isGarbage = true;
-		    return true;
+		    if (e instanceof WeaponEntity){
+			this.isGarbage = true;
+		    }
+
 		}
-	return false;
     }
 
 
@@ -95,9 +97,12 @@ public class Entity
 
     public void tick() {
 	// Move along according to current velocity
+	nudgeHitBox(velX, velY);
 	nudge(velX, velY);
     }
-
+    public void nudgeHitBox(final int speedX, final int speedY){
+	hitBox.translate(speedX, speedY);
+    }
     public int getVelX() {
 	return velX;
     }
@@ -114,6 +119,6 @@ public class Entity
     }
 
     public WeaponEntity getSword(){
-		return new WeaponEntity(this.coord,  Color.BLACK, this );
+		return new WeaponEntity(this.coord, Color.BLACK, this );
     }
 }

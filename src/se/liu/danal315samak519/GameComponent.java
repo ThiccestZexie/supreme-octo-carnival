@@ -33,6 +33,7 @@ public class GameComponent extends JComponent implements FrameListener
 	    g.setColor(gE.getColor());
 	    g.fillRect(entityCoord.x, entityCoord.y, entitySize.width, entitySize.height);
 	}
+
     }
 
     @Override protected void paintComponent(final Graphics g) {
