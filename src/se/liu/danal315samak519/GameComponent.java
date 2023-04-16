@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 public class GameComponent extends JComponent implements FrameListener
 {
     private static final int CONSTANTNUDGE = 1;
+    private static final int TILE_WIDTH = 32;
+    private static final int TILE_HEIGHT = 32;
     public Game game;
 
     public GameComponent(Game game)
@@ -29,7 +31,6 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintEntities(final Graphics g) {
-	paintPlayer(g);
 	for (Entity gE : game.getEntityList()) {
 	    Point entityCoord = gE.getCoord();
 	    Dimension entitySize = gE.getSize();
@@ -40,23 +41,31 @@ public class GameComponent extends JComponent implements FrameListener
 
     @Override protected void paintComponent(final Graphics g) {
 	super.paintComponent(g);
-	paintEntities(g);
 	paintMap(g);
+	paintEntities(g);
+	paintPlayer(g);
     }
 
     private void paintMap(final Graphics g) {
 	World world = game.getWorld();
-	for (int row = 0; row < world.getHeight(); row++) {
-	    for (int col = 0; col < world.getWidth(); col++) {
+	for (int row = 0; row < world.getRows(); row++) {
+	    for (int col = 0; col < world.getColumns(); col++) {
 		Tile tile = world.getTile(col, row);
-		int tileX = tile.getPosition().x;
-		int tileY = tile.getPosition().y;
+		int tileX = tile.getCoord().x;
+		int tileY = tile.getCoord().y;
 		int tileWidth = tile.getWidth();
 		int tileHeight = tile.getHeight();
 		g.drawImage(tile.getImage(), tileX, tileY, tileWidth, tileHeight, null);
 	    }
 	}
     }
+
+    @Override public Dimension getPreferredSize() {
+	int preferredWidth = game.getWorld().getRows() * TILE_WIDTH;
+	int preferredHeight = game.getWorld().getColumns() * TILE_HEIGHT;
+	return new Dimension(preferredWidth, preferredHeight);
+    }
+
 
     /**
      * Adds new keystrokes to the input mapping

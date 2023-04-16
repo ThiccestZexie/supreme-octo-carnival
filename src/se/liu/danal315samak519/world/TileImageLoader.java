@@ -30,25 +30,6 @@ public class TileImageLoader
 	columns = allTilesImage.getWidth() / getTileWidth();
     }
 
-    /**
-     * Just testing some stuff
-     */
-    public static void main(String[] args) throws IOException {
-	int testTileWidth = 32;
-	int testTileHeight = 32;
-	TileImageLoader tileImageLoader = new TileImageLoader("TX Tileset Grass.png", testTileWidth, testTileHeight);
-
-	// Test getting the tile image at (0, 0)
-	BufferedImage tileImage = tileImageLoader.getTileImage(0, 0);
-	assert tileImage.getWidth() == testTileWidth && tileImage.getHeight() == testTileHeight;
-
-	// Test getting the tile width and height
-	assert tileImageLoader.getTileWidth() == testTileWidth;
-	assert tileImageLoader.getTileHeight() == testTileHeight;
-
-	System.out.println("All tests passed!");
-    }
-
     public BufferedImage getTileImage(int x, int y) {
 	int tileX = x * tileWidth;
 	int tileY = y * tileHeight;

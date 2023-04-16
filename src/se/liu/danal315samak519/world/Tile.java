@@ -5,19 +5,19 @@ import java.awt.*;
 public class Tile
 {
     private Image image;
-    private Point position;
+    private Point coord;
 
-    public Tile(final Image image, final Point position) {
+    public Tile(final Image image, final Point coord) {
 	this.image = image;
-	this.position = position;
+	this.coord = coord;
     }
 
     public Image getImage() {
 	return image;
     }
 
-    public Point getPosition() {
-	return position;
+    public Point getCoord() {
+	return coord;
     }
 
     public int getWidth() {

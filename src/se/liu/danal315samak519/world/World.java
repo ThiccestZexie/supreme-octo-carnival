@@ -9,33 +9,28 @@ public class World
 {
     private static int hardCodedTileHeight = 32;
     private static int hardCodedTileWidth = 32;
-    private Tile[][] tiles = new Tile[hardCodedTileHeight][hardCodedTileWidth];
+    private Tile[][] tiles;
     private TileImageLoader tileImageLoader;
-    private CSVLoader csvLoader;
+    private IDLoader idLoader;
 
     public World(final String csvName, final String tileSetImageName){
 	// TODO: Remove hardcoded tile sizes
 	try {
 	    tileImageLoader = new TileImageLoader(tileSetImageName, hardCodedTileWidth, hardCodedTileHeight);
-	    csvLoader = new CSVLoader(csvName);
+	    idLoader = new IDLoader(csvName);
 	    populateTileArray();
 	} catch (IOException | CsvException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
-    /**
-     * Fills the array tileImages with images corresponding to the tiles' id:s found in the CSV file
-     *
-     * @throws IOException
-     * @throws CsvException
-     */
     private void populateTileArray() throws IOException, CsvException {
+	tiles = new Tile[idLoader.getRows()][idLoader.getColumns()];
 	for (int y = 0; y < tiles.length; y++) {
 	    for (int x = 0; x < tiles[0].length; x++) {
-		int id = csvLoader.getValueAt(x, y);
-
-		tiles[y][x] = new Tile(tileImageLoader.getTileImage(id), new Point(x, y));
+		int id = idLoader.getValueAt(x, y);
+		Point tileCoord = new Point(x*hardCodedTileWidth, y*hardCodedTileHeight);
+		tiles[y][x] = new Tile(tileImageLoader.getTileImage(id), tileCoord);
 	    }
 	}
     }
@@ -48,11 +43,11 @@ public class World
 	return getTile(point.x, point.y);
     }
 
-    public int getHeight() {
+    public int getRows() {
 	return tiles.length;
     }
 
-    public int getWidth() {
+    public int getColumns() {
 	return tiles[0].length;
     }
 }
