@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class TileImageLoader
+public class ImageLoader
 {
 
     private BufferedImage tileSetImage;
@@ -21,7 +21,7 @@ public class TileImageLoader
      *
      * @throws IOException if there is an error reading the image file
      */
-    public TileImageLoader(String fileName, int tileWidth, int tileHeight) throws IOException {
+    public ImageLoader(String fileName, int tileWidth, int tileHeight) throws IOException {
 	this.tileWidth = tileWidth;
 	this.tileHeight = tileHeight;
 	tileSetImage = ImageIO.read(new File("resources/images/" + fileName));
