@@ -14,8 +14,7 @@ public class GameComponent extends JComponent implements FrameListener
 	setKeyBindings();
 	this.game = game;
 	game.addFrameListener(this);
-
-    }
+   }
 
     private void paintPlayer(final Graphics g) {
 	Player player = game.getPlayer();
