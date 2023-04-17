@@ -13,8 +13,9 @@ public class Entity
     protected Color color;
     protected Rectangle hitBox;
     protected boolean isGarbage = false;
-    private int exp;
-    private int level;
+    protected int exp;
+    protected int level;
+
 
     public Entity(final Point coord, final Color color) {
 	this.size = new Dimension(50, 50); // HARDCODED SIZE OF 50,50 px TODO
