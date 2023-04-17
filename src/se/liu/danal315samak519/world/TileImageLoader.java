@@ -22,9 +22,9 @@ public class TileImageLoader
      * @throws IOException if there is an error reading the image file
      */
     public TileImageLoader(String fileName, int tileWidth, int tileHeight) throws IOException {
-	allTilesImage = ImageIO.read(new File("resources/images/" + fileName));
 	this.tileWidth = tileWidth;
 	this.tileHeight = tileHeight;
+	allTilesImage = ImageIO.read(new File("resources/images/" + fileName));
 
 	rows = allTilesImage.getHeight() / getTileHeight();
 	columns = allTilesImage.getWidth() / getTileWidth();
@@ -36,11 +36,6 @@ public class TileImageLoader
 	return allTilesImage.getSubimage(tileX, tileY, tileWidth, tileHeight);
     }
 
-    /**
-     * Return tile image from ID
-     *
-     * @param id the number of the tile
-     */
     public BufferedImage getTileImage(int id) {
 	int x = id % columns;
 	int y = id / rows;
