@@ -1,8 +1,5 @@
 package se.liu.danal315samak519;
 
-import se.liu.danal315samak519.world.Tile;
-import se.liu.danal315samak519.world.World;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

@@ -4,7 +4,7 @@
   <export format="csv"/>
  </editorsettings>
  <tileset firstgid="1" source="E:/OneDrive - Linköpings universitet/Kurser/TDDE30/Projekt/tileset/TX Tileset Grass.tsx"/>
- <layer id="1" name="Rutlager 1" width="30" height="30">
+ <layer id="1" name="Rutlager 2" width="30" height="30">
   <data encoding="csv">
 39,34,56,58,40,12,55,13,4,60,38,17,43,27,41,31,4,2,1,15,38,38,23,50,17,23,61,27,57,12,
 6,19,43,60,23,52,34,32,39,59,44,25,57,19,53,11,59,15,46,60,54,62,40,24,55,56,52,45,22,29,
