@@ -38,7 +38,6 @@ public class Game
 	}
 
     private void removeGarbage() {
-
 	entityList.removeIf(Entity::getIsGarbage);
     }
 

@@ -35,7 +35,11 @@ public class WeaponEntity extends Entity
 
 	}
 	this.hitBox = new Rectangle(this.coord, size);
-	lifeSpan = 5;
+	lifeSpan = 690;
+    }
+
+    public Entity getOwner() {
+	return owner;
     }
 
     @Override public void tick() {

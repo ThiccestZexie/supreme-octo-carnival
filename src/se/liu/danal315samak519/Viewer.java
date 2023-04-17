@@ -16,6 +16,7 @@ public class Viewer
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	//Add component
+
 	Player player = new Player("DanelSamuel", new Point(10, 10), Color.green);
 	player.setSpeed(2);
 	Game game = new Game(player);
