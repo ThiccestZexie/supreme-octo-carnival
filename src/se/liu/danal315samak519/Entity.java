@@ -11,18 +11,28 @@ public class Entity
     protected int speed;
     protected int velX, velY;
     protected Color color;
+    protected Rectangle hitBox;
     protected boolean isGarbage = false;
+    protected int exp;
+    protected int level;
+
 
     public Entity(final Point coord, final Color color) {
 	this.size = new Dimension(50, 50); // HARDCODED SIZE OF 50,50 px TODO
 	this.coord = coord;
 	this.color = color;
+	this.hitBox = new Rectangle(size);
+	this.hitBox.setLocation(coord);
 	dir = Direction.DOWN;
 	isGarbage = false;
     }
 
     public Direction getDir() {
 	return dir;
+    }
+
+    public Rectangle getHitBox(){
+	return this.hitBox;
     }
 
     public void setDir(final Direction dir) {
@@ -32,6 +42,19 @@ public class Entity
     public Point getCoord() {
 	return coord;
     }
+    public boolean isHit(Entity e)
+    {
+	if (this.hitBox.getBounds().intersects(e.getHitBox()))
+		{
+		    if (e instanceof WeaponEntity){
+			this.isGarbage = true;
+			return true;
+		    }
+
+		}
+	return false;
+    }
+
 
     public int getX(){
 	return getCoord().x;
@@ -79,9 +102,12 @@ public class Entity
 
     public void tick() {
 	// Move along according to current velocity
+	nudgeHitBox(velX, velY);
 	nudge(velX, velY);
     }
-
+    public void nudgeHitBox(final int speedX, final int speedY){
+	hitBox.translate(speedX, speedY);
+    }
     public int getVelX() {
 	return velX;
     }
@@ -98,6 +124,24 @@ public class Entity
     }
 
     public WeaponEntity getSword(){
-	return new WeaponEntity(this.coord,  Color.BLACK, this );
+		return new WeaponEntity(this.coord, Color.BLACK, this );
+    }
+
+    public void getExp(){
+	exp++;
+    }
+
+    public void levelUp(){
+	while(canLevelUp()){
+	    exp -= 2;
+	    level++;
+	}
+    }
+
+    public boolean canLevelUp(){ // need to figure out exp requirements
+	if (this.exp >= 2){
+	    return true;
+	}
+	return false;
     }
 }

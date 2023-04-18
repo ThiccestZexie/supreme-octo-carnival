@@ -10,4 +10,13 @@ public class Enemy extends Entity
 		super(coord, Color.red);
 
     }
+
+    public void isDead(WeaponEntity weapon)
+    {
+	if(isHit(weapon)){
+	   Entity player = weapon.getOwner();
+	   player.getExp();
+	}
+    }
+
 }

@@ -5,7 +5,6 @@ import java.awt.*;
 public class Player extends Entity
 {
     private String name;
-    private int level;
 
     public Player(String name, final Point coord, final Color color)
     {

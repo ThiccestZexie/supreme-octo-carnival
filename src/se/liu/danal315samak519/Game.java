@@ -3,12 +3,15 @@ package se.liu.danal315samak519;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
-public class Game
+public class Game implements AttackListener
 {
     public List<Entity> entityList = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
+    private List<AttackListener> attackListeners = new ArrayList<>();
+    private Map map;
     private Player player;
     private World world;
 
@@ -16,13 +19,24 @@ public class Game
 	this.player = player;
     }
 
-    public void tick() {
+    public void tick()
+    {
 	removeGarbage();
 	player.tick();
-	for(Entity e: entityList){
+	for (Entity e : entityList) {
+	    checkForHits(e);
 	    e.tick();
-	}
+	    }
     }
+
+    public void checkForHits(Entity e)
+    	{
+	    for(Entity w : entityList){
+		if(!Objects.equals(e,w)){
+		    e.isHit(w);
+		}
+	    }
+	}
 
     private void removeGarbage() {
 
@@ -45,11 +59,19 @@ public class Game
 	frameListeners.add(fl);
     }
 
+
     public void notifyListeners() {
 	for (FrameListener fl : frameListeners) {
 	    fl.frameChanged();
 	}
+
     }
+    public void notifyAttackListeners(){
+	for(AttackListener al : attackListeners){
+	    al.attack();
+	}
+    }
+
 
     public void nudgePlayer(final int dx, final int dy) {
 	player.nudge(dx, dy);
@@ -92,10 +114,18 @@ public class Game
 
     public void addPlayerSword(){
 	entityList.add(player.getSword());
+	notifyAttackListeners();
     }
+
 
     public List<Entity> getEntityList() {
 	return entityList;
+    }
+
+    @Override public void attack() {
+	for (Entity e : entityList) {
+	    checkForHits(e);
+	}
     }
 
     public World getWorld(){
