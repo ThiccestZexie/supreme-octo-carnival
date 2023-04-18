@@ -25,9 +25,12 @@ public class Entity
 
 
     public Entity(final Point coord, final Color color) {
+	this.maxhp = 3;
+	this.hp = maxhp;
 	this.size = new Dimension(50, 50); // HARDCODED SIZE OF 50,50 px TODO
 	this.coord = coord;
 	this.color = color;
+	this.exp = 0;
 	this.hitBox = new Rectangle(size);
 	this.hitBox.setLocation(coord);
 	dir = Direction.DOWN;

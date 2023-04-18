@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 
 public class GameComponent extends JComponent implements FrameListener
 {
-    private static final int CONSTANTNUDGE = 1;
+    private static final int CONSTANTNUDGE = 2;
     private static final int TILE_WIDTH = 32;
     private static final int TILE_HEIGHT = 32;
     public Game game;
@@ -34,6 +34,32 @@ public class GameComponent extends JComponent implements FrameListener
 	    g.fillRect(entityCoord.x, entityCoord.y, entitySize.width, entitySize.height);
 	}
 
+    }
+
+    private void paintGUI(final Graphics g) {
+
+	for (Entity gE : game.getEntityList()) {
+	    if (gE instanceof Enemy) {
+		// Maxhealth (BLACK)
+		g.setColor(Color.BLACK);
+		int blackWidth = gE.getMaxHp() * 60;
+		int blackHeight = 20;
+		int blackX = gE.getX() - blackWidth / 2 + gE.getWidth() / 2;
+		int blackY = gE.getY() + gE.getHeight() + 15;
+		g.fillRect(blackX, blackY, blackWidth, blackHeight); // Should be get maxHp
+
+		//Current health (RED)
+		int redWidth = gE.getHp() * 60;
+		int redHeight = 20;
+		int redX = blackX;
+		int redY = blackY;
+		g.setColor(Color.RED);
+		g.fillRect(gE.getX() - blackWidth / 2 + gE.getWidth() / 2, gE.getY() + gE.getHeight() + 15, redWidth, redHeight);
+	    }
+	}
+
+		g.setColor(Color.PINK);
+		g.drawString(Integer.toString(game.getPlayer().getExp()), 20, 20);
     }
 
     @Override protected void paintComponent(final Graphics g) {

@@ -16,6 +16,7 @@ public class Game implements AttackListener
 
     public Game(final Player player) {
 	this.player = player;
+	attackListeners.add(this);
     }
 
     public void tick()
@@ -23,7 +24,6 @@ public class Game implements AttackListener
 	removeGarbage();
 	player.tick();
 	for (Entity e : entityList) {
-	    checkForHits(e);
 	    e.tick();
 	    }
     }
@@ -31,9 +31,11 @@ public class Game implements AttackListener
     public void checkForHits(Entity e)
     	{
 	    for(Entity w : entityList){
-		if(!Objects.equals(e,w)){
-		    e.isHit(w);
-		}
+			if(w instanceof WeaponEntity)
+			{
+			    WeaponEntity theMurderWeapon = (WeaponEntity) w;
+			    e.isHit(theMurderWeapon);
+			}
 	    }
 	}
 

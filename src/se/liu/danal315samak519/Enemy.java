@@ -16,4 +16,9 @@ public class Enemy extends Entity
 
     }
 
+    @Override public boolean isHit(final WeaponEntity weaponEntity) {
+
+	return super.isHit(weaponEntity);
+
+    }
 }
