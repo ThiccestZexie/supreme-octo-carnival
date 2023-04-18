@@ -11,7 +11,6 @@ public class Game implements AttackListener
     public List<Entity> entityList = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private List<AttackListener> attackListeners = new ArrayList<>();
-    private Map map;
     private Player player;
     private World world;
 
