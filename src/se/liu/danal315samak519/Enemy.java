@@ -11,12 +11,9 @@ public class Enemy extends Entity
 
     }
 
-    public void isDead(WeaponEntity weapon)
-    {
-	if(isHit(weapon)){
-	   Entity player = weapon.getOwner();
-	   player.getExp();
-	}
+    public void isKilled(final WeaponEntity weaponEntity){
+
+
     }
 
 }

@@ -16,7 +16,7 @@ public class GameComponent extends JComponent implements FrameListener
 	this.game = game;
 	setKeyBindings();
 	game.addFrameListener(this);
-   }
+    }
 
     private void paintPlayer(final Graphics g) {
 	Player player = game.getPlayer();
@@ -41,6 +41,7 @@ public class GameComponent extends JComponent implements FrameListener
 	paintMap(g);
 	paintEntities(g);
 	paintPlayer(g);
+	paintGUI(g);
     }
 
     private void paintMap(final Graphics g) {
@@ -58,8 +59,7 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     /**
-     * This method is called when JFrame tries to pack all the components.
-     * Ensures the window size is the same as world size.
+     * This method is called when JFrame tries to pack all the components. Ensures the window size is the same as world size.
      */
     @Override public Dimension getPreferredSize() {
 	int preferredWidth = game.getWorld().getRows() * TILE_WIDTH;
@@ -110,12 +110,12 @@ public class GameComponent extends JComponent implements FrameListener
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	    int speed = game.getPlayer().getSpeed();
+	    int maxSpeed = game.getPlayer().getMaxSpeed();
 	    switch (dir) {
-		case UP -> game.setPlayerVelY(-speed);
-		case DOWN -> game.setPlayerVelY(speed);
-		case RIGHT -> game.setPlayerVelX(speed);
-		case LEFT -> game.setPlayerVelX(-speed);
+		case UP -> game.setPlayerVelY(-maxSpeed);
+		case DOWN -> game.setPlayerVelY(maxSpeed);
+		case RIGHT -> game.setPlayerVelX(maxSpeed);
+		case LEFT -> game.setPlayerVelX(-maxSpeed);
 	    }
 	    game.setPlayerDirection(dir);
 	}

@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 
 public class Viewer
 {
-    private static final int TIMER_DELAY = 2;
+    private static final int TIMER_DELAY = 17;
     private GameComponent gameComponent;
 
     public void show() {
@@ -17,7 +17,7 @@ public class Viewer
 	//Add component
 
 	Player player = new Player("DanelSamuel", new Point(10, 10), Color.green);
-	player.setSpeed(2);
+	player.setMaxSpeed(5);
 	Game game = new Game(player);
 	game.setWorld(new World("map0.tmx", "TX Tileset Grass.png"));
 	game.addEnemy(new Point(100, 600));

@@ -38,7 +38,6 @@ public class Game implements AttackListener
 	}
 
     private void removeGarbage() {
-
 	entityList.removeIf(Entity::getIsGarbage);
     }
 

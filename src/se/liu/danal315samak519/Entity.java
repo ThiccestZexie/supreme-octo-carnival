@@ -4,17 +4,24 @@ import java.awt.*;
 
 public class Entity
 {
+    // CONSTANTS FOR ENTITIES
+    private static final int INVINCIBILITY_FRAMES = 60; // 1 second @ 60fps
     //...
     protected Dimension size;
     protected Point coord;
     protected Direction dir;
-    protected int speed;
+    protected int maxSpeed;
     protected int velX, velY;
     protected Color color;
     protected Rectangle hitBox;
     protected boolean isGarbage = false;
     protected int exp;
     protected int level;
+
+    // TODO REMOVE HARDCODED 3
+    protected int hp;
+    protected int maxhp ;
+    private int currentInvFrames;
 
 
     public Entity(final Point coord, final Color color) {
@@ -30,37 +37,53 @@ public class Entity
     public Direction getDir() {
 	return dir;
     }
-
-    public Rectangle getHitBox(){
-	return this.hitBox;
+    public int getHp(){
+		return hp;
     }
+    public int getMaxHp(){
+	 return maxhp;
+    }
+
 
     public void setDir(final Direction dir) {
 	this.dir = dir;
     }
 
+    public Rectangle getHitBox() {
+	return this.hitBox;
+    }
+
     public Point getCoord() {
 	return coord;
     }
-    public boolean isHit(Entity e)
-    {
-	if (this.hitBox.getBounds().intersects(e.getHitBox()))
-		{
-		    if (e instanceof WeaponEntity){
-			this.isGarbage = true;
-			return true;
-		    }
 
-		}
+    public int getExp() {
+	return exp;
+    }
+
+    public boolean isHit(WeaponEntity e)
+    {
+	Entity owner = e.getOwner();
+	if (this.hitBox.getBounds().intersects(e.getHitBox())) {
+	    if (hp > 0) {
+		hp--;
+		this.currentInvFrames = INVINCIBILITY_FRAMES;
+	    } else {
+		owner.incExp();
+		this.isGarbage = true;
+	    }
+	    return true;
+
+	}
 	return false;
     }
 
 
-    public int getX(){
+    public int getX() {
 	return getCoord().x;
     }
 
-    public int getY(){
+    public int getY() {
 	return getCoord().y;
     }
 
@@ -71,19 +94,21 @@ public class Entity
     public Dimension getSize() {
 	return size;
     }
+
     public int getWidth() {
 	return (int) size.getWidth();
     }
+
     public int getHeight() {
-	return(int) size.getHeight();
+	return (int) size.getHeight();
     }
 
-    public int getSpeed() {
-	return speed;
+    public int getMaxSpeed() {
+	return maxSpeed;
     }
 
-    public void setSpeed(final int speed) {
-	this.speed = speed;
+    public void setMaxSpeed(final int speed) {
+	this.maxSpeed = speed;
     }
 
     public void moveTo(final int x, final int y)
@@ -105,9 +130,11 @@ public class Entity
 	nudgeHitBox(velX, velY);
 	nudge(velX, velY);
     }
-    public void nudgeHitBox(final int speedX, final int speedY){
-	hitBox.translate(speedX, speedY);
+
+    public void nudgeHitBox(final int dx, final int dy) {
+	hitBox.translate(dx, dy);
     }
+
     public int getVelX() {
 	return velX;
     }
@@ -115,31 +142,33 @@ public class Entity
     public int getVelY() {
 	return velY;
     }
-    public int getLifeSpan(){
+
+    public int getLifeSpan() {
 	// Returns -1 becuase they are immortal!!! as in they dont die of age...
 	return -1;
     }
-    public boolean getIsGarbage(){
+
+    public boolean getIsGarbage() {
 	return isGarbage;
     }
 
-    public WeaponEntity getSword(){
-		return new WeaponEntity(this.coord, Color.BLACK, this );
+    public WeaponEntity getSword() {
+	return new WeaponEntity(this.coord, Color.BLACK, this);
     }
 
-    public void getExp(){
-	exp++;
+    public void incExp() { //Exp should depend on enemey level
+		exp++;
     }
 
-    public void levelUp(){
-	while(canLevelUp()){
-	    exp -= 2;
+    public void levelUp() {
+	while (canLevelUp()) {
+	    exp = 0;
 	    level++;
 	}
     }
 
-    public boolean canLevelUp(){ // need to figure out exp requirements
-	if (this.exp >= 2){
+    public boolean canLevelUp() { // need to figure out exp requirements
+	if (this.exp >= 211) {
 	    return true;
 	}
 	return false;
