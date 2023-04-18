@@ -19,7 +19,7 @@ public class Game
     public void tick() {
 	removeGarbage();
 	player.tick();
-	for(Entity e: entityList){
+	for (Entity e : entityList) {
 	    e.tick();
 	}
     }
@@ -81,8 +81,8 @@ public class Game
 	player.setCurrentVelocity(vx, vy);
     }
 
-    public void setPlayerDirection(final Direction dir){
-		player.setDir(dir);
+    public void setPlayerDirection(final Direction dir) {
+	player.setDir(dir);
     }
 
     public void addEnemy(Point coords)
@@ -90,7 +90,7 @@ public class Game
 	entityList.add(new Enemy(coords));
     }
 
-    public void addPlayerSword(){
+    public void addPlayerSword() {
 	entityList.add(player.getSword());
     }
 
@@ -98,7 +98,7 @@ public class Game
 	return entityList;
     }
 
-    public World getWorld(){
+    public World getWorld() {
 	return world;
     }
 

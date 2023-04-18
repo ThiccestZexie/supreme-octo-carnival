@@ -58,8 +58,7 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     /**
-     * This method is called when JFrame tries to pack all the components.
-     * Ensures the window size is the same as world size.
+     * This method is called when JFrame tries to pack all the components. Ensures the window size is the same as world size.
      */
     @Override public Dimension getPreferredSize() {
 	int preferredWidth = game.getWorld().getRows() * TILE_WIDTH;

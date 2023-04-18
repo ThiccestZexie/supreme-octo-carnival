@@ -72,14 +72,18 @@ public class MapLoader
 	}
 
 	// Fill tiles array
-	tiles = new Tile[getRows()][getColumns()];
-	for (int y = 0; y < getRows(); y++) {
-	    for (int x = 0; x < getColumns(); x++) {
+	tiles = new Tile[rows][columns];
+	for (int y = 0; y < rows; y++) {
+	    for (int x = 0; x < columns; x++) {
 		int id = this.getID(x, y);
 		Point coord = new Point(x * getTileWidth(), y * getTileHeight());
 		tiles[y][x] = new Tile(getTileImage(id), coord);
 	    }
 	}
+    }
+
+    public static void main(String[] args) throws IOException {
+	MapLoader mapLoader = new MapLoader("map0.tmx");
     }
 
     /**
@@ -120,9 +124,12 @@ public class MapLoader
     public BufferedImage getTileImage(int id) {
 	int index = getIndexOf(id);
 	int firstGID = tilesetGIDs[index];
-	int col = (id - firstGID) % columns;
-	int row = (id - firstGID) / rows;
-	return getTileImage(col, row, index);
+	BufferedImage image = tilesetImages[index];
+	int tilesetColumns = image.getWidth() / getTileWidth();
+	int tilesetRows = image.getHeight() / getTileHeight();
+	int col = (id - firstGID) % tilesetColumns;
+	int row = (id - firstGID) / tilesetRows;
+	return getSubImageOfTileSet(col, row, image);
     }
 
     private int getIndexOf(int id) {
@@ -136,14 +143,10 @@ public class MapLoader
 	return index;
     }
 
-    public BufferedImage getTileImage(int col, int row, int index) {
+    private BufferedImage getSubImageOfTileSet(int col, int row, BufferedImage image) {
 	int x = col * tileWidth;
 	int y = row * tileHeight;
-	return tilesetImages[index].getSubimage(x, y, tileWidth, tileHeight);
-    }
-
-    public static void main(String[] args) throws IOException {
-	MapLoader mapLoader = new MapLoader("map0.tmx");
+	return image.getSubimage(x, y, tileWidth, tileHeight);
     }
 
     public int getID(int x, int y) {
