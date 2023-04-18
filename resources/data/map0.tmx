@@ -3,7 +3,7 @@
  <editorsettings>
   <export format="csv"/>
  </editorsettings>
- <tileset firstgid="1" source="E:/OneDrive - Linköpings universitet/Kurser/TDDE30/Projekt/tileset/TX Tileset Grass.tsx"/>
+ <tileset firstgid="1" source="TX Tileset Grass.tsx"/>
  <layer id="1" name="Rutlager 2" width="30" height="30">
   <data encoding="csv">
 7,14,5,22,11,6,28,5,1,7,26,11,21,11,25,1,31,25,8,24,22,16,19,31,19,12,11,4,4,22,

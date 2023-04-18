@@ -6,28 +6,24 @@ import java.io.IOException;
 public class World
 {
     private Tile[][] tiles;
-    private TileImageLoader tileImageLoader;
-    private IDLoader idLoader;
 
-    public World(final String tmxName, final String tileSetName) {
+    public World(final String tmxName) {
 	try {
-	    idLoader = new IDLoader(tmxName);
-	    tileImageLoader = new TileImageLoader(tileSetName, idLoader.getTileWidth(), idLoader.getTileHeight());
-	    populateTileArray();
+	    MapLoader mapLoader = new MapLoader(tmxName);
+	    tiles = new Tile[mapLoader.getRows()][mapLoader.getColumns()];
+	    for (int y = 0; y < tiles.length; y++) {
+		for (int x = 0; x < tiles[0].length; x++) {
+		    int id = mapLoader.getID(x, y);
+		    Point coord = new Point(x * mapLoader.getTileWidth(), y * mapLoader.getTileHeight());
+		    tiles[y][x] = new Tile(mapLoader.getTileImage(id), coord);
+		}
+	    }
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
     private void populateTileArray() {
-	tiles = new Tile[idLoader.getRows()][idLoader.getColumns()];
-	for (int y = 0; y < tiles.length; y++) {
-	    for (int x = 0; x < tiles[0].length; x++) {
-		int id = idLoader.getID(x, y);
-		Point coord = new Point(x * idLoader.getTileWidth(), y * idLoader.getTileHeight());
-		tiles[y][x] = new Tile(tileImageLoader.getTileImage(id), coord);
-	    }
-	}
     }
 
     public Tile getTile(int x, int y) {
