@@ -103,8 +103,8 @@ public class Game implements AttackListener
 	player.setCurrentVelocity(vx, vy);
     }
 
-    public void setPlayerDirection(final Direction dir){
-		player.setDir(dir);
+    public void setPlayerDirection(final Direction dir) {
+	player.setDir(dir);
     }
 
     public void addEnemy(Point coords)
@@ -112,7 +112,7 @@ public class Game implements AttackListener
 	entityList.add(new Enemy(coords));
     }
 
-    public void addPlayerSword(){
+    public void addPlayerSword() {
 	entityList.add(player.getSword());
 	notifyAttackListeners();
     }
@@ -128,7 +128,7 @@ public class Game implements AttackListener
 	}
     }
 
-    public World getWorld(){
+    public World getWorld() {
 	return world;
     }
 

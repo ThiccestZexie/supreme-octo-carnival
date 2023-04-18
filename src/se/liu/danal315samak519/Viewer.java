@@ -19,7 +19,7 @@ public class Viewer
 	Player player = new Player("DanelSamuel", new Point(10, 10), Color.green);
 	player.setMaxSpeed(5);
 	Game game = new Game(player);
-	game.setWorld(new World("map0.tmx", "TX Tileset Grass.png"));
+	game.setWorld(new World("map0.tmx"));
 	game.addEnemy(new Point(100, 600));
 	game.addEnemy(new Point(523, 321));
 	game.addEnemy(new Point(132, 60));
