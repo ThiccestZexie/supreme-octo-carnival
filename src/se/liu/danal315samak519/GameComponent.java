@@ -57,9 +57,13 @@ public class GameComponent extends JComponent implements FrameListener
 		g.fillRect(gE.getX() - blackWidth / 2 + gE.getWidth() / 2, gE.getY() + gE.getHeight() + 15, redWidth, redHeight);
 	    }
 	}
+	int expBarLength = 100;
 
-		g.setColor(Color.PINK);
-		g.drawString(Integer.toString(game.getPlayer().getExp()), 20, 20);
+	g.setColor(Color.BLACK);
+	g.fillRect(20,20,expBarLength, 30);
+	g.setColor(Color.GREEN);
+	g.fillRect(20,20,
+		   game.getPlayer().exp * expBarLength/game.getPlayer().getExpRequirements()[game.getPlayer().getLevel()-1], 30);
     }
 
     @Override protected void paintComponent(final Graphics g) {

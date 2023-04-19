@@ -10,6 +10,7 @@ public class Player extends Entity
     {
 	super(coord, color);
 	this.name = name;
+	this.level = 1;
     }
 
     public String getName() {
