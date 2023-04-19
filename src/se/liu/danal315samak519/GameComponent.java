@@ -14,12 +14,14 @@ public class GameComponent extends JComponent implements FrameListener
 
     public int i = 0;
     public boolean didPlayerLevel = false;
+    int oldPlayerLevel;
 
     public GameComponent(Game game)
     {
 	this.game = game;
 	setKeyBindings();
 	game.addFrameListener(this);
+	oldPlayerLevel = game.getPlayer().getLevel();
     }
 
     private void paintPlayer(final Graphics g) {
@@ -70,23 +72,26 @@ public class GameComponent extends JComponent implements FrameListener
 		   game.getPlayer().exp * expBarLength/game.getPlayer().getExpRequirements()[game.getPlayer().getLevel()-1], 30);
     }
 
-    private void paintLevelUPAnimation(final Graphics g, int i){
+    private void paintLevelUPAnimation(final Graphics g){
 	BufferedImage image = null;
-	if (game.getPlayer().checkExpReq()){
+
+	if (oldPlayerLevel < game.getPlayer().getLevel()){
 	    didPlayerLevel = true;
-	    System.out.println("hi");
 	}
+	this.oldPlayerLevel = game.getPlayer().getLevel();
 	if (this.i >= 19)
 	{
 
-	    i = 0;
+
+	    this.i = 0;
 	    didPlayerLevel = false;
 	}
-	if (true)
-	{
-	    g.drawImage(game.getPlayer().frames.get(i), game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
+	else if (didPlayerLevel){
+	    g.drawImage(game.getPlayer().frames.get(this.i), game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
 	    this.i++;
+
 	}
+
 
     }
 
@@ -97,7 +102,7 @@ public class GameComponent extends JComponent implements FrameListener
 	paintEntities(g);
 	paintPlayer(g);
 	paintGUI(g);
-	paintLevelUPAnimation(g, i);
+	paintLevelUPAnimation(g);
 
     }
 
