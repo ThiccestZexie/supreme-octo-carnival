@@ -82,7 +82,7 @@ public class Entity
 		this.currentInvFrames = INVINCIBILITY_FRAMES;
 	    } else {
 		owner.incExp();
-		owner.canLevelUp();
+		owner.levelUp();
 		this.isGarbage = true;
 	    }
 	    return true;
@@ -173,7 +173,7 @@ public class Entity
 		exp++;
     }
 
-    public void canLevelUp() {
+    public void levelUp() {
 	while (checkExpReq()) {
 	    exp -= expRequirements[level - 1];
 	    level++;

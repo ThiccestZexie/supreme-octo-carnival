@@ -3,6 +3,7 @@ package se.liu.danal315samak519;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 
 public class GameComponent extends JComponent implements FrameListener
 {
@@ -10,6 +11,9 @@ public class GameComponent extends JComponent implements FrameListener
     private static final int TILE_WIDTH = 32;
     private static final int TILE_HEIGHT = 32;
     public Game game;
+
+    public int i = 0;
+    public boolean didPlayerLevel = false;
 
     public GameComponent(Game game)
     {
@@ -66,12 +70,35 @@ public class GameComponent extends JComponent implements FrameListener
 		   game.getPlayer().exp * expBarLength/game.getPlayer().getExpRequirements()[game.getPlayer().getLevel()-1], 30);
     }
 
+    private void paintLevelUPAnimation(final Graphics g, int i){
+	BufferedImage image = null;
+	if (game.getPlayer().checkExpReq()){
+	    didPlayerLevel = true;
+	    System.out.println("hi");
+	}
+	if (this.i >= 19)
+	{
+
+	    i = 0;
+	    didPlayerLevel = false;
+	}
+	if (true)
+	{
+	    g.drawImage(game.getPlayer().frames.get(i), game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
+	    this.i++;
+	}
+
+    }
+
     @Override protected void paintComponent(final Graphics g) {
 	super.paintComponent(g);
+
 	paintMap(g);
 	paintEntities(g);
 	paintPlayer(g);
 	paintGUI(g);
+	paintLevelUPAnimation(g, i);
+
     }
 
     private void paintMap(final Graphics g) {

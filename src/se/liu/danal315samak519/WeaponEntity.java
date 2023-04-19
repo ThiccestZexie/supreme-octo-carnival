@@ -12,6 +12,7 @@ public class WeaponEntity extends Entity
 	super(coord, color);
 	this.owner = owner;
 	this.coord = coord;
+	this.hp = 9999; //temp bug fix to make it so swords dont kill themselves for exp...
 	switch (owner.getDir()){
 	    case UP:
 		this.size =new Dimension(10, 60);
