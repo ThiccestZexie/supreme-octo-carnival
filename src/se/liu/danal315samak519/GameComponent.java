@@ -81,15 +81,12 @@ public class GameComponent extends JComponent implements FrameListener
 	this.oldPlayerLevel = game.getPlayer().getLevel();
 	if (this.i >= 19)
 	{
-
-
 	    this.i = 0;
 	    didPlayerLevel = false;
 	}
 	else if (didPlayerLevel){
 	    g.drawImage(game.getPlayer().frames.get(this.i), game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
 	    this.i++;
-
 	}
 
 
