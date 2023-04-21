@@ -25,22 +25,21 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintPlayer(final Graphics g) {
 	Player player = game.getPlayer();
-	Point playerCoord = player.getCoord();
-	Dimension playerSize = player.getSize();
+
 	// PAINT HITBOX
 	g.setColor(player.getColor());
-	g.fillRect(playerCoord.x, playerCoord.y, playerSize.width, playerSize.height);
+	g.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
 	paintLevelUpAnimation(g);
+
+	// PAINT SPRITE
+	g.drawImage(player.getCurrentSprite(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), null);
     }
 
     private void paintEntities(final Graphics g) {
 	for (Entity gE : game.getEntityList()) {
-	    Point entityCoord = gE.getCoord();
-	    Dimension entitySize = gE.getSize();
 	    g.setColor(gE.getColor());
-	    g.fillRect(entityCoord.x, entityCoord.y, entitySize.width, entitySize.height);
+	    g.fillRect(gE.getX(), gE.getY(), gE.getWidth(), gE.getHeight());
 	}
-
     }
 
     private void paintGUI(final Graphics g) {
@@ -66,6 +65,7 @@ public class GameComponent extends JComponent implements FrameListener
 	}
 	int expBarLength = 100;
 
+	// Paint EXP bar
 	g.setColor(Color.BLACK);
 	g.fillRect(20, 20, expBarLength, 30);
 	g.setColor(Color.GREEN);

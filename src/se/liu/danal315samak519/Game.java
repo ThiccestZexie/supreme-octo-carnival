@@ -60,9 +60,7 @@ public class Game
 	for (FrameListener fl : frameListeners) {
 	    fl.frameChanged();
 	}
-
     }
-
 
     public void nudgePlayer(final int dx, final int dy) {
 	player.nudge(dx, dy);

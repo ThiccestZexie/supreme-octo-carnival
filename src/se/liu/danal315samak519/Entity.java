@@ -8,7 +8,7 @@ public class Entity
     // CONSTANTS FOR ENTITIES
     private static final int INVINCIBILITY_FRAMES = 60; // 1 second @ 60fps
 
-    private final int[] expRequirements = new int[]{2,3,5,8,12,20,23,30,999}; //from level "0" to level "10"
+    private final int[] expRequirements = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
     //...
     protected Dimension size;
     protected Point coord;
@@ -22,10 +22,13 @@ public class Entity
     protected int level;
 
     protected int hp;
-    protected int maxhp ;
+    protected int maxhp;
     private int currentInvFrames;
 
-    private BufferedImage currentSprite;
+    private BufferedImage[] currentSpriteFrames;
+
+    // Keeps track of what frame to display on the sprite
+    private int currentSpriteFrameIndex = 0;
 
 
     public Entity(final Point coord, final Color color) {
@@ -37,18 +40,23 @@ public class Entity
 	this.exp = 0;
 	this.hitBox = new Rectangle(size);
 	this.hitBox.setLocation(coord);
-	dir = Direction.DOWN;
 	isGarbage = false;
     }
 
     public Direction getDir() {
 	return dir;
     }
-    public int getHp(){
-		return hp;
+
+    public void setDir(final Direction dir) {
+	this.dir = dir;
     }
-    public int getMaxHp(){
-	 return maxhp;
+
+    public int getHp() {
+	return hp;
+    }
+
+    public int getMaxHp() {
+	return maxhp;
     }
 
     public int[] getExpRequirements() {
@@ -59,16 +67,16 @@ public class Entity
 	return level;
     }
 
-    public void setDir(final Direction dir) {
-	this.dir = dir;
-    }
-
     public BufferedImage getCurrentSprite() {
-	return currentSprite;
+	return getSpriteFrameAt(currentSpriteFrameIndex);
     }
 
-    public void setCurrentSprite(final BufferedImage currentSprite) {
-	this.currentSprite = currentSprite;
+    private BufferedImage getSpriteFrameAt(int index){
+	return currentSpriteFrames[index];
+    }
+
+    public void setCurrentSpriteFrames(final BufferedImage[] frames) {
+	this.currentSpriteFrames = frames;
     }
 
     public Rectangle getHitBox() {
@@ -180,7 +188,7 @@ public class Entity
     }
 
     public void incExp() { //Exp should depend on enemey level
-		exp++;
+	exp++;
     }
 
     public void levelUp() {
