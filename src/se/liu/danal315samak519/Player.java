@@ -1,9 +1,7 @@
 package se.liu.danal315samak519;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,27 +27,13 @@ public class Player extends Entity
 
     public void getLevelUpFrames() {
 	try {
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up00.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up01.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up02.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up03.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up04.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up05.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up06.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up07.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up08.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up09.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up10.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up11.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up12.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up13.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up14.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up15.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up16.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up17.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up18.png")));
-	    levelUpFrames.add(ImageIO.read(new File(LEVEL_FOLDER + "level_up19.png")));
-
+	    // HARDCODED FOR EXACTLY 20 FRAMES
+	    for (int tens = 0; tens < 2; tens++) {
+		for (int ones = 0; ones < 10; ones++) {
+		    ImageLoader levelUpFrameLoader = new ImageLoader("/levelUP/level_up" + tens + ones + ".png");
+		    levelUpFrames.add(levelUpFrameLoader.getImage());
+		}
+	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}

@@ -28,4 +28,8 @@ public class ImageLoader
     public BufferedImage getSubImage(int x, int y, int width, int height) {
 	return image.getSubimage(x, y, width, height);
     }
+
+    public BufferedImage getImage(){
+	return image;
+    }
 }

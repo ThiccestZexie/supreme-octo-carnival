@@ -74,8 +74,6 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintLevelUpAnimation(final Graphics g){
-	BufferedImage image = null;
-
 	if (oldPlayerLevel < game.getPlayer().getLevel()){
 	    didPlayerLevel = true;
 	}
@@ -86,11 +84,10 @@ public class GameComponent extends JComponent implements FrameListener
 	    didPlayerLevel = false;
 	}
 	else if (didPlayerLevel){
-	    g.drawImage(game.getPlayer().levelUpFrames.get(this.i), game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
+	    Image currentFrame = game.getPlayer().levelUpFrames.get(this.i);
+	    g.drawImage(currentFrame, game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
 	    this.i++;
 	}
-
-
     }
 
     @Override protected void paintComponent(final Graphics g) {
