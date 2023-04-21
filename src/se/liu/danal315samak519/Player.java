@@ -9,13 +9,6 @@ public class Player extends Entity
     private static final String LEVEL_FOLDER = "resources/data/LevelUP/";
     public BufferedImage[] levelUpFrames;
     private String name;
-    private BufferedImage[] upFrames;
-    private BufferedImage[] downFrames;
-    private BufferedImage[] leftFrames;
-    private BufferedImage[] rightFrames;
-
-    private int ticksCounted = 0;
-    private static final int TICKS_PER_FRAME = 10;
 
 
     public Player(String name, final Point coord, final Color color)
@@ -34,7 +27,7 @@ public class Player extends Entity
 
     private void storeLevelUpFrames() {
 	try {
-	    // HARDCODED FOR EXACTLY 20 FRAMES
+	    // TODO HARDCODED FOR EXACTLY 20 FRAMES
 	    levelUpFrames = new BufferedImage[20];
 	    for (int tens = 0; tens < 2; tens++) {
 		for (int ones = 0; ones < 10; ones++) {
@@ -60,16 +53,6 @@ public class Player extends Entity
 		currentSpriteFrameIndex %= 2;
 		ticksCounted = 0;
 	    }
-	}
-    }
-
-    @Override public void setDir(final Direction dir) {
-	super.setDir(dir);
-	switch (dir) {
-	    case DOWN -> setCurrentSpriteFrames(downFrames);
-	    case UP -> setCurrentSpriteFrames(upFrames);
-	    case RIGHT -> setCurrentSpriteFrames(rightFrames);
-	    case LEFT -> setCurrentSpriteFrames(leftFrames);
 	}
     }
 

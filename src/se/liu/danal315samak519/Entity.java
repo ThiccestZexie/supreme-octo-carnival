@@ -3,8 +3,9 @@ package se.liu.danal315samak519;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Entity
+public abstract class Entity
 {
+    protected static final int TICKS_PER_FRAME = 10;
     // CONSTANTS FOR ENTITIES
     private static final int INVINCIBILITY_FRAMES = 60; // 1 second @ 60fps
 
@@ -23,6 +24,11 @@ public class Entity
 
     protected int hp;
     protected int maxhp;
+    protected BufferedImage[] upFrames;
+    protected BufferedImage[] downFrames;
+    protected BufferedImage[] leftFrames;
+    protected BufferedImage[] rightFrames;
+    protected int ticksCounted = 0;
     private int currentInvFrames;
 
     private BufferedImage[] currentSpriteFrames;
@@ -49,6 +55,12 @@ public class Entity
 
     public void setDir(final Direction dir) {
 	this.dir = dir;
+	switch (dir) {
+	    case DOWN -> setCurrentSpriteFrames(downFrames);
+	    case UP -> setCurrentSpriteFrames(upFrames);
+	    case RIGHT -> setCurrentSpriteFrames(rightFrames);
+	    case LEFT -> setCurrentSpriteFrames(leftFrames);
+	}
     }
 
     public int getHp() {

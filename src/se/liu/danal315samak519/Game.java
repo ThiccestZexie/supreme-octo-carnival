@@ -94,7 +94,7 @@ public class Game
 
     public void addEnemy(Point coords)
     {
-	entityList.add(new Enemy(coords));
+	entityList.add(new Enemy(coords, getPlayer()));
     }
 
     public void addPlayerSword() {
