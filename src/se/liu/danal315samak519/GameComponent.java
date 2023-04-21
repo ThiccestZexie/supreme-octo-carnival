@@ -3,7 +3,6 @@ package se.liu.danal315samak519;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
 
 public class GameComponent extends JComponent implements FrameListener
 {
@@ -28,6 +27,7 @@ public class GameComponent extends JComponent implements FrameListener
 	Player player = game.getPlayer();
 	Point playerCoord = player.getCoord();
 	Dimension playerSize = player.getSize();
+	// PAINT HITBOX
 	g.setColor(player.getColor());
 	g.fillRect(playerCoord.x, playerCoord.y, playerSize.width, playerSize.height);
 	paintLevelUpAnimation(g);
@@ -67,23 +67,21 @@ public class GameComponent extends JComponent implements FrameListener
 	int expBarLength = 100;
 
 	g.setColor(Color.BLACK);
-	g.fillRect(20,20,expBarLength, 30);
+	g.fillRect(20, 20, expBarLength, 30);
 	g.setColor(Color.GREEN);
-	g.fillRect(20,20,
-		   game.getPlayer().exp * expBarLength/game.getPlayer().getExpRequirements()[game.getPlayer().getLevel()-1], 30);
+	g.fillRect(20, 20, game.getPlayer().exp * expBarLength / game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1],
+		   30);
     }
 
-    private void paintLevelUpAnimation(final Graphics g){
-	if (oldPlayerLevel < game.getPlayer().getLevel()){
+    private void paintLevelUpAnimation(final Graphics g) {
+	if (oldPlayerLevel < game.getPlayer().getLevel()) {
 	    didPlayerLevel = true;
 	}
 	this.oldPlayerLevel = game.getPlayer().getLevel();
-	if (this.i >= 19)
-	{
+	if (this.i >= 19) {
 	    this.i = 0;
 	    didPlayerLevel = false;
-	}
-	else if (didPlayerLevel){
+	} else if (didPlayerLevel) {
 	    Image currentFrame = game.getPlayer().levelUpFrames[this.i];
 	    g.drawImage(currentFrame, game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
 	    this.i++;

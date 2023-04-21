@@ -3,7 +3,6 @@ package se.liu.danal315samak519;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class Game implements AttackListener
@@ -25,19 +24,18 @@ public class Game implements AttackListener
 	player.tick();
 	for (Entity e : entityList) {
 	    e.tick();
-	    }
+	}
     }
 
     public void checkForHits(Entity e)
-    	{
-	    for(Entity w : entityList){
-			if(w instanceof WeaponEntity)
-			{
-			    WeaponEntity theMurderWeapon = (WeaponEntity) w;
-			    e.isHit(theMurderWeapon);
-			}
+    {
+	for (Entity w : entityList) {
+	    if (w instanceof WeaponEntity) {
+		WeaponEntity theMurderWeapon = (WeaponEntity) w;
+		e.isHit(theMurderWeapon);
 	    }
 	}
+    }
 
     private void removeGarbage() {
 	entityList.removeIf(Entity::getIsGarbage);
@@ -66,8 +64,9 @@ public class Game implements AttackListener
 	}
 
     }
-    public void notifyAttackListeners(){
-	for(AttackListener al : attackListeners){
+
+    public void notifyAttackListeners() {
+	for (AttackListener al : attackListeners) {
 	    al.attack();
 	}
     }

@@ -1,6 +1,7 @@
 package se.liu.danal315samak519;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Entity
 {
@@ -20,10 +21,11 @@ public class Entity
     protected int exp;
     protected int level;
 
-    // TODO REMOVE HARDCODED 3
     protected int hp;
     protected int maxhp ;
     private int currentInvFrames;
+
+    private BufferedImage currentSprite;
 
 
     public Entity(final Point coord, final Color color) {
@@ -59,6 +61,14 @@ public class Entity
 
     public void setDir(final Direction dir) {
 	this.dir = dir;
+    }
+
+    public BufferedImage getCurrentSprite() {
+	return currentSprite;
+    }
+
+    public void setCurrentSprite(final BufferedImage currentSprite) {
+	this.currentSprite = currentSprite;
     }
 
     public Rectangle getHitBox() {

@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 
 public class Viewer
 {
-    private static final int TIMER_DELAY = 17;
+    private static final int FPS = 60;
     private GameComponent gameComponent;
 
     public void show() {
@@ -37,7 +37,8 @@ public class Viewer
 
     public void startTimer()
     {
-	final Timer clockTimer = new Timer(TIMER_DELAY, doTimerTick);
+	int millisDelay = 1000/FPS;
+	final Timer clockTimer = new Timer(millisDelay, doTimerTick);
 	clockTimer.setCoalesce(true);
 	clockTimer.start();
     }

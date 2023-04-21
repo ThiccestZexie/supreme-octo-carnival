@@ -32,4 +32,9 @@ public class ImageLoader
     public BufferedImage getImage(){
 	return image;
     }
+
+    public static BufferedImage readImageIO(final String imageName) throws IOException {
+	String imagePath = "resources/images/" + imageName;
+	return ImageIO.read(new File(imagePath));
+    }
 }
