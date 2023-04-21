@@ -5,17 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Game implements AttackListener
+public class Game
 {
     public List<Entity> entityList = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
-    private List<AttackListener> attackListeners = new ArrayList<>();
     private Player player;
     private World world;
 
     public Game(final Player player) {
 	this.player = player;
-	attackListeners.add(this);
     }
 
     public void tick()
@@ -65,12 +63,6 @@ public class Game implements AttackListener
 
     }
 
-    public void notifyAttackListeners() {
-	for (AttackListener al : attackListeners) {
-	    al.attack();
-	}
-    }
-
 
     public void nudgePlayer(final int dx, final int dy) {
 	player.nudge(dx, dy);
@@ -113,7 +105,7 @@ public class Game implements AttackListener
 
     public void addPlayerSword() {
 	entityList.add(player.getSword());
-	notifyAttackListeners();
+	attack();
     }
 
 
@@ -121,7 +113,7 @@ public class Game implements AttackListener
 	return entityList;
     }
 
-    @Override public void attack() {
+    public void attack() {
 	for (Entity e : entityList) {
 	    checkForHits(e);
 	}
