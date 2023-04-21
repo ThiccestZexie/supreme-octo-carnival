@@ -9,7 +9,7 @@ import java.util.List;
 public class Player extends Entity
 {
     private static final String LEVEL_FOLDER = "resources/data/LevelUP/";
-    public List<BufferedImage> levelUpFrames = new ArrayList<>();
+    public BufferedImage[] levelUpFrames;
     private String name;
 
 
@@ -28,10 +28,11 @@ public class Player extends Entity
     public void getLevelUpFrames() {
 	try {
 	    // HARDCODED FOR EXACTLY 20 FRAMES
+	    levelUpFrames = new BufferedImage[20];
 	    for (int tens = 0; tens < 2; tens++) {
 		for (int ones = 0; ones < 10; ones++) {
 		    ImageLoader levelUpFrameLoader = new ImageLoader("/levelUP/level_up" + tens + ones + ".png");
-		    levelUpFrames.add(levelUpFrameLoader.getImage());
+		    levelUpFrames[10*tens + ones] = levelUpFrameLoader.getImage();
 		}
 	    }
 	} catch (IOException e) {

@@ -84,7 +84,7 @@ public class GameComponent extends JComponent implements FrameListener
 	    didPlayerLevel = false;
 	}
 	else if (didPlayerLevel){
-	    Image currentFrame = game.getPlayer().levelUpFrames.get(this.i);
+	    Image currentFrame = game.getPlayer().levelUpFrames[this.i];
 	    g.drawImage(currentFrame, game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
 	    this.i++;
 	}
