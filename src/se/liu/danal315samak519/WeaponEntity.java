@@ -5,7 +5,7 @@ import java.awt.*;
 public class WeaponEntity extends Entity
 {
     private Entity owner;
-    private int lifeSpan;
+    private int lifeSpan;//get a life
 
     public WeaponEntity(final Point coord, final Color color, final Entity owner) {
 	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
@@ -13,25 +13,23 @@ public class WeaponEntity extends Entity
 	this.owner = owner;
 	this.coord = coord;
 	//this.hp = 9999; //temp bug fix to make it so swords dont kill themselves for exp...
-	switch (owner.getDir()){
+	switch (owner.getDir()) {
 	    case UP:
-		this.size =new Dimension(10, 60);
-	    	this.coord = new Point((owner.getX() + (owner.getWidth()/2) - this.getWidth()/2), (owner.getY() - this.getHeight()));
-		    break;
+		this.size = new Dimension(10, 60);
+		this.coord = new Point((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2), (owner.getY() - this.getHeight()));
+		break;
 	    case DOWN:
-		this.size =new Dimension(10, 60);
-		this.coord = new Point((owner.getX() + (owner.getWidth()/2) - this.getWidth()/2),
-				       (owner.getY() + (owner.getHeight())));
+		this.size = new Dimension(10, 60);
+		this.coord = new Point((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2), (owner.getY() + (owner.getHeight())));
 		break;
 	    case LEFT:
 		size = new Dimension(60, 10);
-		this.coord = new Point((owner.getX() - this.getWidth()),
-				       (owner.getY()+ (owner.getHeight()/2)) - (this.getHeight()/2));
+		this.coord = new Point((owner.getX() - this.getWidth()), (owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
 		break;
 	    case RIGHT:
 		size = new Dimension(60, 10);
-		this.coord = new Point((owner.getX() + owner.getWidth()),
-			       (owner.getY()+ (owner.getHeight()/2)) - (this.getHeight()/2));
+		this.coord =
+			new Point((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
 		break;
 
 	}
@@ -47,14 +45,16 @@ public class WeaponEntity extends Entity
 	super.tick();
 	lifeSpan--;
 	followOwner();
-	if(lifeSpan <= 0){
+	if (lifeSpan <= 0) {
 	    isGarbage = true;
 	}
     }
-    public void followOwner(){
-	    this.velX = owner.getVelX();
-	    this.velY = owner.getVelY();
+
+    public void followOwner() {
+	this.velX = owner.getVelX();
+	this.velY = owner.getVelY();
     }
+
     @Override public int getLifeSpan() {
 	return lifeSpan;
     }

@@ -67,10 +67,6 @@ public class Game
 	notifyListeners();
     }
 
-    public void movePlayerTo(final int x, final int y) {
-	player.moveTo(x, y);
-	notifyListeners();
-    }
 
     public int getPlayerVelX() {
 	return player.getVelX();

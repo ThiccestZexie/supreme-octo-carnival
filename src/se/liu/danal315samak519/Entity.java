@@ -28,7 +28,7 @@ public class Entity
     private BufferedImage[] currentSpriteFrames;
 
     // Keeps track of what frame to display on the sprite
-    private int currentSpriteFrameIndex = 0;
+    protected int currentSpriteFrameIndex = 0;
 
 
     public Entity(final Point coord, final Color color) {
@@ -142,10 +142,6 @@ public class Entity
 	this.maxSpeed = speed;
     }
 
-    public void moveTo(final int x, final int y)
-    {
-	coord.move(x, y);
-    }
 
     public void nudge(final int dx, final int dy) {
 	coord.translate(dx, dy);

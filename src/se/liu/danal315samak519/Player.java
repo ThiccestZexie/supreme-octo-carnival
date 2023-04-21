@@ -14,6 +14,9 @@ public class Player extends Entity
     private BufferedImage[] leftFrames;
     private BufferedImage[] rightFrames;
 
+    private int ticksCounted = 0;
+    private static final int TICKS_PER_FRAME = 10;
+
 
     public Player(String name, final Point coord, final Color color)
     {
@@ -41,6 +44,22 @@ public class Player extends Entity
 	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
+	}
+    }
+
+    @Override public void tick() {
+	super.tick();
+	if(velX == 0 && velY == 0){
+	    currentSpriteFrameIndex = 0;
+	    ticksCounted = 0;
+	}
+	else{
+	    ticksCounted++;
+	    if(ticksCounted > TICKS_PER_FRAME){
+		currentSpriteFrameIndex++;
+		currentSpriteFrameIndex %= 2;
+		ticksCounted = 0;
+	    }
 	}
     }
 
