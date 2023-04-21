@@ -30,6 +30,7 @@ public class GameComponent extends JComponent implements FrameListener
 	Dimension playerSize = player.getSize();
 	g.setColor(player.getColor());
 	g.fillRect(playerCoord.x, playerCoord.y, playerSize.width, playerSize.height);
+	paintLevelUpAnimation(g);
     }
 
     private void paintEntities(final Graphics g) {
@@ -72,7 +73,7 @@ public class GameComponent extends JComponent implements FrameListener
 		   game.getPlayer().exp * expBarLength/game.getPlayer().getExpRequirements()[game.getPlayer().getLevel()-1], 30);
     }
 
-    private void paintLevelUPAnimation(final Graphics g){
+    private void paintLevelUpAnimation(final Graphics g){
 	BufferedImage image = null;
 
 	if (oldPlayerLevel < game.getPlayer().getLevel()){
@@ -85,7 +86,7 @@ public class GameComponent extends JComponent implements FrameListener
 	    didPlayerLevel = false;
 	}
 	else if (didPlayerLevel){
-	    g.drawImage(game.getPlayer().frames.get(this.i), game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
+	    g.drawImage(game.getPlayer().levelUpFrames.get(this.i), game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
 	    this.i++;
 	}
 
@@ -94,13 +95,10 @@ public class GameComponent extends JComponent implements FrameListener
 
     @Override protected void paintComponent(final Graphics g) {
 	super.paintComponent(g);
-
 	paintMap(g);
 	paintEntities(g);
 	paintPlayer(g);
 	paintGUI(g);
-	paintLevelUPAnimation(g);
-
     }
 
     private void paintMap(final Graphics g) {

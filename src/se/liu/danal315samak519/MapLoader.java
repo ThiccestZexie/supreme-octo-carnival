@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,7 +18,7 @@ public class MapLoader
     private int[][] tileIDs;
     private int rows, columns;
     private int tileWidth, tileHeight;
-    private BufferedImage[] tilesetImages;
+    private ImageLoader[] imageLoaders;
 
     private Tile[][] tiles;
 
@@ -61,14 +60,14 @@ public class MapLoader
 	Elements tileSetElements = doc.select("tileset");
 	int numTileSets = tileSetElements.size();
 	tilesetGIDs = new int[numTileSets];
-	tilesetImages = new BufferedImage[numTileSets];
+	imageLoaders = new ImageLoader[numTileSets];
 	for (int i = 0; i < numTileSets; i++) {
 	    Element element = tileSetElements.get(i);
 	    tilesetGIDs[i] = Integer.parseInt(element.attr("firstgid"));
 	    // Parse image
 	    String tilesetName = element.attr("source");
-	    String imagePath = findImagePath(tilesetName);
-	    tilesetImages[i] = ImageIO.read(new File(imagePath));
+	    String imageName = findImageName(tilesetName);
+	    imageLoaders[i] = new ImageLoader(imageName);
 	}
 
 	// Fill tiles array
@@ -93,7 +92,7 @@ public class MapLoader
      *
      * @return
      */
-    private String findImagePath(String tilesetName) throws IOException {
+    private String findImageName(String tilesetName) throws IOException {
 	String filePath = DATA_FOLDER + tilesetName;
 	File file = new File(filePath);
 	Document doc = Jsoup.parse(file, "UTF-8");
@@ -103,7 +102,7 @@ public class MapLoader
 	String sourceValue = imageElement.attr("source");
 	String imageName = sourceValue.substring(sourceValue.lastIndexOf('/') + 1);
 
-	return IMAGES_FOLDER + imageName;
+	return imageName;
     }
 
     /**
@@ -124,12 +123,14 @@ public class MapLoader
     public BufferedImage getTileImage(int id) {
 	int index = getIndexOf(id);
 	int firstGID = tilesetGIDs[index];
-	BufferedImage image = tilesetImages[index];
-	int tilesetColumns = image.getWidth() / getTileWidth();
-	int tilesetRows = image.getHeight() / getTileHeight();
+	ImageLoader imageLoader = imageLoaders[index];
+	int tilesetColumns = imageLoader.getWidth() / getTileWidth();
+	int tilesetRows = imageLoader.getHeight() / getTileHeight();
 	int col = (id - firstGID) % tilesetColumns;
 	int row = (id - firstGID) / tilesetRows;
-	return getSubImageOfTileSet(col, row, image);
+	int x = col * getTileWidth();
+	int y = row * getTileHeight();
+	return imageLoader.getSubImage(x, y, getTileWidth(), getTileHeight());
     }
 
     private int getIndexOf(int id) {
@@ -141,12 +142,6 @@ public class MapLoader
 	    index = i;
 	}
 	return index;
-    }
-
-    private BufferedImage getSubImageOfTileSet(int col, int row, BufferedImage image) {
-	int x = col * tileWidth;
-	int y = row * tileHeight;
-	return image.getSubimage(x, y, tileWidth, tileHeight);
     }
 
     public int getID(int x, int y) {
