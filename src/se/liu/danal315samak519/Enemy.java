@@ -25,6 +25,25 @@ public class Enemy extends Entity
 	return velocity;
     }
 
+    private Double distanceToPlayer() {
+	return player.getCoord().distance(this.getCoord());
+    }
+
+    public boolean canSeePlayer() {
+	if (distanceToPlayer() < 500) {
+	    return true;
+	}
+	return false;
+    }
+
+    public boolean wantToAttack()
+    {
+	if (distanceToPlayer() < 60) {
+	    return true;
+	}
+	return false;
+    }
+
     @Override public void tick() {
 	super.tick();
 	if (canSeePlayer()) { // CHASe PLAYER!!

@@ -28,7 +28,7 @@ public class GameComponent extends JComponent implements FrameListener
 
 	// PAINT HITBOX
 	g.setColor(player.getColor());
-	g.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+	g.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
 	paintLevelUpAnimation(g);
 
 	// PAINT SPRITE

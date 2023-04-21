@@ -21,8 +21,7 @@ public class Viewer
 	Game game = new Game(player);
 	game.setWorld(new World("map0.tmx"));
 	game.addEnemy(new Point(100, 600));
-	game.addEnemy(new Point(523, 321));
-	game.addEnemy(new Point(132, 60));
+
 
 	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);
