@@ -36,31 +36,32 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintEntities(final Graphics g) {
-	for (Entity gE : game.getEntityList()) {
-	    g.setColor(gE.getColor());
-	    g.fillRect(gE.getX(), gE.getY(), gE.getWidth(), gE.getHeight());
+	for (Entity entity : game.getEntityList()) {
+	    g.setColor(entity.getColor());
+	    g.fillRect(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight());
 	}
     }
 
     private void paintGUI(final Graphics g) {
 
-	for (Entity gE : game.getEntityList()) {
-	    if (gE instanceof Enemy) {
+	for (Entity entity: game.getEntityList()) {
+	    if (entity instanceof Enemy) {
+		Enemy enemy = (Enemy)entity;
 		// Maxhealth (BLACK)
 		g.setColor(Color.BLACK);
-		int blackWidth = gE.getMaxHp() * 60;
+		int blackWidth = enemy.getMaxHp() * 60;
 		int blackHeight = 20;
-		int blackX = gE.getX() - blackWidth / 2 + gE.getWidth() / 2;
-		int blackY = gE.getY() + gE.getHeight() + 15;
+		int blackX = enemy.getX() - blackWidth / 2 + enemy.getWidth() / 2;
+		int blackY = enemy.getY() + enemy.getHeight() + 15;
 		g.fillRect(blackX, blackY, blackWidth, blackHeight); // Should be get maxHp
 
 		//Current health (RED)
-		int redWidth = gE.getHp() * 60;
+		int redWidth = enemy.getHp() * 60;
 		int redHeight = 20;
 		int redX = blackX;
 		int redY = blackY;
 		g.setColor(Color.RED);
-		g.fillRect(gE.getX() - blackWidth / 2 + gE.getWidth() / 2, gE.getY() + gE.getHeight() + 15, redWidth, redHeight);
+		g.fillRect(enemy.getX() - blackWidth / 2 + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() + 15, redWidth, redHeight);
 	    }
 	}
 	int expBarLength = 100;

@@ -2,12 +2,18 @@ package se.liu.danal315samak519;
 
 import java.awt.*;
 
-public class WeaponEntity extends Entity
+public class Weapon extends Entity
 {
-    private Entity owner;
+    private final int[] expRequirements = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
+    protected int exp;
+    protected int level;
+    protected int hp;
+    protected int maxhp;
+    private Character owner;
     private int lifeSpan;//get a life
+    private int currentInvFrames;
 
-    public WeaponEntity(final Point coord, final Color color, final Entity owner) {
+    public Weapon(final Point coord, final Color color, final Character owner) {
 	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
 	super(coord, color);
 	this.owner = owner;
@@ -37,7 +43,7 @@ public class WeaponEntity extends Entity
 	lifeSpan = 5;
     }
 
-    public Entity getOwner() {
+    public Character getOwner() {
 	return owner;
     }
 
@@ -57,5 +63,61 @@ public class WeaponEntity extends Entity
 
     @Override public int getLifeSpan() {
 	return lifeSpan;
+    }
+
+    public int getHp() {
+	return hp;
+    }
+
+    public int getMaxHp() {
+	return maxhp;
+    }
+
+    public int[] getExpRequirements() {
+	return expRequirements;
+    }
+
+    public int getLevel() {
+	return level;
+    }
+
+    public int getExp() {
+	return exp;
+    }
+
+//    public boolean isHit(Weapon e)
+//    {
+//	Character owner = e.getOwner();
+//	if (this.hitBox.getBounds().intersects(e.getHitBox())) {
+//	    if (hp > 1) {
+//		hp--;
+//		this.currentInvFrames = INVINCIBILITY_FRAMES;
+//	    } else {
+//		owner.incExp();
+//		owner.levelUp();
+//		this.isGarbage = true;
+//	    }
+//	    return true;
+//
+//	}
+//	return false;
+//    }
+
+    public void incExp() { //Exp should depend on enemey level
+	exp++;
+    }
+
+    public void levelUp() {
+	while (checkExpReq()) {
+	    exp -= expRequirements[level - 1];
+	    level++;
+	}
+    }
+
+    public boolean checkExpReq() { // You start as level 1 so index 0 of exp req and the exp is exp needed for next level...
+	if (this.exp >= expRequirements[level - 1]) {
+	    return true;
+	}
+	return false;
     }
 }

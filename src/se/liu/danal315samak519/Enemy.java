@@ -2,7 +2,7 @@ package se.liu.danal315samak519;
 
 import java.awt.*;
 
-public class Enemy extends Entity
+public class Enemy extends Character
 {
 
     public Enemy(final Point coord)
@@ -11,14 +11,14 @@ public class Enemy extends Entity
 
     }
 
-    public void isKilled(final WeaponEntity weaponEntity){
+    public void isKilled(final Weapon weapon){
 
 
     }
 
-    @Override public boolean isHit(final WeaponEntity weaponEntity) {
+    @Override public boolean isHit(final Weapon weapon) {
 
-	return super.isHit(weaponEntity);
+	return super.isHit(weapon);
 
     }
 }

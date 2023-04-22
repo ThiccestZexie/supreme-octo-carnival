@@ -25,11 +25,11 @@ public class Game
 	}
     }
 
-    public void checkForHits(Entity e)
+    public void checkForHits(Character e)
     {
-	for (Entity w : entityList) {
-	    if (w instanceof WeaponEntity) {
-		WeaponEntity theMurderWeapon = (WeaponEntity) w;
+	for (Entity entity : entityList) {
+	    if (entity instanceof Weapon) {
+		Weapon theMurderWeapon = (Weapon) entity;
 		e.isHit(theMurderWeapon);
 	    }
 	}
@@ -99,7 +99,7 @@ public class Game
 
     public void addPlayerSword() {
 	entityList.add(player.getSword());
-	attack();
+	checkIfAnyEntityHit();
     }
 
 
@@ -107,9 +107,11 @@ public class Game
 	return entityList;
     }
 
-    public void attack() {
-	for (Entity e : entityList) {
-	    checkForHits(e);
+    public void checkIfAnyEntityHit() {
+	for (Entity entity : entityList) {
+	    if(entity instanceof Character){
+		checkForHits((Character) entity);
+	    }
 	}
     }
 

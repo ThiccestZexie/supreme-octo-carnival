@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Player extends Entity
+public class Player extends Character
 {
     private static final String LEVEL_FOLDER = "resources/data/LevelUP/";
     public BufferedImage[] levelUpFrames;
