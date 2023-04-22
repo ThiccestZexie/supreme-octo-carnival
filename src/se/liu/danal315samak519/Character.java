@@ -14,12 +14,13 @@ public abstract class Character extends Entity
     protected int level;
     protected int hp;
     protected int maxhp;
-    protected int currentSpriteFrameIndex = 0;
+    protected int currentFrameIndex = 0;
     protected BufferedImage[] currentFrames;
     protected BufferedImage[] downFrames;
     protected BufferedImage[] leftFrames;
     protected BufferedImage[] upFrames;
     protected BufferedImage[] rightFrames;
+    protected BufferedImage attackFrame;
     private int ticksCounted;
 
     protected Character(final Point2D.Double coord) {
@@ -111,13 +112,13 @@ public abstract class Character extends Entity
      */
     private void performWalkCycle() {
 	if (velX == 0 && velY == 0) {
-	    currentSpriteFrameIndex = 0;
+	    currentFrameIndex = 0;
 	    ticksCounted = 0;
 	} else {
 	    ticksCounted++;
 	    if (ticksCounted > TICKS_PER_FRAME) {
-		currentSpriteFrameIndex++;
-		currentSpriteFrameIndex %= 2;
+		currentFrameIndex++;
+		currentFrameIndex %= 2;
 		ticksCounted = 0;
 	    }
 	}
@@ -125,7 +126,7 @@ public abstract class Character extends Entity
 
 
     public BufferedImage getCurrentSprite() {
-	return getSpriteFrameAt(currentSpriteFrameIndex);
+	return getSpriteFrameAt(currentFrameIndex);
     }
 
     private BufferedImage getSpriteFrameAt(int index) {
@@ -134,5 +135,9 @@ public abstract class Character extends Entity
 
     public void setCurrentFrames(final BufferedImage[] frames) {
 	this.currentFrames = frames;
+    }
+
+    public void becomeAttacking() {
+	this.currentFrameIndex = 2;
     }
 }

@@ -6,10 +6,12 @@ import java.io.IOException;
 
 public class Enemy extends Character
 {
+    private Player player;
 
-    public Enemy(final Point2D.Double coord)
+    public Enemy(final Point2D.Double coord, final Player player)
     {
 	super(coord);
+	this.player = player;
 	storeDirectionalFrames();
 	setDir(Direction.DOWN);
     }
@@ -39,6 +41,43 @@ public class Enemy extends Character
 
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
+	}
+    }
+    public Point2D.Double getVelocityTowardsPlayer() {
+	double x = player.getX() - this.getX();
+	double y = player.getY() - this.getY();
+	double distance = distanceToPlayer();
+	Point2D.Double velocity = new Point2D.Double(maxSpeed * x / distance, maxSpeed * y / distance);
+	return velocity;
+    }
+
+    private double distanceToPlayer() {
+	return player.getCoord().distance(this.getCoord());
+    }
+
+    public boolean canSeePlayer() {
+	return true;
+//	if (distanceToPlayer() < 500) {
+//	    return true;
+//	}
+//	return false;
+    }
+
+    public boolean wantToAttack()
+    {
+	if (distanceToPlayer() < 60) {
+	    return true;
+	}
+	return false;
+    }
+
+    @Override public void tick() {
+	super.tick();
+	if (canSeePlayer()) { // CHASe PLAYER!!
+	    Point2D velocity = getVelocityTowardsPlayer();
+	    setCurrentVelocity((int) velocity.getX(), (int) velocity.getY());
+	} else { // Chill...
+	    setCurrentVelocity(0, 0);
 	}
     }
 }

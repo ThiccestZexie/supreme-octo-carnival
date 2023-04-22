@@ -18,7 +18,7 @@ public class Player extends Character
 	this.color = Color.GREEN; //TODO HARDCODED GREEN PLAYER
 	this.level = 1;
 	storeLevelUpFrames();
-	storeDirectionalFrames();
+	storeSpriteFrames();
 	setDir(Direction.DOWN);
     }
 
@@ -41,28 +41,32 @@ public class Player extends Character
 	}
     }
 
-    private void storeDirectionalFrames() {
+    private void storeSpriteFrames() {
 	try {
 	    int spriteHeight = 16;
 	    int spriteWidth = 16;
 
 	    ImageLoader linkImageLoader = new ImageLoader("link.png");
 
-	    downFrames = new BufferedImage[2];
+	    downFrames = new BufferedImage[3];
 	    downFrames[0] = linkImageLoader.getSubImage(0, 0, spriteWidth, spriteHeight);
 	    downFrames[1] = linkImageLoader.getSubImage(0, 32, spriteWidth, spriteHeight);
+	    downFrames[2] = linkImageLoader.getSubImage(0, 32 * 2, spriteWidth, spriteHeight);
 
-	    leftFrames = new BufferedImage[2];
+	    leftFrames = new BufferedImage[3];
 	    leftFrames[0] = linkImageLoader.getSubImage(32, 0, spriteWidth, spriteHeight);
 	    leftFrames[1] = linkImageLoader.getSubImage(32, 32, spriteWidth, spriteHeight);
+	    leftFrames[2] = linkImageLoader.getSubImage(32, 32 * 2, spriteWidth, spriteHeight);
 
-	    upFrames = new BufferedImage[2];
+	    upFrames = new BufferedImage[3];
 	    upFrames[0] = linkImageLoader.getSubImage(32 * 2, 0, spriteWidth, spriteHeight);
 	    upFrames[1] = linkImageLoader.getSubImage(32 * 2, 32, spriteWidth, spriteHeight);
+	    upFrames[2] = linkImageLoader.getSubImage(32*2, 32 * 2, spriteWidth, spriteHeight);
 
-	    rightFrames = new BufferedImage[2];
+	    rightFrames = new BufferedImage[3];
 	    rightFrames[0] = linkImageLoader.getSubImage(32 * 3, 32, spriteWidth, spriteHeight);
 	    rightFrames[1] = linkImageLoader.getSubImage(32 * 3, 0, spriteWidth, spriteHeight);
+	    rightFrames[2] = linkImageLoader.getSubImage(32*3, 32 * 2, spriteWidth, spriteHeight);
 
 	} catch (IOException e) {
 	    throw new RuntimeException(e);

@@ -1,7 +1,6 @@
 package se.liu.danal315samak519;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
 
@@ -21,9 +20,9 @@ public class Viewer
 	player.setMaxSpeed(5);
 	Game game = new Game(player);
 	game.setWorld(new World("map0.tmx"));
-	game.addEnemy(100, 600);
-	game.addEnemy(523, 321);
-	game.addEnemy(132, 60);
+//	game.addEnemy(100, 600);
+//	game.addEnemy(523, 321);
+//	game.addEnemy(132, 60);
 
 	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);

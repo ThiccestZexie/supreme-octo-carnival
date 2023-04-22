@@ -94,10 +94,11 @@ public class Game
 
     public void addEnemy(Point2D.Double coord)
     {
-	addEntity(new Enemy(coord));
+	addEntity(new Enemy(coord, player));
     }
 
-    public void addPlayerSword() {
+    public void playerAttack() {
+	player.becomeAttacking();
 	addEntity(player.getSword());
 	checkIfAnyEntityHit();
     }

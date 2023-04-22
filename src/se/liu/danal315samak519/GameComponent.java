@@ -176,14 +176,13 @@ public class GameComponent extends JComponent implements FrameListener
 		case RIGHT -> game.setPlayerVelX(maxSpeed);
 		case LEFT -> game.setPlayerVelX(-maxSpeed);
 	    }
-	    game.setPlayerDirection(dir);
 	}
     }
 
     private class AttackAction extends AbstractAction
     {
 	public void actionPerformed(ActionEvent e) {
-	    game.addPlayerSword();
+	    game.playerAttack();
 	}
     }
 

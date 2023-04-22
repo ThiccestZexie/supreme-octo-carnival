@@ -18,13 +18,13 @@ public abstract class Entity
 
     protected Entity(final Point2D.Double coord) {
 	setLocation(coord);
+	setMaxSpeed(5);
     }
 
     private void setLocation(final Point2D.Double coord) {
-	if(this.coord != null){
+	if (this.coord != null) {
 	    this.coord.setLocation(coord);
-	}
-	else{
+	} else {
 	    this.coord = coord;
 	}
     }
@@ -62,11 +62,10 @@ public abstract class Entity
     }
 
     protected void setHitBox(double x, double y, double w, double h) {
-	if(hitBox != null){
+	if (hitBox != null) {
 	    this.hitBox.setRect(x, y, w, h);
-	}
-	else{
-	    this.hitBox = new Rectangle2D.Double(x,y,w,h);
+	} else {
+	    this.hitBox = new Rectangle2D.Double(x, y, w, h);
 	}
     }
 
@@ -129,8 +128,25 @@ public abstract class Entity
     public void setCurrentVelocity(final int vx, final int vy) {
 	this.velX = vx;
 	this.velY = vy;
+	setAppropiateDir();
     }
 
+    private void setAppropiateDir() {
+	if(getVelX() == 0 && getVelY() == 0){
+	    return; // Do nothing
+	}
+	float angle = (float) Math.atan2(getVelY(), getVelX());
+
+	if (-Math.PI / 4 < angle && angle < Math.PI / 4) {
+	    setDir(Direction.RIGHT);
+	} else if (-3 * Math.PI / 4 < angle && angle < -Math.PI / 4) {
+	    setDir(Direction.UP);
+	} else if (Math.PI / 4 < angle && angle < 3 * Math.PI / 4) {
+	    setDir(Direction.DOWN);
+	} else if (angle < -3 * Math.PI / 4 || angle > 3 * Math.PI / 4) {
+	    setDir(Direction.LEFT);
+	}
+    }
     public void tick() {
 	// Move along according to current velocity
 	nudgeHitBox(velX, velY);

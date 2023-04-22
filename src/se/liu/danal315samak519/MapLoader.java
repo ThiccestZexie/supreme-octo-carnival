@@ -20,8 +20,6 @@ public class MapLoader
     private int tileWidth, tileHeight;
     private ImageLoader[] imageLoaders;
 
-    private Tile[][] tiles;
-
     /**
      * Loads a map file and dispenses tile images as needed.
      *
@@ -71,7 +69,7 @@ public class MapLoader
 	}
 
 	// Fill tiles array
-	tiles = new Tile[rows][columns];
+	Tile[][] tiles = new Tile[rows][columns];
 	for (int y = 0; y < rows; y++) {
 	    for (int x = 0; x < columns; x++) {
 		int id = this.getID(x, y);
@@ -112,7 +110,7 @@ public class MapLoader
      *
      * @throws IOException
      */
-    private void readMapFile(final String filePath) throws IOException {
+    private void readMapFile(final String filePath){
     }
 
     /**
