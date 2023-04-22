@@ -2,13 +2,16 @@ package se.liu.danal315samak519;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 
 public class Weapon extends Entity
 {
     private final int[] expRequirements = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
+    // Keeps track of what frame to display on the sprite
+    protected int currentSpriteFrameIndex = 0;
+    protected BufferedImage[] currentSpriteFrames;
     private Character owner;
     private int lifeSpan = 5;
-    private int currentInvFrames;
 
     public Weapon(final Point2D.Double coord, final Character owner) {
 	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
@@ -65,4 +68,15 @@ public class Weapon extends Entity
 	return expRequirements;
     }
 
+    public BufferedImage getCurrentSprite() {
+	return getSpriteFrameAt(currentSpriteFrameIndex);
+    }
+
+    private BufferedImage getSpriteFrameAt(int index) {
+	return currentSpriteFrames[index];
+    }
+
+    public void setCurrentSpriteFrames(final BufferedImage[] frames) {
+	this.currentSpriteFrames = frames;
+    }
 }

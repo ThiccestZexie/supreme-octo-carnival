@@ -10,15 +10,4 @@ public class Enemy extends Character
 	super(coord);
 
     }
-
-    public void isKilled(final Weapon weapon) {
-
-
-    }
-
-    @Override public boolean isHit(final Weapon weapon) {
-
-	return super.isHit(weapon);
-
-    }
 }

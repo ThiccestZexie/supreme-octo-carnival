@@ -3,7 +3,6 @@ package se.liu.danal315samak519;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 public abstract class Entity
 {
@@ -17,9 +16,6 @@ public abstract class Entity
     protected Color color;
     protected Rectangle2D hitBox;
     protected boolean isGarbage = false;
-    // Keeps track of what frame to display on the sprite
-    protected int currentSpriteFrameIndex = 0;
-    protected BufferedImage[] currentSpriteFrames;
 
     protected Entity(final Point2D.Double coord) {
 	this.size = new Dimension(50, 50); // HARDCODED SIZE OF 50,50 px TODO
@@ -30,20 +26,20 @@ public abstract class Entity
     public Direction getDir() {
 	return dir;
     }
-
     public int getIntWidth(){
 	return (int)getWidth();
     }
+
     public int getIntHeight(){
 	return (int)getHeight();
     }
-
     public int getIntX(){
 	return (int)getX();
     }
     public int getIntY(){
 	return (int)getY();
     }
+
     public void setDir(final Direction dir) {
 	this.dir = dir;
     }
@@ -55,24 +51,12 @@ public abstract class Entity
     protected void setLocationOfHitBox(Point2D point) {
 	setHitBox(point.getX(), point.getY(), getWidth(), getHeight());
     }
-
     protected void setHitBox(double x, double y, double w, double h) {
 	this.hitBox.setRect(x, y, w, h);
     }
+
     protected void setHitBox(){
 	setHitBox(getX(), getY(), getWidth(), getHeight());
-    }
-
-    public BufferedImage getCurrentSprite() {
-	return getSpriteFrameAt(currentSpriteFrameIndex);
-    }
-
-    private BufferedImage getSpriteFrameAt(int index) {
-	return currentSpriteFrames[index];
-    }
-
-    public void setCurrentSpriteFrames(final BufferedImage[] frames) {
-	this.currentSpriteFrames = frames;
     }
 
     public Rectangle2D getHitBox() {
@@ -149,5 +133,4 @@ public abstract class Entity
     public boolean getIsGarbage() {
 	return isGarbage;
     }
-
 }
