@@ -3,6 +3,7 @@ package se.liu.danal315samak519;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.geom.Point2D;
 
 public class Viewer
 {
@@ -16,13 +17,13 @@ public class Viewer
 
 	//Add component
 
-	Player player = new Player("DanelSamuel", new Point(10, 10), Color.green);
+	Player player = new Player(new Point2D.Double(10,10));
 	player.setMaxSpeed(5);
 	Game game = new Game(player);
 	game.setWorld(new World("map0.tmx"));
-	game.addEnemy(new Point(100, 600));
-	game.addEnemy(new Point(523, 321));
-	game.addEnemy(new Point(132, 60));
+	game.addEnemy(100, 600);
+	game.addEnemy(523, 321);
+	game.addEnemy(132, 60);
 
 	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);

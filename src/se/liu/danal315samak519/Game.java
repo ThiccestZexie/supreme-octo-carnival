@@ -1,6 +1,6 @@
 package se.liu.danal315samak519;
 
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,13 +92,13 @@ public class Game
 	player.setDir(dir);
     }
 
-    public void addEnemy(Point coords)
+    public void addEnemy(Point2D.Double coord)
     {
-	entityList.add(new Enemy(coords));
+	addEntity(new Enemy(coord));
     }
 
     public void addPlayerSword() {
-	entityList.add(player.getSword());
+	addEntity(player.getSword());
 	checkIfAnyEntityHit();
     }
 
@@ -109,7 +109,7 @@ public class Game
 
     public void checkIfAnyEntityHit() {
 	for (Entity entity : entityList) {
-	    if(entity instanceof Character){
+	    if (entity instanceof Character) {
 		checkForHits((Character) entity);
 	    }
 	}
@@ -121,5 +121,13 @@ public class Game
 
     public void setWorld(final World world) {
 	this.world = world;
+    }
+
+    public void addEnemy(final double x, final double y) {
+	addEnemy(new Point2D.Double(x, y));
+    }
+
+    private void addEntity(final Entity entity) {
+	entityList.add(entity);
     }
 }

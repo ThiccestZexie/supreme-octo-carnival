@@ -1,6 +1,7 @@
 package se.liu.danal315samak519;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -18,10 +19,11 @@ public class Player extends Character
     private static final int TICKS_PER_FRAME = 10;
 
 
-    public Player(String name, final Point coord, final Color color)
+    public Player(final Point2D.Double coord)
     {
-	super(coord, color);
+	super(coord);
 	this.name = name;
+	this.color = Color.GREEN;
 	this.level = 1;
 	storeLevelUpFrames();
 	storeDirectionalFrames();

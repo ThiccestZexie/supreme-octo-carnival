@@ -28,17 +28,17 @@ public class GameComponent extends JComponent implements FrameListener
 
 	// PAINT HITBOX
 	g.setColor(player.getColor());
-	g.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+	g.fillRect(player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight());
 	paintLevelUpAnimation(g);
 
 	// PAINT SPRITE
-	g.drawImage(player.getCurrentSprite(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), null);
+	g.drawImage(player.getCurrentSprite(), player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight(), null);
     }
 
     private void paintEntities(final Graphics g) {
 	for (Entity entity : game.getEntityList()) {
 	    g.setColor(entity.getColor());
-	    g.fillRect(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight());
+	    g.fillRect(entity.getIntX(), entity.getIntY(), entity.getIntWidth(), entity.getIntHeight());
 	}
     }
 
@@ -51,9 +51,9 @@ public class GameComponent extends JComponent implements FrameListener
 		g.setColor(Color.BLACK);
 		int blackWidth = enemy.getMaxHp() * 60;
 		int blackHeight = 20;
-		int blackX = enemy.getX() - blackWidth / 2 + enemy.getWidth() / 2;
-		int blackY = enemy.getY() + enemy.getHeight() + 15;
-		g.fillRect(blackX, blackY, blackWidth, blackHeight); // Should be get maxHp
+		int blackX = enemy.getIntX() - blackWidth / 2 + enemy.getIntWidth() / 2;
+		int blackY = enemy.getIntY() + enemy.getIntHeight() + 15;
+		g.fillRect(blackX, blackY, blackWidth, blackHeight); // Should be getInt maxHp
 
 		//Current health (RED)
 		int redWidth = enemy.getHp() * 60;
@@ -61,7 +61,7 @@ public class GameComponent extends JComponent implements FrameListener
 		int redX = blackX;
 		int redY = blackY;
 		g.setColor(Color.RED);
-		g.fillRect(enemy.getX() - blackWidth / 2 + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() + 15, redWidth, redHeight);
+		g.fillRect(enemy.getIntX() - blackWidth / 2 + enemy.getIntWidth() / 2, enemy.getIntY() + enemy.getIntHeight() + 15, redWidth, redHeight);
 	    }
 	}
 	int expBarLength = 100;
@@ -84,7 +84,7 @@ public class GameComponent extends JComponent implements FrameListener
 	    didPlayerLevel = false;
 	} else if (didPlayerLevel) {
 	    Image currentFrame = game.getPlayer().levelUpFrames[this.i];
-	    g.drawImage(currentFrame, game.getPlayer().getX(), game.getPlayer().getY() - 30, null);
+	    g.drawImage(currentFrame, game.getPlayer().getIntX(), game.getPlayer().getIntY() - 30, null);
 	    this.i++;
 	}
     }

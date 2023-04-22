@@ -1,6 +1,8 @@
 package se.liu.danal315samak519;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
+
 public abstract class Character extends Entity
 {
     // CONSTANTS FOR ENTITIES
@@ -13,14 +15,12 @@ public abstract class Character extends Entity
     protected int maxhp;
     private int currentInvFrames;
 
-    public Character(final Point coord, final Color color) {
-	super(coord, color);
-	this.hitBox.setLocation(coord);
+    protected Character(final Point2D.Double coord) {
+	super(coord);
 	this.exp = 0;
 	this.maxhp = 3;
 	this.hp = maxhp;
     }
-
 
     public int getHp() {
 	return hp;
@@ -61,7 +61,7 @@ public abstract class Character extends Entity
     }
 
     public Weapon getSword() {
-	return new Weapon(this.coord, Color.BLACK, this);
+	return new Weapon(this.coord, this);
     }
 
     public void incExp() { //Exp should depend on enemey level

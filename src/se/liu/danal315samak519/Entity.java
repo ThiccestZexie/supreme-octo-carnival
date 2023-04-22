@@ -1,29 +1,29 @@
 package se.liu.danal315samak519;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity
 {
     //...
     protected Dimension size;
-    protected Point coord;
+    protected Point2D.Double coord;
     protected Direction dir;
     protected int maxSpeed;
     protected int velX;
     protected int velY;
     protected Color color;
-    protected Rectangle hitBox;
+    protected Rectangle2D hitBox;
     protected boolean isGarbage = false;
     // Keeps track of what frame to display on the sprite
     protected int currentSpriteFrameIndex = 0;
-    private BufferedImage[] currentSpriteFrames;
+    protected BufferedImage[] currentSpriteFrames;
 
-    public Entity(final Point coord, final Color color) {
+    protected Entity(final Point2D.Double coord) {
 	this.size = new Dimension(50, 50); // HARDCODED SIZE OF 50,50 px TODO
 	this.coord = coord;
-	this.color = color;
-	isGarbage = false;
 	this.hitBox = new Rectangle(size);
     }
 
@@ -31,8 +31,36 @@ public abstract class Entity
 	return dir;
     }
 
+    public int getIntWidth(){
+	return (int)getWidth();
+    }
+    public int getIntHeight(){
+	return (int)getHeight();
+    }
+
+    public int getIntX(){
+	return (int)getX();
+    }
+    public int getIntY(){
+	return (int)getY();
+    }
     public void setDir(final Direction dir) {
 	this.dir = dir;
+    }
+
+    protected void setLocationOfHitBox(double x, double y) {
+	setHitBox(x, y, getWidth(), getHeight());
+    }
+
+    protected void setLocationOfHitBox(Point2D point) {
+	setHitBox(point.getX(), point.getY(), getWidth(), getHeight());
+    }
+
+    protected void setHitBox(double x, double y, double w, double h) {
+	this.hitBox.setRect(x, y, w, h);
+    }
+    protected void setHitBox(){
+	setHitBox(getX(), getY(), getWidth(), getHeight());
     }
 
     public BufferedImage getCurrentSprite() {
@@ -47,20 +75,20 @@ public abstract class Entity
 	this.currentSpriteFrames = frames;
     }
 
-    public Rectangle getHitBox() {
+    public Rectangle2D getHitBox() {
 	return this.hitBox;
     }
 
-    public Point getCoord() {
+    public Point2D.Double getCoord() {
 	return coord;
     }
 
-    public int getX() {
-	return getCoord().x;
+    public double getX() {
+	return getCoord().getX();
     }
 
-    public int getY() {
-	return getCoord().y;
+    public double getY() {
+	return getCoord().getY();
     }
 
     public Color getColor() {
@@ -71,12 +99,12 @@ public abstract class Entity
 	return size;
     }
 
-    public int getWidth() {
-	return (int) size.getWidth();
+    public double getWidth() {
+	return size.getWidth();
     }
 
-    public int getHeight() {
-	return (int) size.getHeight();
+    public double getHeight() {
+	return size.getHeight();
     }
 
     public int getMaxSpeed() {
@@ -88,7 +116,11 @@ public abstract class Entity
     }
 
     public void nudge(final int dx, final int dy) {
-	coord.translate(dx, dy);
+	setLocation(getX() + dx, getY() + dy);
+    }
+
+    public void setLocation(final double x, final double y) {
+	coord.setLocation(x, y);
     }
 
     public void setCurrentVelocity(final int vx, final int vy) {
@@ -103,7 +135,7 @@ public abstract class Entity
     }
 
     public void nudgeHitBox(final int dx, final int dy) {
-	hitBox.translate(dx, dy);
+	setLocationOfHitBox(getX() + dx, getY() + dy);
     }
 
     public int getVelX() {
@@ -112,11 +144,6 @@ public abstract class Entity
 
     public int getVelY() {
 	return velY;
-    }
-
-    public int getLifeSpan() {
-	// Returns -1 becuase they are immortal!!! as in they dont die of age...
-	return -1;
     }
 
     public boolean getIsGarbage() {
