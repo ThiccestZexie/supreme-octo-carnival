@@ -16,7 +16,6 @@ public class Weapon extends Entity
     public Weapon(final Point2D.Double coord, final Character owner) {
 	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
 	super(coord);
-	this.coord = coord;
 	this.owner = owner;
 
 	switch (owner.getDir()) {

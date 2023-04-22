@@ -6,7 +6,6 @@ import java.awt.geom.Rectangle2D;
 
 public abstract class Entity
 {
-    //...
     protected Dimension size;
     protected Point2D.Double coord;
     protected Direction dir;
@@ -18,30 +17,40 @@ public abstract class Entity
     protected boolean isGarbage = false;
 
     protected Entity(final Point2D.Double coord) {
-	this.size = new Dimension(50, 50); // HARDCODED SIZE OF 50,50 px TODO
-	this.coord = coord;
-	this.hitBox = new Rectangle(size);
+	setLocation(coord);
+    }
+
+    private void setLocation(final Point2D.Double coord) {
+	if(this.coord != null){
+	    this.coord.setLocation(coord);
+	}
+	else{
+	    this.coord = coord;
+	}
     }
 
     public Direction getDir() {
 	return dir;
     }
-    public int getIntWidth(){
-	return (int)getWidth();
-    }
-
-    public int getIntHeight(){
-	return (int)getHeight();
-    }
-    public int getIntX(){
-	return (int)getX();
-    }
-    public int getIntY(){
-	return (int)getY();
-    }
 
     public void setDir(final Direction dir) {
 	this.dir = dir;
+    }
+
+    public int getIntWidth() {
+	return (int) getWidth();
+    }
+
+    public int getIntHeight() {
+	return (int) getHeight();
+    }
+
+    public int getIntX() {
+	return (int) getX();
+    }
+
+    public int getIntY() {
+	return (int) getY();
     }
 
     protected void setLocationOfHitBox(double x, double y) {
@@ -51,11 +60,17 @@ public abstract class Entity
     protected void setLocationOfHitBox(Point2D point) {
 	setHitBox(point.getX(), point.getY(), getWidth(), getHeight());
     }
+
     protected void setHitBox(double x, double y, double w, double h) {
-	this.hitBox.setRect(x, y, w, h);
+	if(hitBox != null){
+	    this.hitBox.setRect(x, y, w, h);
+	}
+	else{
+	    this.hitBox = new Rectangle2D.Double(x,y,w,h);
+	}
     }
 
-    protected void setHitBox(){
+    protected void setHitBox() {
 	setHitBox(getX(), getY(), getWidth(), getHeight());
     }
 
@@ -68,11 +83,11 @@ public abstract class Entity
     }
 
     public double getX() {
-	return getCoord().getX();
+	return coord.getX();
     }
 
     public double getY() {
-	return getCoord().getY();
+	return coord.getY();
     }
 
     public Color getColor() {
@@ -104,7 +119,11 @@ public abstract class Entity
     }
 
     public void setLocation(final double x, final double y) {
-	coord.setLocation(x, y);
+	if (coord != null) {
+	    coord.setLocation(x, y);
+	} else {
+	    coord = new Point2D.Double(x, y);
+	}
     }
 
     public void setCurrentVelocity(final int vx, final int vy) {
@@ -119,7 +138,7 @@ public abstract class Entity
     }
 
     public void nudgeHitBox(final int dx, final int dy) {
-	setLocationOfHitBox(getX() + dx, getY() + dy);
+	setLocationOfHitBox(hitBox.getX() + dx, hitBox.getY() + dy);
     }
 
     public int getVelX() {

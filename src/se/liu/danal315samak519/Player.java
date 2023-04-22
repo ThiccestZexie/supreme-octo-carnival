@@ -15,7 +15,7 @@ public class Player extends Character
     public Player(final Point2D.Double coord)
     {
 	super(coord);
-	this.color = Color.GREEN;
+	this.color = Color.GREEN; //TODO HARDCODED GREEN PLAYER
 	this.level = 1;
 	storeLevelUpFrames();
 	storeDirectionalFrames();

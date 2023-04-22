@@ -1,5 +1,6 @@
 package se.liu.danal315samak519;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -27,6 +28,8 @@ public abstract class Character extends Entity
 	this.exp = 0;
 	this.maxhp = 3;
 	this.hp = maxhp;
+	this.size = new Dimension(50, 50); // TODO CHARACTERS HARDCODED SIZE
+	setHitBox();
     }
 
     @Override public void setDir(final Direction dir) {

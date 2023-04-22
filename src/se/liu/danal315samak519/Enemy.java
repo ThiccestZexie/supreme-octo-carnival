@@ -8,6 +8,5 @@ public class Enemy extends Character
     public Enemy(final Point2D.Double coord)
     {
 	super(coord);
-
     }
 }
