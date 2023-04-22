@@ -28,16 +28,16 @@ public class Enemy extends Character
 	    downFrames[1] = imageLoader.getSubImage(0, spriteWidth*2-2, spriteWidth, spriteHeight);
 
 	    leftFrames = new BufferedImage[2];
-	    leftFrames[0] = imageLoader.getSubImage(32, 0, spriteWidth, spriteHeight);
-	    leftFrames[1] = imageLoader.getSubImage(32, 32, spriteWidth, spriteHeight);
+	    leftFrames[0] = imageLoader.getSubImage(32-2, 0, spriteWidth, spriteHeight);
+	    leftFrames[1] = imageLoader.getSubImage(32-2, 32, spriteWidth, spriteHeight);
 
 	    upFrames = new BufferedImage[2];
-	    upFrames[0] = imageLoader.getSubImage(32 * 2, 0, spriteWidth, spriteHeight);
-	    upFrames[1] = imageLoader.getSubImage(32 * 2, 32, spriteWidth, spriteHeight);
+	    upFrames[0] = imageLoader.getSubImage((32-2) * 2, 0, spriteWidth, spriteHeight);
+	    upFrames[1] = imageLoader.getSubImage((32-2) * 2, 32, spriteWidth, spriteHeight);
 
 	    rightFrames = new BufferedImage[2];
-	    rightFrames[0] = imageLoader.getSubImage(32 * 3, 32, spriteWidth, spriteHeight);
-	    rightFrames[1] = imageLoader.getSubImage(32 * 3, 0, spriteWidth, spriteHeight);
+	    rightFrames[0] = imageLoader.getSubImage((32-2) * 3, 32, spriteWidth, spriteHeight);
+	    rightFrames[1] = imageLoader.getSubImage((32-2) * 3, 0, spriteWidth, spriteHeight);
 
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
