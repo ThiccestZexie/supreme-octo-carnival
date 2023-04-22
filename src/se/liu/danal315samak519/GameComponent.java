@@ -37,8 +37,14 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintEntities(final Graphics g) {
 	for (Entity entity : game.getEntityList()) {
+	    // PAINT HITBOX
 	    g.setColor(entity.getColor());
 	    g.fillRect(entity.getIntX(), entity.getIntY(), entity.getIntWidth(), entity.getIntHeight());
+	    if(entity instanceof Character){
+		Character character = (Character) entity;
+		// PAINT SPRITE
+		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(), character.getIntHeight(), null);
+	    }
 	}
     }
 

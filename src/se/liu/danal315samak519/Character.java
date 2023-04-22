@@ -3,7 +3,6 @@ package se.liu.danal315samak519;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public abstract class Character extends Entity
 {
@@ -16,11 +15,11 @@ public abstract class Character extends Entity
     protected int hp;
     protected int maxhp;
     protected int currentSpriteFrameIndex = 0;
-    protected BufferedImage[] currentSpriteFrames;
-    private BufferedImage[] downFrames;
-    private BufferedImage[] leftFrames;
-    private BufferedImage[] upFrames;
-    private BufferedImage[] rightFrames;
+    protected BufferedImage[] currentFrames;
+    protected BufferedImage[] downFrames;
+    protected BufferedImage[] leftFrames;
+    protected BufferedImage[] upFrames;
+    protected BufferedImage[] rightFrames;
     private int ticksCounted;
 
     protected Character(final Point2D.Double coord) {
@@ -34,7 +33,7 @@ public abstract class Character extends Entity
 
     @Override public void setDir(final Direction dir) {
 	super.setDir(dir);
-	this.currentSpriteFrames = switch (dir) {
+	this.currentFrames = switch (dir) {
 	    case UP -> upFrames;
 	    case DOWN -> downFrames;
 	    case LEFT -> leftFrames;
@@ -124,43 +123,16 @@ public abstract class Character extends Entity
 	}
     }
 
-    protected void storeDirectionalFrames() {
-	try {
-	    int spriteHeight = 16;
-	    int spriteWidth = 16;
-
-	    ImageLoader linkImageLoader = new ImageLoader("link.png");
-
-	    downFrames = new BufferedImage[2];
-	    downFrames[0] = linkImageLoader.getSubImage(0, 0, spriteWidth, spriteHeight);
-	    downFrames[1] = linkImageLoader.getSubImage(0, 32, spriteWidth, spriteHeight);
-
-	    leftFrames = new BufferedImage[2];
-	    leftFrames[0] = linkImageLoader.getSubImage(32, 0, spriteWidth, spriteHeight);
-	    leftFrames[1] = linkImageLoader.getSubImage(32, 32, spriteWidth, spriteHeight);
-
-	    upFrames = new BufferedImage[2];
-	    upFrames[0] = linkImageLoader.getSubImage(32 * 2, 0, spriteWidth, spriteHeight);
-	    upFrames[1] = linkImageLoader.getSubImage(32 * 2, 32, spriteWidth, spriteHeight);
-
-	    rightFrames = new BufferedImage[2];
-	    rightFrames[0] = linkImageLoader.getSubImage(32 * 3, 32, spriteWidth, spriteHeight);
-	    rightFrames[1] = linkImageLoader.getSubImage(32 * 3, 0, spriteWidth, spriteHeight);
-
-	} catch (IOException e) {
-	    throw new RuntimeException(e);
-	}
-    }
 
     public BufferedImage getCurrentSprite() {
 	return getSpriteFrameAt(currentSpriteFrameIndex);
     }
 
     private BufferedImage getSpriteFrameAt(int index) {
-	return currentSpriteFrames[index];
+	return currentFrames[index];
     }
 
-    public void setCurrentSpriteFrames(final BufferedImage[] frames) {
-	this.currentSpriteFrames = frames;
+    public void setCurrentFrames(final BufferedImage[] frames) {
+	this.currentFrames = frames;
     }
 }
