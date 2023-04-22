@@ -6,15 +6,17 @@ import java.awt.image.BufferedImage;
 
 public abstract class Character extends Entity
 {
-    // CONSTANTS FOR ENTITIES
+    // CONSTANTS FOR CHARACTERS
     private static final int TICKS_PER_FRAME = 8;
+    private static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
+    private static final int MAXHP = 3;
 
-    private final int[] expRequirements = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
     protected int exp;
     protected int level;
     protected int hp;
-    protected int maxhp;
     protected int currentFrameIndex = 0;
+
+    // Sprite
     protected BufferedImage[] currentFrames;
     protected BufferedImage[] downFrames;
     protected BufferedImage[] leftFrames;
@@ -26,8 +28,7 @@ public abstract class Character extends Entity
     protected Character(final Point2D.Double coord) {
 	super(coord);
 	this.exp = 0;
-	this.maxhp = 3;
-	this.hp = maxhp;
+	this.hp = MAXHP;
 	this.size = new Dimension(50, 50); // TODO CHARACTERS HARDCODED SIZE
 	setHitBox();
     }
@@ -48,11 +49,11 @@ public abstract class Character extends Entity
     }
 
     public int getMaxHp() {
-	return maxhp;
+	return MAXHP;
     }
 
     public int[] getExpRequirements() {
-	return expRequirements;
+	return EXP_REQUIREMENTS;
     }
 
     public int getLevel() {
@@ -90,13 +91,13 @@ public abstract class Character extends Entity
 
     public void levelUp() {
 	while (checkExpReq()) {
-	    exp -= expRequirements[level - 1];
+	    exp -= EXP_REQUIREMENTS[level - 1];
 	    level++;
 	}
     }
 
     public boolean checkExpReq() { // You start as level 1 so index 0 of exp req and the exp is exp needed for next level...
-	if (this.exp >= expRequirements[level - 1]) {
+	if (this.exp >= EXP_REQUIREMENTS[level - 1]) {
 	    return true;
 	}
 	return false;

@@ -57,8 +57,8 @@ public class Game
 
 
     public void notifyListeners() {
-	for (FrameListener fl : frameListeners) {
-	    fl.frameChanged();
+	for (FrameListener frameListener : frameListeners) {
+	    frameListener.frameChanged();
 	}
     }
 
