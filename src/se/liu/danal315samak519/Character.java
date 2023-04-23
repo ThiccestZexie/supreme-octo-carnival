@@ -11,10 +11,11 @@ public abstract class Character extends Entity
     private static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
     private static final int MAXHP = 3;
 
-    protected int exp;
+    protected int exp = 0;
     protected int level;
-    protected int hp;
+    protected int hp = MAXHP;
     protected int currentFrameIndex = 0;
+    private Status status = Status.NORMAL;
 
     // Sprite
     protected BufferedImage[] currentFrames;
@@ -25,10 +26,9 @@ public abstract class Character extends Entity
     protected BufferedImage attackFrame;
     private int ticksCounted;
 
+
     protected Character(final Point2D.Double coord) {
 	super(coord);
-	this.exp = 0;
-	this.hp = MAXHP;
 	this.size = new Dimension(50, 50); // TODO CHARACTERS HARDCODED SIZE
 	setHitBox();
     }
@@ -104,6 +104,9 @@ public abstract class Character extends Entity
     }
 
     @Override public void tick() {
+	if(getStatus() == Status.SLEEPING){
+	    return; // Do nothing just sleep zZzZ
+	}
 	super.tick();
 	performWalkCycle();
     }
@@ -125,7 +128,6 @@ public abstract class Character extends Entity
 	}
     }
 
-
     public BufferedImage getCurrentSprite() {
 	return getSpriteFrameAt(currentFrameIndex);
     }
@@ -140,5 +142,14 @@ public abstract class Character extends Entity
 
     public void becomeAttacking() {
 	this.currentFrameIndex = 2;
+	this.setStatus(Status.ATTACKING);
+    }
+
+    protected void setStatus(final Status status) {
+	this.status = status;
+    }
+
+    protected Status getStatus() {
+	return this.status;
     }
 }

@@ -9,8 +9,6 @@ public class Player extends Character
 {
     private static final String LEVEL_FOLDER = "resources/data/LevelUP/";
     public BufferedImage[] levelUpFrames;
-    private String name;
-
 
     public Player(final Point2D.Double coord)
     {
@@ -20,10 +18,6 @@ public class Player extends Character
 	storeLevelUpFrames();
 	storeSpriteFrames();
 	setDir(Direction.DOWN);
-    }
-
-    public String getName() {
-	return name;
     }
 
     private void storeLevelUpFrames() {

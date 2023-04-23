@@ -6,10 +6,11 @@ import java.awt.image.BufferedImage;
 
 public class Weapon extends Entity
 {
-    private final int[] expRequirements = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
-    // Keeps track of what frame to display on the sprite
-    protected int currentSpriteFrameIndex = 0;
-    protected BufferedImage[] currentSpriteFrames;
+    private BufferedImage currentSprite;
+    private BufferedImage upSprite;
+    private BufferedImage leftSprite;
+    private BufferedImage downSprite;
+    private BufferedImage rightSprite;
     private Character owner;
     private int lifeSpan = 5;
 
@@ -45,6 +46,10 @@ public class Weapon extends Entity
 	return owner;
     }
 
+    public BufferedImage getCurrentSprite() {
+	return currentSprite;
+    }
+
     @Override public void tick() {
 	super.tick();
 	lifeSpan--;
@@ -55,27 +60,10 @@ public class Weapon extends Entity
     }
 
     public void followOwner() {
-	this.velX = owner.getVelX();
-	this.velY = owner.getVelY();
+	setCurrentVelocity(owner.getVelX(), owner.getVelY());
     }
 
     public int getLifeSpan() {
 	return lifeSpan;
-    }
-
-    public int[] getExpRequirements() {
-	return expRequirements;
-    }
-
-    public BufferedImage getCurrentSprite() {
-	return getSpriteFrameAt(currentSpriteFrameIndex);
-    }
-
-    private BufferedImage getSpriteFrameAt(int index) {
-	return currentSpriteFrames[index];
-    }
-
-    public void setCurrentSpriteFrames(final BufferedImage[] frames) {
-	this.currentSpriteFrames = frames;
     }
 }

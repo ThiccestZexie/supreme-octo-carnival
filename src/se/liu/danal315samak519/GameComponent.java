@@ -11,6 +11,8 @@ public class GameComponent extends JComponent implements FrameListener
     private static final int TILE_HEIGHT = 32;
     public Game game;
 
+    private long lastFrameTime;
+
     public int i = 0;
     public boolean didPlayerLevel = false;
     int oldPlayerLevel;
@@ -26,33 +28,49 @@ public class GameComponent extends JComponent implements FrameListener
     private void paintPlayer(final Graphics g) {
 	Player player = game.getPlayer();
 
-	// PAINT HITBOX
-	g.setColor(player.getColor());
-	g.fillRect(player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight());
-	paintLevelUpAnimation(g);
+	if(game.debug){
+	    // PAINT HITBOX
+	    g.setColor(player.getColor());
+	    g.fillRect(player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight());
+	}
 
+	paintLevelUpAnimation(g);
 	// PAINT SPRITE
 	g.drawImage(player.getCurrentSprite(), player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight(), null);
     }
 
     private void paintEntities(final Graphics g) {
 	for (Entity entity : game.getEntityList()) {
-	    // PAINT HITBOX
-	    g.setColor(entity.getColor());
-	    g.fillRect(entity.getIntX(), entity.getIntY(), entity.getIntWidth(), entity.getIntHeight());
-	    if(entity instanceof Character){
+	    if(game.debug){
+		// PAINT HITBOX
+		g.setColor(entity.getColor());
+		g.fillRect(entity.getIntX(), entity.getIntY(), entity.getIntWidth(), entity.getIntHeight());
+	    }
+	    if (entity instanceof Character) {
 		Character character = (Character) entity;
 		// PAINT SPRITE
-		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(), character.getIntHeight(), null);
+		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(),
+			    character.getIntHeight(), null);
 	    }
 	}
     }
 
+    private int getFPS(){
+	long currentTime = System.nanoTime();
+	long elapsedNanos = currentTime - lastFrameTime;
+	lastFrameTime = currentTime;
+
+	double elapsedSeconds = (double) elapsedNanos / 1_000_000_000.0;
+	double currentFPS = 1.0 / elapsedSeconds;
+
+	return (int)currentFPS;
+    }
+
     private void paintGUI(final Graphics g) {
 
-	for (Entity entity: game.getEntityList()) {
+	for (Entity entity : game.getEntityList()) {
 	    if (entity instanceof Enemy) {
-		Enemy enemy = (Enemy)entity;
+		Enemy enemy = (Enemy) entity;
 		// Maxhealth (BLACK)
 		g.setColor(Color.BLACK);
 		int blackWidth = enemy.getMaxHp() * 60;
@@ -67,7 +85,8 @@ public class GameComponent extends JComponent implements FrameListener
 		int redX = blackX;
 		int redY = blackY;
 		g.setColor(Color.RED);
-		g.fillRect(enemy.getIntX() - blackWidth / 2 + enemy.getIntWidth() / 2, enemy.getIntY() + enemy.getIntHeight() + 15, redWidth, redHeight);
+		g.fillRect(enemy.getIntX() - blackWidth / 2 + enemy.getIntWidth() / 2, enemy.getIntY() + enemy.getIntHeight() + 15,
+			   redWidth, redHeight);
 	    }
 	}
 	int expBarLength = 100;
@@ -101,6 +120,10 @@ public class GameComponent extends JComponent implements FrameListener
 	paintEntities(g);
 	paintPlayer(g);
 	paintGUI(g);
+
+	if (game.debug) {
+	    System.out.println(getFPS());
+	}
     }
 
     private void paintMap(final Graphics g) {
@@ -154,6 +177,9 @@ public class GameComponent extends JComponent implements FrameListener
 	addNewKeyBinding("released DOWN", new StopAction(Direction.DOWN));
 	addNewKeyBinding("released LEFT", new StopAction(Direction.LEFT));
 	addNewKeyBinding("released RIGHT", new StopAction(Direction.RIGHT));
+
+	// Debug
+	addNewKeyBinding("F1", new DebugAction());
     }
 
     @Override public void frameChanged() {
@@ -183,6 +209,14 @@ public class GameComponent extends JComponent implements FrameListener
     {
 	public void actionPerformed(ActionEvent e) {
 	    game.playerAttack();
+	}
+    }
+
+    private class DebugAction extends AbstractAction
+    {
+
+	@Override public void actionPerformed(final ActionEvent e) {
+	    game.toggleDebug();
 	}
     }
 

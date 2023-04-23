@@ -14,6 +14,7 @@ public class Enemy extends Character
 	this.player = player;
 	storeDirectionalFrames();
 	setDir(Direction.DOWN);
+	setStatus(Status.SLEEPING);
     }
 
     private void storeDirectionalFrames() {

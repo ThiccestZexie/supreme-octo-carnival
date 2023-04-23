@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 
 public class Viewer
 {
-    private static final int FPS = 60;
+    private static final int TARGET_FPS = 120;
     private GameComponent gameComponent;
 
     public void show() {
@@ -37,7 +37,7 @@ public class Viewer
 
     public void startTimer()
     {
-	int millisDelay = 1000/FPS;
+	int millisDelay = 1000 / TARGET_FPS;
 	final Timer clockTimer = new Timer(millisDelay, doTimerTick);
 	clockTimer.setCoalesce(true);
 	clockTimer.start();

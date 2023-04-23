@@ -67,16 +67,6 @@ public class MapLoader
 	    String imageName = findImageName(tilesetName);
 	    imageLoaders[i] = new ImageLoader(imageName);
 	}
-
-	// Fill tiles array
-	Tile[][] tiles = new Tile[rows][columns];
-	for (int y = 0; y < rows; y++) {
-	    for (int x = 0; x < columns; x++) {
-		int id = this.getID(x, y);
-		Point coord = new Point(x * getTileWidth(), y * getTileHeight());
-		tiles[y][x] = new Tile(getTileImage(id), coord);
-	    }
-	}
     }
 
     public static void main(String[] args) throws IOException {
