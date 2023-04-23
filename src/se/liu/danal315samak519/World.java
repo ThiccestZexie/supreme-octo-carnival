@@ -2,6 +2,7 @@ package se.liu.danal315samak519;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class World
 {
@@ -48,7 +49,26 @@ public class World
     public int getTileWidth() {
 	return tileWidth;
     }
+
     public int getTileHeight() {
 	return tileHeight;
+    }
+
+    /**
+     * @return a flattened list of the foreground map layer, null elements removed.
+     */
+    public ArrayList<Tile> getForegroundTileList() {
+	ArrayList<Tile> foregroundTileList = new ArrayList<>();
+	int foregroundLayer = 1;
+
+	for (int y = 0; y < getRows(); y++) {
+	    for (int x = 0; x < getColumns(); x++) {
+		Tile tile = getTile(x, y, foregroundLayer);
+		if(tile != null){
+		    foregroundTileList.add(tile);
+		}
+	    }
+	}
+	return foregroundTileList;
     }
 }

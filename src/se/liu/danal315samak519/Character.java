@@ -42,7 +42,6 @@ public abstract class Character extends Entity
 	};
     }
 
-
     public int getHp() {
 	return hp;
     }

@@ -1,5 +1,6 @@
 package se.liu.danal315samak519;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,25 @@ public class Game
     {
 	removeGarbage();
 	player.tick();
+	handleWallCollisions();
 	for (Entity e : entityList) {
 	    e.tick();
+	}
+    }
+
+    /**
+     * Iterates through all foreground tiles and makes sure no entites can pass through them
+     */
+    private void handleWallCollisions() {
+	for (Tile tile : world.getForegroundTileList()) {
+	    Rectangle tileHitBox = new Rectangle(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
+	    if (player.getHitBox().intersects(tileHitBox)){
+		Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
+		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), player.getHitBox().getCenterY());
+		Direction pushBackDirection = DirectionUtils.directionBetweenPoints(from, to);
+		player.nudge(pushBackDirection.getX(), pushBackDirection.getY());
+		player.setCurrentVelocity(0,0);
+	    }
 	}
     }
 

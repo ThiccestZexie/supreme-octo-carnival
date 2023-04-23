@@ -81,7 +81,12 @@ public class MapLoader
     }
 
     private void setTile(final int value, int y, int x, int l) {
-	tiles[y][x][l] = new Tile(getTileImage(value));
+	if(value != 0){
+	    Point point = new Point(x*tileWidth, y*tileHeight);
+	    tiles[y][x][l] = new Tile(getTileImage(value), point);
+	}else {
+	    tiles[y][x][l] = null;
+	}
     }
 
     /**

@@ -132,20 +132,7 @@ public abstract class Entity
     }
 
     private void setAppropiateDir() {
-	if (getVelX() == 0 && getVelY() == 0) {
-	    return; // Do nothing
-	}
-	float angle = (float) Math.atan2(getVelY(), getVelX());
-
-	if (-Math.PI / 4 < angle && angle < Math.PI / 4) {
-	    setDir(Direction.RIGHT);
-	} else if (-3 * Math.PI / 4 < angle && angle < -Math.PI / 4) {
-	    setDir(Direction.UP);
-	} else if (Math.PI / 4 < angle && angle < 3 * Math.PI / 4) {
-	    setDir(Direction.DOWN);
-	} else if (angle < -3 * Math.PI / 4 || angle > 3 * Math.PI / 4) {
-	    setDir(Direction.LEFT);
-	}
+	DirectionUtils.velocityToDirection(getCoord(), getVelX(), getVelY());
     }
 
     public void tick() {
