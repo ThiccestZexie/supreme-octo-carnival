@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -100,7 +99,7 @@ public class MapLoader
      *
      * @throws IOException
      */
-    private void readMapFile(final String filePath){
+    private void readMapFile(final String filePath) {
     }
 
     /**

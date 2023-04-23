@@ -15,8 +15,6 @@ public abstract class Character extends Entity
     protected int level;
     protected int hp = MAXHP;
     protected int currentFrameIndex = 0;
-    private Status status = Status.NORMAL;
-
     // Sprite
     protected BufferedImage[] currentFrames;
     protected BufferedImage[] downFrames;
@@ -24,6 +22,7 @@ public abstract class Character extends Entity
     protected BufferedImage[] upFrames;
     protected BufferedImage[] rightFrames;
     protected BufferedImage attackFrame;
+    private Status status = Status.NORMAL;
     private int ticksCounted;
 
 
@@ -104,7 +103,7 @@ public abstract class Character extends Entity
     }
 
     @Override public void tick() {
-	if(getStatus() == Status.SLEEPING){
+	if (getStatus() == Status.SLEEPING) {
 	    return; // Do nothing just sleep zZzZ
 	}
 	super.tick();
@@ -145,11 +144,11 @@ public abstract class Character extends Entity
 	this.setStatus(Status.ATTACKING);
     }
 
-    protected void setStatus(final Status status) {
-	this.status = status;
-    }
-
     protected Status getStatus() {
 	return this.status;
+    }
+
+    protected void setStatus(final Status status) {
+	this.status = status;
     }
 }

@@ -55,12 +55,12 @@ public class Player extends Character
 	    upFrames = new BufferedImage[3];
 	    upFrames[0] = linkImageLoader.getSubImage(32 * 2, 0, spriteWidth, spriteHeight);
 	    upFrames[1] = linkImageLoader.getSubImage(32 * 2, 32, spriteWidth, spriteHeight);
-	    upFrames[2] = linkImageLoader.getSubImage(32*2, 32 * 2, spriteWidth, spriteHeight);
+	    upFrames[2] = linkImageLoader.getSubImage(32 * 2, 32 * 2, spriteWidth, spriteHeight);
 
 	    rightFrames = new BufferedImage[3];
 	    rightFrames[0] = linkImageLoader.getSubImage(32 * 3, 32, spriteWidth, spriteHeight);
 	    rightFrames[1] = linkImageLoader.getSubImage(32 * 3, 0, spriteWidth, spriteHeight);
-	    rightFrames[2] = linkImageLoader.getSubImage(32*3, 32 * 2, spriteWidth, spriteHeight);
+	    rightFrames[2] = linkImageLoader.getSubImage(32 * 3, 32 * 2, spriteWidth, spriteHeight);
 
 	} catch (IOException e) {
 	    throw new RuntimeException(e);

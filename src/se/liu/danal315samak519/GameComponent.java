@@ -10,13 +10,11 @@ public class GameComponent extends JComponent implements FrameListener
     private static final int TILE_WIDTH = 32;
     private static final int TILE_HEIGHT = 32;
     public Game game;
-
-    private long lastFrameTime;
-    private boolean debug = false;
-
     public int i = 0;
     public boolean didPlayerLevel = false;
     int oldPlayerLevel;
+    private long lastFrameTime;
+    private boolean debug = false;
 
     public GameComponent(Game game)
     {
@@ -29,7 +27,7 @@ public class GameComponent extends JComponent implements FrameListener
     private void paintPlayer(final Graphics g) {
 	Player player = game.getPlayer();
 
-	if(debug){
+	if (debug) {
 	    // PAINT HITBOX
 	    g.setColor(player.getColor());
 	    g.fillRect(player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight());
@@ -42,7 +40,7 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintEntities(final Graphics g) {
 	for (Entity entity : game.getEntityList()) {
-	    if(debug){
+	    if (debug) {
 		// PAINT HITBOX
 		g.setColor(entity.getColor());
 		g.fillRect(entity.getIntX(), entity.getIntY(), entity.getIntWidth(), entity.getIntHeight());
@@ -116,14 +114,14 @@ public class GameComponent extends JComponent implements FrameListener
 	}
     }
 
-    private int getFPS(){
+    private int getFPS() {
 	long currentTime = System.nanoTime();
 	long elapsedNanos = currentTime - lastFrameTime;
 	lastFrameTime = currentTime;
-	double elapsedSeconds = (double) elapsedNanos / 1_000_000_000.0;
+	double elapsedSeconds = elapsedNanos / 1_000_000_000.0;
 	double currentFPS = 1.0 / elapsedSeconds;
 
-	return (int)currentFPS;
+	return (int) currentFPS;
     }
 
     private void paintDebug(final Graphics g) {

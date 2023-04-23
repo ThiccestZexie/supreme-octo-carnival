@@ -8,6 +8,14 @@ public class Viewer
 {
     private static final int TARGET_FPS = 120;
     private GameComponent gameComponent;
+    private final Action doTimerTick = new AbstractAction()
+    {
+	@Override public void actionPerformed(final ActionEvent e)
+	{
+	    gameComponent.frameChanged();
+	    gameComponent.game.tick();
+	}
+    };
 
     public void show() {
 	// Initisalise frame
@@ -16,7 +24,7 @@ public class Viewer
 
 	//Add component
 
-	Player player = new Player(new Point2D.Double(10,10));
+	Player player = new Player(new Point2D.Double(10, 10));
 	player.setMaxSpeed(5);
 	Game game = new Game(player);
 	game.setWorld(new World("map0.tmx"));
@@ -42,12 +50,4 @@ public class Viewer
 	clockTimer.setCoalesce(true);
 	clockTimer.start();
     }
-    private final Action doTimerTick = new AbstractAction()
-    {
-	@Override public void actionPerformed(final ActionEvent e)
-	{
-	    gameComponent.frameChanged();
-	    gameComponent.game.tick();
-	}
-    };
 }

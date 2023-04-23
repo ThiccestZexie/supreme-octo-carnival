@@ -22,20 +22,23 @@ public class Weapon extends Entity
 	switch (owner.getDir()) {
 	    case UP:
 		this.size = new Dimension(10, 60);
-		this.coord = new Point2D.Double((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2), (owner.getY() - this.getHeight()));
+		this.coord = new Point2D.Double((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2),
+						(owner.getY() - this.getHeight()));
 		break;
 	    case DOWN:
 		this.size = new Dimension(10, 60);
-		this.coord = new Point2D.Double((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2), (owner.getY() + (owner.getHeight())));
+		this.coord = new Point2D.Double((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2),
+						(owner.getY() + (owner.getHeight())));
 		break;
 	    case LEFT:
 		size = new Dimension(60, 10);
-		this.coord = new Point2D.Double((owner.getX() - this.getWidth()), (owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
+		this.coord = new Point2D.Double((owner.getX() - this.getWidth()),
+						(owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
 		break;
 	    case RIGHT:
 		size = new Dimension(60, 10);
-		this.coord =
-			new Point2D.Double((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
+		this.coord = new Point2D.Double((owner.getX() + owner.getWidth()),
+						(owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
 		break;
 	}
 

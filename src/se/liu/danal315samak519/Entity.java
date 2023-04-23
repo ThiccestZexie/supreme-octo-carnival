@@ -132,7 +132,7 @@ public abstract class Entity
     }
 
     private void setAppropiateDir() {
-	if(getVelX() == 0 && getVelY() == 0){
+	if (getVelX() == 0 && getVelY() == 0) {
 	    return; // Do nothing
 	}
 	float angle = (float) Math.atan2(getVelY(), getVelX());
@@ -147,6 +147,7 @@ public abstract class Entity
 	    setDir(Direction.LEFT);
 	}
     }
+
     public void tick() {
 	// Move along according to current velocity
 	nudgeHitBox(velX, velY);

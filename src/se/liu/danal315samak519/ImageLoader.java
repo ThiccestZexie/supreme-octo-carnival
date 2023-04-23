@@ -17,6 +17,11 @@ public class ImageLoader
 	this.height = image.getHeight();
     }
 
+    public static BufferedImage readImageIO(final String imageName) throws IOException {
+	String imagePath = "resources/images/" + imageName;
+	return ImageIO.read(new File(imagePath));
+    }
+
     public int getWidth() {
 	return width;
     }
@@ -29,12 +34,7 @@ public class ImageLoader
 	return image.getSubimage(x, y, width, height);
     }
 
-    public BufferedImage getImage(){
+    public BufferedImage getImage() {
 	return image;
-    }
-
-    public static BufferedImage readImageIO(final String imageName) throws IOException {
-	String imagePath = "resources/images/" + imageName;
-	return ImageIO.read(new File(imagePath));
     }
 }
