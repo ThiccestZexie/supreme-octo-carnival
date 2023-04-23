@@ -13,7 +13,7 @@ public class GameComponent extends JComponent implements FrameListener
     public boolean didPlayerLevel = false;
     int oldPlayerLevel;
     private long lastFrameTime;
-    private boolean debug = false;
+    private boolean debug = true;
 
     public GameComponent(Game game)
     {
