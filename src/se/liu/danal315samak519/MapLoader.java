@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +16,7 @@ public class MapLoader
     private static final String IMAGES_FOLDER = "resources/images/";
     private final int layers;
     private int[] tilesetGIDs;
-    private int[][][] dataValues; //[rows][columns][layers]
+    private Tile[][][] tiles;
     private int rows, columns;
     private int tileWidth, tileHeight;
     private ImageLoader[] tileSetLoaders;
@@ -41,23 +42,6 @@ public class MapLoader
 	this.tileHeight = Integer.parseInt(mapElement.attr("tileheight"));
 	this.layers = Integer.parseInt(mapElement.attr("nextlayerid")) - 1;
 
-	// Fill tileIDs using the CSV part of XML file
-	Elements layerElements = doc.select("layer");
-	for (int l = 0; l < this.layers; l++) {
-	    Element layerElement = layerElements.get(l);
-	    String dataString = layerElement.selectFirst("data").text();
-	    String separator = System.lineSeparator();
-	    String[] dataRows = dataString.split(", ");
-	    this.dataValues = new int[rows][columns][layers];
-
-	    for (int y = 0; y < rows; y++) {
-		String[] rowValues = dataRows[y].split(",");
-		for (int x = 0; x < columns; x++) {
-		    dataValues[y][x][l] = Integer.parseInt(rowValues[x]);
-		}
-	    }
-	}
-
 
 	// Handle multiple tilesets
 	Elements tileSetElements = doc.select("tileset");
@@ -72,10 +56,33 @@ public class MapLoader
 	    String imageName = findImageName(tilesetName);
 	    tileSetLoaders[i] = new ImageLoader(imageName);
 	}
+
+	// Fill tileIDs using the CSV part of XML file
+	this.tiles = new Tile[rows][columns][layers];
+
+	Elements layerElements = doc.select("layer");
+	for (int l = 0; l < this.layers; l++) {
+	    Element layerElement = layerElements.get(l);
+	    String dataString = layerElement.selectFirst("data").text();
+	    String[] dataRows = dataString.split(", ");
+	    for (int y = 0; y < rows; y++) {
+		String[] rowValues = dataRows[y].split(",");
+		for (int x = 0; x < columns; x++) {
+		    int value = Integer.parseInt(rowValues[x]);
+		    Point coord = new Point(x * getTileWidth(), y * getTileWidth());
+		    setTile(value, coord, y, x, l);
+		}
+	    }
+	}
+
     }
 
     public static void main(String[] args) throws IOException {
 	MapLoader mapLoader = new MapLoader("map0.tmx");
+    }
+
+    private void setTile(final int value, final Point coord, int y, int x, int l) {
+	tiles[y][x][l] = new Tile(getTileImage(value), coord);
     }
 
     /**
@@ -104,7 +111,7 @@ public class MapLoader
      * @return
      */
     public BufferedImage getTileImage(int value) {
-	if(value == 0){ // Catch "transparent / empty" tiles from map file
+	if (value == 0) { // Catch "transparent / empty" tiles from map file
 	    return null;
 	}
 	int index = getTileSetOfValue(value);
@@ -119,10 +126,10 @@ public class MapLoader
 	return imageLoader.getSubImage(x, y, getTileWidth(), getTileHeight());
     }
 
-    private int getTileSetOfValue(int id) {
+    private int getTileSetOfValue(int value) {
 	int index = -1;
 	for (int i = 0; i < tilesetGIDs.length; i++) {
-	    if (tilesetGIDs[i] > id) {
+	    if (tilesetGIDs[i] > value) {
 		break;
 	    }
 	    index = i;
@@ -130,12 +137,8 @@ public class MapLoader
 	return index;
     }
 
-    public int getLayers(){
+    public int getLayers() {
 	return layers;
-    }
-
-    public int getID(int x, int y, final int l) {
-	return dataValues[y][x][l];
     }
 
     public int getRows() {
@@ -152,5 +155,9 @@ public class MapLoader
 
     public int getTileHeight() {
 	return tileHeight;
+    }
+
+    public Tile[][][] getTiles() {
+	return this.tiles;
     }
 }

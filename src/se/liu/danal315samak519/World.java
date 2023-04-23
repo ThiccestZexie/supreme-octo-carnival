@@ -7,29 +7,18 @@ public class World
 {
     // columns, rows, layers
     private Tile[][][] tiles;
+    private int rows, columns, layers;
 
     public World(final String tmxName) {
 	try {
 	    MapLoader mapLoader = new MapLoader(tmxName);
-	    int rows = mapLoader.getRows();
-	    int columns = mapLoader.getColumns();
-	    int layers = mapLoader.getLayers();
-	    tiles = new Tile[rows][columns][layers];
-	    for (int y = 0; y < rows; y++) {
-		for (int x = 0; x < columns; x++) {
-		    for (int l = 0; l < layers; l++) {
-			int id = mapLoader.getID(x, y, l);
-			Point coord = new Point(x * mapLoader.getTileWidth(), y * mapLoader.getTileHeight());
-			tiles[y][x][l] = new Tile(mapLoader.getTileImage(id), coord);
-		    }
-		}
-	    }
+	    this.rows = mapLoader.getRows();
+	    this.columns = mapLoader.getColumns();
+	    this.layers = mapLoader.getLayers();
+	    this.tiles = mapLoader.getTiles();
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
-    }
-
-    private void populateTileArray() {
     }
 
     public Tile getTile(int x, int y, int l) {

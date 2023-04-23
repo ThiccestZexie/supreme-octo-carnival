@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 
 public class GameComponent extends JComponent implements FrameListener
 {
-    private static final int CONSTANTNUDGE = 2;
     private static final int TILE_WIDTH = 32;
     private static final int TILE_HEIGHT = 32;
     public Game game;
