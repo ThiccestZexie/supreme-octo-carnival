@@ -69,8 +69,7 @@ public class MapLoader
 		String[] rowValues = dataRows[y].split(",");
 		for (int x = 0; x < columns; x++) {
 		    int value = Integer.parseInt(rowValues[x]);
-		    Point coord = new Point(x * getTileWidth(), y * getTileWidth());
-		    setTile(value, coord, y, x, l);
+		    setTile(value, y, x, l);
 		}
 	    }
 	}
@@ -81,8 +80,8 @@ public class MapLoader
 	MapLoader mapLoader = new MapLoader("map0.tmx");
     }
 
-    private void setTile(final int value, final Point coord, int y, int x, int l) {
-	tiles[y][x][l] = new Tile(getTileImage(value), coord);
+    private void setTile(final int value, int y, int x, int l) {
+	tiles[y][x][l] = new Tile(getTileImage(value));
     }
 
     /**

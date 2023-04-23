@@ -7,9 +7,8 @@ public class Tile
     private Image image;
     private Point coord;
 
-    public Tile(final Image image, final Point coord) {
+    public Tile(final Image image) {
 	this.image = image;
-	this.coord = coord;
     }
 
     public Image getImage() {
@@ -28,12 +27,5 @@ public class Tile
 	    return 0;
 	}
 	return image.getHeight(null);
-    }
-
-    public int getX(){
-	return coord.x;
-    }
-    public int getY() {
-	return coord.y;
     }
 }

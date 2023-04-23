@@ -6,18 +6,20 @@ import java.awt.event.ActionEvent;
 
 public class GameComponent extends JComponent implements FrameListener
 {
-    private static final int TILE_WIDTH = 32;
-    private static final int TILE_HEIGHT = 32;
     public Game game;
     public int i = 0;
     public boolean didPlayerLevel = false;
     int oldPlayerLevel;
-    private long lastFrameTime;
+    private int tileWidth;
+    private int tileHeight;
     private boolean debug = true;
+    private long lastFrameTime;
 
     public GameComponent(Game game)
     {
 	this.game = game;
+	this.tileWidth = game.getWorld().getTileWidth();
+	this.tileHeight = game.getWorld().getTileHeight();
 	setKeyBindings();
 	game.addFrameListener(this);
 	oldPlayerLevel = game.getPlayer().getLevel();
@@ -103,9 +105,10 @@ public class GameComponent extends JComponent implements FrameListener
 
     @Override protected void paintComponent(final Graphics g) {
 	super.paintComponent(g);
-	paintMap(g);
+	paintMapLayer(g,0); // Paint background
 	paintEntities(g);
 	paintPlayer(g);
+	paintMapLayer(g,1); // Paint foreground
 	paintGUI(g);
 
 	if (debug) {
@@ -127,14 +130,14 @@ public class GameComponent extends JComponent implements FrameListener
 	g.drawString(String.valueOf(getFPS()), 5, 15);
     }
 
-    private void paintMap(final Graphics g) {
+    private void paintMapLayer(final Graphics g, final int layer) {
 	World world = game.getWorld();
-	for (int l = 0; l < world.getLayers(); l++) {
-	    for (int y = 0; y < world.getRows(); y++) {
-		for (int x = 0; x < world.getColumns(); x++) {
-		    Tile tile = world.getTile(x, y, l);
-		    g.drawImage(tile.getImage(), tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight(), null);
-		}
+	for (int y = 0; y < world.getRows(); y++) {
+	    for (int x = 0; x < world.getColumns(); x++) {
+		Tile tile = world.getTile(x, y, layer);
+		int tileX = x * tileWidth;
+		int tileY = y * tileHeight;
+		g.drawImage(tile.getImage(), tileX, tileY, tileWidth, tileHeight, null);
 	    }
 	}
     }
@@ -143,8 +146,8 @@ public class GameComponent extends JComponent implements FrameListener
      * This method is called when JFrame tries to pack all the components. Ensures the window size is the same as world size.
      */
     @Override public Dimension getPreferredSize() {
-	int preferredWidth = game.getWorld().getRows() * TILE_WIDTH;
-	int preferredHeight = game.getWorld().getColumns() * TILE_HEIGHT;
+	int preferredWidth = game.getWorld().getRows() * tileWidth;
+	int preferredHeight = game.getWorld().getColumns() * tileHeight;
 	return new Dimension(preferredWidth, preferredHeight);
     }
 

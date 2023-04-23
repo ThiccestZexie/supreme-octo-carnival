@@ -5,6 +5,8 @@ import java.io.IOException;
 
 public class World
 {
+    private final int tileHeight;
+    private final int tileWidth;
     // columns, rows, layers
     private Tile[][][] tiles;
     private int rows, columns, layers;
@@ -16,6 +18,8 @@ public class World
 	    this.columns = mapLoader.getColumns();
 	    this.layers = mapLoader.getLayers();
 	    this.tiles = mapLoader.getTiles();
+	    this.tileWidth = mapLoader.getTileWidth();
+	    this.tileHeight = mapLoader.getTileHeight();
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
@@ -39,5 +43,12 @@ public class World
 
     public int getLayers() {
 	return layers;
+    }
+
+    public int getTileWidth() {
+	return tileWidth;
+    }
+    public int getTileHeight() {
+	return tileHeight;
     }
 }
