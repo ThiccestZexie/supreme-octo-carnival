@@ -11,7 +11,6 @@ public class Game
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player;
     private World world;
-    public boolean debug = true;
 
     public Game(final Player player) {
 	this.player = player;
@@ -133,7 +132,4 @@ public class Game
 	entityList.add(entity);
     }
 
-    public void toggleDebug() {
-	this.debug = !this.debug;
-    }
 }

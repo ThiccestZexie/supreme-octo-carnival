@@ -12,6 +12,7 @@ public class GameComponent extends JComponent implements FrameListener
     public Game game;
 
     private long lastFrameTime;
+    private boolean debug = false;
 
     public int i = 0;
     public boolean didPlayerLevel = false;
@@ -28,7 +29,7 @@ public class GameComponent extends JComponent implements FrameListener
     private void paintPlayer(final Graphics g) {
 	Player player = game.getPlayer();
 
-	if(game.debug){
+	if(debug){
 	    // PAINT HITBOX
 	    g.setColor(player.getColor());
 	    g.fillRect(player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight());
@@ -41,7 +42,7 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintEntities(final Graphics g) {
 	for (Entity entity : game.getEntityList()) {
-	    if(game.debug){
+	    if(debug){
 		// PAINT HITBOX
 		g.setColor(entity.getColor());
 		g.fillRect(entity.getIntX(), entity.getIntY(), entity.getIntWidth(), entity.getIntHeight());
@@ -53,17 +54,6 @@ public class GameComponent extends JComponent implements FrameListener
 			    character.getIntHeight(), null);
 	    }
 	}
-    }
-
-    private int getFPS(){
-	long currentTime = System.nanoTime();
-	long elapsedNanos = currentTime - lastFrameTime;
-	lastFrameTime = currentTime;
-
-	double elapsedSeconds = (double) elapsedNanos / 1_000_000_000.0;
-	double currentFPS = 1.0 / elapsedSeconds;
-
-	return (int)currentFPS;
     }
 
     private void paintGUI(final Graphics g) {
@@ -121,9 +111,23 @@ public class GameComponent extends JComponent implements FrameListener
 	paintPlayer(g);
 	paintGUI(g);
 
-	if (game.debug) {
-	    System.out.println(getFPS());
+	if (debug) {
+	    paintDebug(g);
 	}
+    }
+
+    private int getFPS(){
+	long currentTime = System.nanoTime();
+	long elapsedNanos = currentTime - lastFrameTime;
+	lastFrameTime = currentTime;
+	double elapsedSeconds = (double) elapsedNanos / 1_000_000_000.0;
+	double currentFPS = 1.0 / elapsedSeconds;
+
+	return (int)currentFPS;
+    }
+
+    private void paintDebug(final Graphics g) {
+	g.drawString(String.valueOf(getFPS()), 5, 15);
     }
 
     private void paintMap(final Graphics g) {
@@ -216,7 +220,7 @@ public class GameComponent extends JComponent implements FrameListener
     {
 
 	@Override public void actionPerformed(final ActionEvent e) {
-	    game.toggleDebug();
+	    debug = !debug;
 	}
     }
 
