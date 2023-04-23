@@ -24,13 +24,13 @@ public class Viewer
 
 	//Add component
 
-	Player player = new Player(new Point2D.Double(10, 10));
+	Player player = new Player(new Point2D.Double(300, 300));
 	player.setMaxSpeed(5);
 	Game game = new Game(player);
 	game.setWorld(new World("map0.tmx"));
-	game.addEnemy(100, 600);
+	game.addEnemy(200, 600);
 	game.addEnemy(523, 321);
-	game.addEnemy(132, 60);
+	game.addEnemy(132, 90);
 
 	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);

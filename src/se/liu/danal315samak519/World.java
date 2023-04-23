@@ -30,10 +30,14 @@ public class World
     }
 
     public int getRows() {
-	return tiles.length;
+	return this.rows;
     }
 
     public int getColumns() {
-	return tiles[0].length;
+	return columns;
+    }
+
+    public int getLayers() {
+	return layers;
     }
 }

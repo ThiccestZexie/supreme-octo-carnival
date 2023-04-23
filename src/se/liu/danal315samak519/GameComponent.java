@@ -129,10 +129,12 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintMap(final Graphics g) {
 	World world = game.getWorld();
-	for (int row = 0; row < world.getRows(); row++) {
-	    for (int col = 0; col < world.getColumns(); col++) {
-		Tile tile = world.getTile(col, row, 0);
-		g.drawImage(tile.getImage(), tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight(), null);
+	for (int l = 0; l < world.getLayers(); l++) {
+	    for (int y = 0; y < world.getRows(); y++) {
+		for (int x = 0; x < world.getColumns(); x++) {
+		    Tile tile = world.getTile(x, y, l);
+		    g.drawImage(tile.getImage(), tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight(), null);
+		}
 	    }
 	}
     }
