@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,12 +14,11 @@ public class MapLoader
 {
     private static final String DATA_FOLDER = "resources/data/";
     private static final String IMAGES_FOLDER = "resources/images/";
-    private final int layers;
     private int[] tilesetGIDs;
-    private int[][][] dataValues; //[rows][columns][layers]
+    private int[][] tileIDs;
     private int rows, columns;
     private int tileWidth, tileHeight;
-    private ImageLoader[] tileSetLoaders;
+    private ImageLoader[] imageLoaders;
 
     /**
      * Loads a map file and dispenses tile images as needed.
@@ -39,38 +39,33 @@ public class MapLoader
 	this.rows = Integer.parseInt(mapElement.attr("height"));
 	this.tileWidth = Integer.parseInt(mapElement.attr("tilewidth"));
 	this.tileHeight = Integer.parseInt(mapElement.attr("tileheight"));
-	this.layers = Integer.parseInt(mapElement.attr("nextlayerid")) - 1;
 
 	// Fill tileIDs using the CSV part of XML file
-	Elements layerElements = doc.select("layer");
-	for (int l = 0; l < this.layers; l++) {
-	    Element layerElement = layerElements.get(l);
-	    String dataString = layerElement.selectFirst("data").text();
-	    String separator = System.lineSeparator();
-	    String[] dataRows = dataString.split(", ");
-	    this.dataValues = new int[rows][columns][layers];
+	Element layerElement = doc.selectFirst("layer");
+	String dataString = layerElement.selectFirst("data").text();
+	String separator = System.lineSeparator();
+	String[] dataRows = dataString.split(", ");
 
-	    for (int y = 0; y < rows; y++) {
-		String[] rowValues = dataRows[y].split(",");
-		for (int x = 0; x < columns; x++) {
-		    dataValues[y][x][l] = Integer.parseInt(rowValues[x]);
-		}
+	this.tileIDs = new int[rows][columns];
+	for (int y = 0; y < rows; y++) {
+	    String[] rowValues = dataRows[y].split(",");
+	    for (int x = 0; x < columns; x++) {
+		tileIDs[y][x] = Integer.parseInt(rowValues[x]);
 	    }
 	}
-
 
 	// Handle multiple tilesets
 	Elements tileSetElements = doc.select("tileset");
 	int numTileSets = tileSetElements.size();
 	tilesetGIDs = new int[numTileSets];
-	tileSetLoaders = new ImageLoader[numTileSets];
+	imageLoaders = new ImageLoader[numTileSets];
 	for (int i = 0; i < numTileSets; i++) {
 	    Element element = tileSetElements.get(i);
 	    tilesetGIDs[i] = Integer.parseInt(element.attr("firstgid"));
 	    // Parse image
 	    String tilesetName = element.attr("source");
 	    String imageName = findImageName(tilesetName);
-	    tileSetLoaders[i] = new ImageLoader(imageName);
+	    imageLoaders[i] = new ImageLoader(imageName);
 	}
     }
 
@@ -99,6 +94,16 @@ public class MapLoader
     }
 
     /**
+     * Reads these values from a map file - rows, columns, tileWidth, tileHeight - the CSV data - tileset(s)
+     *
+     * @param filePath the path to a .tmx file to read
+     *
+     * @throws IOException
+     */
+    private void readMapFile(final String filePath){
+    }
+
+    /**
      * @param id the value of a cell. A value above the current tileset image amount meaning the next tileset should be used.
      *
      * @return
@@ -106,7 +111,7 @@ public class MapLoader
     public BufferedImage getTileImage(int id) {
 	int index = getIndexOf(id);
 	int firstGID = tilesetGIDs[index];
-	ImageLoader imageLoader = tileSetLoaders[index];
+	ImageLoader imageLoader = imageLoaders[index];
 	int tilesetColumns = imageLoader.getWidth() / getTileWidth();
 	int tilesetRows = imageLoader.getHeight() / getTileHeight();
 	int col = (id - firstGID) % tilesetColumns;
@@ -127,12 +132,8 @@ public class MapLoader
 	return index;
     }
 
-    public int getLayers(){
-	return layers;
-    }
-
     public int getID(int x, int y) {
-	return dataValues[y][x][0];
+	return tileIDs[y][x];
     }
 
     public int getRows() {
