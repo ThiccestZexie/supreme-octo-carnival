@@ -132,12 +132,8 @@ public class GameComponent extends JComponent implements FrameListener
 	World world = game.getWorld();
 	for (int row = 0; row < world.getRows(); row++) {
 	    for (int col = 0; col < world.getColumns(); col++) {
-		Tile tile = world.getTile(col, row);
-		int tileX = tile.getCoord().x;
-		int tileY = tile.getCoord().y;
-		int tileWidth = tile.getWidth();
-		int tileHeight = tile.getHeight();
-		g.drawImage(tile.getImage(), tileX, tileY, tileWidth, tileHeight, null);
+		Tile tile = world.getTile(col, row, 0);
+		g.drawImage(tile.getImage(), tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight(), null);
 	    }
 	}
     }

@@ -16,15 +16,24 @@ public class Tile
 	return image;
     }
 
-    public Point getCoord() {
-	return coord;
-    }
-
     public int getWidth() {
+	if(image == null){
+	    return 0;
+	}
 	return image.getWidth(null);
     }
 
     public int getHeight() {
+	if(image == null){
+	    return 0;
+	}
 	return image.getHeight(null);
+    }
+
+    public int getX(){
+	return coord.x;
+    }
+    public int getY() {
+	return coord.y;
     }
 }
