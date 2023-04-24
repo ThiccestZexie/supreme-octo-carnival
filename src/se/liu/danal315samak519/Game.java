@@ -38,7 +38,7 @@ public class Game
 		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), player.getHitBox().getCenterY());
 		Direction pushBackDirection = DirectionUtil.getDirectionBetweenPoints(from, to);
 		int pushBackAmount = 5;
-		player.nudge(pushBackAmount*pushBackDirection.getX(), pushBackAmount*pushBackDirection.getY());
+		player.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
 		player.setVelocity(0, 0);
 	    }
 
@@ -48,7 +48,7 @@ public class Game
 		    Point2D to = new Point2D.Double(entity.getHitBox().getCenterX(), entity.getHitBox().getCenterY());
 		    Direction pushBackDirection = DirectionUtil.getDirectionBetweenPoints(from, to);
 		    int pushBackAmount = 1;
-		    entity.nudge(pushBackAmount*pushBackDirection.getX(), pushBackAmount*pushBackDirection.getY());
+		    entity.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
 		    entity.setVelocity(0, 0);
 		}
 	    }
