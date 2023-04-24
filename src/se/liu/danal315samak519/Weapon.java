@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-public class Weapon extends Entity
+public class Weapon extends MovableEntity
 {
     private BufferedImage currentSprite;
     private BufferedImage upSprite;

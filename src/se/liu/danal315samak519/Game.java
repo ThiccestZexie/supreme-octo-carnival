@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Game
 {
-    public List<Entity> entityList = new ArrayList<>();
+    public List<MovableEntity> movableEntityList = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player;
     private World world;
@@ -23,7 +23,7 @@ public class Game
 	player.tick();
 	handleWallCollisions();
 	checkForCollisionHits();
-	for (Entity e : entityList) {
+	for (MovableEntity e : movableEntityList) {
 	    e.tick();
 	}
     }
@@ -43,14 +43,14 @@ public class Game
 		player.setVelocity(0, 0);
 	    }
 
-	    for (Entity entity : entityList) {
-		if (entity.getHitBox().intersects(tileHitBox)) {
+	    for (MovableEntity movableEntity : movableEntityList) {
+		if (movableEntity.getHitBox().intersects(tileHitBox)) {
 		    Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
-		    Point2D to = new Point2D.Double(entity.getHitBox().getCenterX(), entity.getHitBox().getCenterY());
+		    Point2D to = new Point2D.Double(movableEntity.getHitBox().getCenterX(), movableEntity.getHitBox().getCenterY());
 		    Direction pushBackDirection = DirectionUtil.getDirectionBetweenPoints(from, to);
 		    int pushBackAmount = 1;
-		    entity.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
-		    entity.setVelocity(0, 0);
+		    movableEntity.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
+		    movableEntity.setVelocity(0, 0);
 		}
 	    }
 	}
@@ -58,9 +58,9 @@ public class Game
 
     public void checkForHits(Character e)
     {
-	for (Entity entity : entityList) {
-	    if (entity instanceof Weapon) {
-		Weapon theMurderWeapon = (Weapon) entity;
+	for (MovableEntity movableEntity : movableEntityList) {
+	    if (movableEntity instanceof Weapon) {
+		Weapon theMurderWeapon = (Weapon) movableEntity;
 		e.isHit(theMurderWeapon);
 	    }
 
@@ -79,7 +79,7 @@ public class Game
 
 
     private void removeGarbage() {
-	entityList.removeIf(Entity::getIsGarbage);
+	movableEntityList.removeIf(MovableEntity::getIsGarbage);
     }
 
     public void addPlayer(final Player player) {
@@ -129,14 +129,14 @@ public class Game
 	addEntity(player.shootProjectile());
     }
 
-    public List<Entity> getEntityList() {
-	return entityList;
+    public List<MovableEntity> getEntityList() {
+	return movableEntityList;
     }
 
     public void checkIfAnyEntityHit() {
-	for (Entity entity : entityList) {
-	    if (entity instanceof Character) {
-		checkForHits((Character) entity);
+	for (MovableEntity movableEntity : movableEntityList) {
+	    if (movableEntity instanceof Character) {
+		checkForHits((Character) movableEntity);
 	    }
 
 	}
@@ -155,8 +155,8 @@ public class Game
 	addEnemy(new Point2D.Double(x, y));
     }
 
-    private void addEntity(final Entity entity) {
-	entityList.add(entity);
+    private void addEntity(final MovableEntity movableEntity) {
+	movableEntityList.add(movableEntity);
     }
 
 }

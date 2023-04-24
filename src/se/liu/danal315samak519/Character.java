@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-public abstract class Character extends Entity
+public abstract class Character extends MovableEntity
 {
     // CONSTANTS FOR CHARACTERS
     private static final int TICKS_PER_FRAME = 8;

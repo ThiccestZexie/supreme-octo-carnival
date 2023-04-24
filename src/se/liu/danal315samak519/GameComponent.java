@@ -40,14 +40,14 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintEntities(final Graphics g) {
-	for (Entity entity : game.getEntityList()) {
+	for (MovableEntity movableEntity : game.getEntityList()) {
 	    if (debug) {
 		// PAINT HITBOX
-		g.setColor(entity.getColor());
-		g.drawRect(entity.getIntX(), entity.getIntY(), entity.getIntWidth(), entity.getIntHeight());
+		g.setColor(movableEntity.getColor());
+		g.drawRect(movableEntity.getIntX(), movableEntity.getIntY(), movableEntity.getIntWidth(), movableEntity.getIntHeight());
 	    }
-	    if (entity instanceof Character) {
-		Character character = (Character) entity;
+	    if (movableEntity instanceof Character) {
+		Character character = (Character) movableEntity;
 		// PAINT SPRITE
 		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(),
 			    character.getIntHeight(), null);
@@ -57,9 +57,9 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintGUI(final Graphics g) {
 
-	for (Entity entity : game.getEntityList()) {
-	    if (entity instanceof Enemy) {
-		Enemy enemy = (Enemy) entity;
+	for (MovableEntity movableEntity : game.getEntityList()) {
+	    if (movableEntity instanceof Enemy) {
+		Enemy enemy = (Enemy) movableEntity;
 		// Maxhealth (BLACK)
 		g.setColor(Color.BLACK);
 		int blackWidth = enemy.getMaxHp() * 60;
@@ -206,7 +206,7 @@ public class GameComponent extends JComponent implements FrameListener
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	    int maxSpeed = game.getPlayer().getMaxSpeed();
+	    double maxSpeed = game.getPlayer().getMaxSpeed();
 	    switch (dir) {
 		case UP -> game.getPlayer().setVelY(-maxSpeed);
 		case DOWN -> game.getPlayer().setVelY(maxSpeed);
