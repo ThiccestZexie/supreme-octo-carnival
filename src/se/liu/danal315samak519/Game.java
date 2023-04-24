@@ -41,6 +41,17 @@ public class Game
 		player.nudge(pushBackAmount*pushBackDirection.getX(), pushBackAmount*pushBackDirection.getY());
 		player.setVelocity(0, 0);
 	    }
+
+	    for (Entity entity : entityList) {
+		if (entity.getHitBox().intersects(tileHitBox)) {
+		    Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
+		    Point2D to = new Point2D.Double(entity.getHitBox().getCenterX(), entity.getHitBox().getCenterY());
+		    Direction pushBackDirection = DirectionUtil.getDirectionBetweenPoints(from, to);
+		    int pushBackAmount = 1;
+		    entity.nudge(pushBackAmount*pushBackDirection.getX(), pushBackAmount*pushBackDirection.getY());
+		    entity.setVelocity(0, 0);
+		}
+	    }
 	}
     }
 
