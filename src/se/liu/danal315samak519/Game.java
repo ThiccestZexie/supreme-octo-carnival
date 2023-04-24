@@ -33,12 +33,13 @@ public class Game
     private void handleWallCollisions() {
 	for (Tile tile : world.getForegroundTileList()) {
 	    Rectangle tileHitBox = new Rectangle(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
-	    if (player.getHitBox().intersects(tileHitBox)){
+	    if (player.getHitBox().intersects(tileHitBox)) {
 		Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
 		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), player.getHitBox().getCenterY());
-		Direction pushBackDirection = DirectionUtils.directionBetweenPoints(from, to);
-		player.nudge(pushBackDirection.getX(), pushBackDirection.getY());
-		player.setCurrentVelocity(0,0);
+		Direction pushBackDirection = DirectionUtil.getDirectionBetweenPoints(from, to);
+		int pushBackAmount = 5;
+		player.nudge(pushBackAmount*pushBackDirection.getX(), pushBackAmount*pushBackDirection.getY());
+		player.setVelocity(0, 0);
 	    }
 	}
     }
@@ -73,7 +74,6 @@ public class Game
 	frameListeners.add(fl);
     }
 
-
     public void notifyListeners() {
 	for (FrameListener frameListener : frameListeners) {
 	    frameListener.frameChanged();
@@ -83,31 +83,6 @@ public class Game
     public void nudgePlayer(final int dx, final int dy) {
 	player.nudge(dx, dy);
 	notifyListeners();
-    }
-
-
-    public int getPlayerVelX() {
-	return player.getVelX();
-    }
-
-    public void setPlayerVelX(final int vx) {
-	setPlayerVelocity(vx, getPlayerVelY());
-    }
-
-    public int getPlayerVelY() {
-	return player.getVelY();
-    }
-
-    public void setPlayerVelY(final int vy) {
-	setPlayerVelocity(getPlayerVelX(), vy);
-    }
-
-    public void setPlayerVelocity(final int vx, final int vy) {
-	player.setCurrentVelocity(vx, vy);
-    }
-
-    public void setPlayerDirection(final Direction dir) {
-	player.setDir(dir);
     }
 
     public void addEnemy(Point2D.Double coord)
@@ -120,7 +95,6 @@ public class Game
 	addEntity(player.getSword());
 	checkIfAnyEntityHit();
     }
-
 
     public List<Entity> getEntityList() {
 	return entityList;

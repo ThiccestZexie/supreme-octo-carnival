@@ -14,8 +14,7 @@ public class Enemy extends Character
 	this.player = player;
 	storeDirectionalFrames();
 	setDir(Direction.DOWN);
-	// TODO REMOVE SLEEPING STATUS FROM ENEMY
-	setStatus(Status.SLEEPING);
+	setMaxSpeed(2);
     }
 
     private void storeDirectionalFrames() {
@@ -78,9 +77,9 @@ public class Enemy extends Character
 	super.tick();
 	if (canSeePlayer()) { // CHASe PLAYER!!
 	    Point2D velocity = getVelocityTowardsPlayer();
-	    setCurrentVelocity((int) velocity.getX(), (int) velocity.getY());
+	    setVelocity((int) velocity.getX(), (int) velocity.getY());
 	} else { // Chill...
-	    setCurrentVelocity(0, 0);
+	    setVelocity(0, 0);
 	}
     }
 }

@@ -115,6 +115,7 @@ public abstract class Entity
 
     public void nudge(final int dx, final int dy) {
 	setLocation(getX() + dx, getY() + dy);
+	nudgeHitBox(dx, dy);
     }
 
     public void setLocation(final double x, final double y) {
@@ -125,23 +126,33 @@ public abstract class Entity
 	}
     }
 
-    public void setCurrentVelocity(final int vx, final int vy) {
-	this.velX = vx;
+    public void setVelocity(final int vx, final int vy) {
+	setVelX(vx);
+	setVelY(vy);
+    }
+
+    public void setVelY(final int vy){
 	this.velY = vy;
 	setAppropiateDir();
     }
 
+    public void setVelX(final int vx){
+	this.velX = vx;
+	setAppropiateDir();
+    }
+
     private void setAppropiateDir() {
-	DirectionUtils.velocityToDirection(getCoord(), getVelX(), getVelY());
+	Direction newDirection = DirectionUtil.velocityToDirection(getVelX(), getVelY());
+	if(newDirection != null){
+	    setDir(newDirection);
+	}
     }
 
     public void tick() {
-	// Move along according to current velocity
-	nudgeHitBox(velX, velY);
 	nudge(velX, velY);
     }
 
-    public void nudgeHitBox(final int dx, final int dy) {
+    private void nudgeHitBox(final int dx, final int dy) {
 	setLocationOfHitBox(hitBox.getX() + dx, hitBox.getY() + dy);
     }
 

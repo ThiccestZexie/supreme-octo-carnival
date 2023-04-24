@@ -63,7 +63,7 @@ public class Weapon extends Entity
     }
 
     public void followOwner() {
-	setCurrentVelocity(owner.getVelX(), owner.getVelY());
+	setVelocity(owner.getVelX(), owner.getVelY());
     }
 
     public int getLifeSpan() {

@@ -1,8 +1,10 @@
 package se.liu.danal315samak519;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
+import java.util.Random;
 
 public class Viewer
 {
@@ -28,10 +30,13 @@ public class Viewer
 	player.setMaxSpeed(5);
 	Game game = new Game(player);
 	game.setWorld(new World("map0.tmx"));
-	game.addEnemy(200, 600);
-	game.addEnemy(523, 321);
-	game.addEnemy(132, 90);
-
+	Random random = new Random();
+	for (int i = 0; i < 3; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+	    game.addEnemy(randomCoord);
+	}
 	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);
 

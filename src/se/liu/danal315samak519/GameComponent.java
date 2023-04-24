@@ -201,10 +201,10 @@ public class GameComponent extends JComponent implements FrameListener
 	public void actionPerformed(ActionEvent e) {
 	    int maxSpeed = game.getPlayer().getMaxSpeed();
 	    switch (dir) {
-		case UP -> game.setPlayerVelY(-maxSpeed);
-		case DOWN -> game.setPlayerVelY(maxSpeed);
-		case RIGHT -> game.setPlayerVelX(maxSpeed);
-		case LEFT -> game.setPlayerVelX(-maxSpeed);
+		case UP -> game.getPlayer().setVelY(-maxSpeed);
+		case DOWN -> game.getPlayer().setVelY(maxSpeed);
+		case RIGHT -> game.getPlayer().setVelX(maxSpeed);
+		case LEFT -> game.getPlayer().setVelX(-maxSpeed);
 	    }
 	}
     }
@@ -234,17 +234,17 @@ public class GameComponent extends JComponent implements FrameListener
 
 	public void actionPerformed(ActionEvent e) {
 	    // Cancel velocity in appropiate direction!!
-	    if (dir == Direction.UP && game.getPlayerVelY() < 0) {
-		game.setPlayerVelY(0);
+	    if (dir == Direction.UP && game.getPlayer().getVelY() < 0) {
+		game.getPlayer().setVelY(0);
 	    }
-	    if (dir == Direction.DOWN && game.getPlayerVelY() > 0) {
-		game.setPlayerVelY(0);
+	    if (dir == Direction.DOWN && game.getPlayer().getVelY() > 0) {
+		game.getPlayer().setVelY(0);
 	    }
-	    if (dir == Direction.RIGHT && game.getPlayerVelX() > 0) {
-		game.setPlayerVelX(0);
+	    if (dir == Direction.RIGHT && game.getPlayer().getVelX() > 0) {
+		game.getPlayer().setVelX(0);
 	    }
-	    if (dir == Direction.LEFT && game.getPlayerVelX() < 0) {
-		game.setPlayerVelX(0);
+	    if (dir == Direction.LEFT && game.getPlayer().getVelX() < 0) {
+		game.getPlayer().setVelX(0);
 	    }
 	}
     }
