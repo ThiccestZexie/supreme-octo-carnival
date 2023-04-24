@@ -31,7 +31,7 @@ public class GameComponent extends JComponent implements FrameListener
 	if (debug) {
 	    // PAINT HITBOX
 	    g.setColor(player.getColor());
-	    g.fillRect(player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight());
+	    g.drawRect(player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight());
 	}
 
 	paintLevelUpAnimation(g);
@@ -44,7 +44,7 @@ public class GameComponent extends JComponent implements FrameListener
 	    if (debug) {
 		// PAINT HITBOX
 		g.setColor(entity.getColor());
-		g.fillRect(entity.getIntX(), entity.getIntY(), entity.getIntWidth(), entity.getIntHeight());
+		g.drawRect(entity.getIntX(), entity.getIntY(), entity.getIntWidth(), entity.getIntHeight());
 	    }
 	    if (entity instanceof Character) {
 		Character character = (Character) entity;
