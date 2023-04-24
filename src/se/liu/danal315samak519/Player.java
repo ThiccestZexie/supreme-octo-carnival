@@ -15,6 +15,7 @@ public class Player extends Character
 	super(coord);
 	this.color = Color.GREEN; //TODO HARDCODED GREEN PLAYER
 	this.level = 1;
+	this.hp = 3;
 	storeLevelUpFrames();
 	storeSpriteFrames();
 	setDir(Direction.DOWN);
@@ -64,6 +65,12 @@ public class Player extends Character
 
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
+	}
+    }
+    public void takeDamage(){
+	if (this.hp > 0 && this.getStatus() != Status.HIT){
+	    hp--;
+	    this.setStatus(Status.HIT);
 	}
     }
 

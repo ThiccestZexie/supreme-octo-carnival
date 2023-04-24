@@ -72,6 +72,12 @@ public class Enemy extends Character
 	}
 	return false;
     }
+    public boolean playerCollision(Player player){
+	if(this.hitBox.getBounds().intersects(player.getHitBox().getBounds())){
+	    return true;
+	}
+	return false;
+    }
 
     @Override public void tick() {
 	super.tick();

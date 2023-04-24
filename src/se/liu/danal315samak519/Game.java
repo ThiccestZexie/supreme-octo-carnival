@@ -22,6 +22,7 @@ public class Game
 	removeGarbage();
 	player.tick();
 	handleWallCollisions();
+	checkForCollisionHits();
 	for (Entity e : entityList) {
 	    e.tick();
 	}
@@ -62,8 +63,20 @@ public class Game
 		Weapon theMurderWeapon = (Weapon) entity;
 		e.isHit(theMurderWeapon);
 	    }
+
 	}
     }
+    public void checkForCollisionHits(){
+	for (Entity entity :entityList){
+	    if (entity instanceof  Enemy){
+		if (((Enemy) entity).playerCollision(player)){
+		    player.takeDamage();
+		}
+	    }
+	}
+
+    }
+
 
     private void removeGarbage() {
 	entityList.removeIf(Entity::getIsGarbage);
@@ -100,6 +113,11 @@ public class Game
     {
 	addEntity(new Enemy(coord, player));
     }
+    public void addEnemySword(Enemy enemy){
+	if (enemy.wantToAttack()){
+	    entityList.add(enemy.getSword());
+	}
+    }
 
     public void playerAttack() {
 	player.becomeAttacking();
@@ -116,8 +134,10 @@ public class Game
 	    if (entity instanceof Character) {
 		checkForHits((Character) entity);
 	    }
+
 	}
     }
+
 
     public World getWorld() {
 	return world;

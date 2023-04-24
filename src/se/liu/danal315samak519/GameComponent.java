@@ -86,6 +86,12 @@ public class GameComponent extends JComponent implements FrameListener
 	g.setColor(Color.GREEN);
 	g.fillRect(20, 20, game.getPlayer().exp * expBarLength / game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1],
 		   30);
+	// Player hp bar
+	int healthBarLength = 100;
+	g.setColor(Color.BLACK);
+	g.fillRect(20, 60, healthBarLength, 30);
+	g.setColor(Color.RED);
+	g.fillRect(20,60, game.getPlayer().getHp() * (healthBarLength/game.getPlayer().getMaxHp()), 30);
     }
 
     private void paintLevelUpAnimation(final Graphics g) {

@@ -11,7 +11,11 @@ public abstract class Character extends Entity
     private static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
     private static final int MAXHP = 3;
 
+    private static final int iFrames = 60;
+
     protected int exp = 0;
+
+    protected int currentIFramees = 0;
     protected int level;
     protected int hp = MAXHP;
     protected int currentFrameIndex = 0;
@@ -66,9 +70,10 @@ public abstract class Character extends Entity
     {
 	Character owner = e.getOwner();
 	if (this.hitBox.getBounds().intersects(e.getHitBox())) {
-	    if (hp > 1) {
+	    if (hp > 1 && this.getStatus() != Status.HIT) {
 		hp--;
-	    } else {
+		this.setStatus(Status.HIT);
+	    } else if (this.getStatus() != Status.HIT) {
 		owner.incExp();
 		owner.levelUp();
 		this.isGarbage = true;
@@ -104,6 +109,14 @@ public abstract class Character extends Entity
     @Override public void tick() {
 	if (getStatus() == Status.SLEEPING) {
 	    return; // Do nothing just sleep zZzZ
+	}
+	if (getStatus() == Status.HIT){
+	    currentIFramees++;
+	}
+	if (currentIFramees == iFrames){
+	    setStatus(Status.NORMAL);
+	    System.out.println(getStatus());
+	    currentIFramees = 0;
 	}
 	super.tick();
 	performWalkCycle();
