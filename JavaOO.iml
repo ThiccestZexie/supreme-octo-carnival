@@ -16,5 +16,6 @@
     <orderEntry type="library" name="opencsv" level="project" />
     <orderEntry type="library" name="commons-lang" level="project" />
     <orderEntry type="library" name="jsoup" level="project" />
+    <orderEntry type="library" name="commons-io" level="project" />
   </component>
 </module>

@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="RPG" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="se.liu.danal315samak519.MainGameTest" />
+    <module name="JavaOO" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
