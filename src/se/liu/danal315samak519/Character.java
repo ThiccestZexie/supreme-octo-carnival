@@ -11,7 +11,7 @@ public abstract class Character extends Entity
     private static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
     private static final int MAXHP = 3;
 
-    private static final int iFrames = 60;
+    private static final int iFrames = 90; //about 1.5 seconds of iFrames
 
     protected int exp = 0;
 
@@ -84,6 +84,10 @@ public abstract class Character extends Entity
 	return false;
     }
 
+    public Arrow shootProjectile(){
+	return new Arrow(this.coord, this);
+    }
+
     public Weapon getSword() {
 	return new Weapon(this.coord, this);
     }
@@ -115,7 +119,6 @@ public abstract class Character extends Entity
 	}
 	if (currentIFramees == iFrames){
 	    setStatus(Status.NORMAL);
-	    System.out.println(getStatus());
 	    currentIFramees = 0;
 	}
 	super.tick();

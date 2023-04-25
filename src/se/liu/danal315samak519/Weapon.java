@@ -12,13 +12,13 @@ public class Weapon extends Entity
     private BufferedImage downSprite;
     private BufferedImage rightSprite;
     private Character owner;
-    private int lifeSpan = 5;
+    private int lifeSpan;
 
     public Weapon(final Point2D.Double coord, final Character owner) {
 	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
 	super(coord);
 	this.owner = owner;
-
+	lifeSpan = 5;
 	switch (owner.getDir()) {
 	    case UP:
 		this.size = new Dimension(10, 60);
@@ -68,5 +68,9 @@ public class Weapon extends Entity
 
     public int getLifeSpan() {
 	return lifeSpan;
+    }
+
+    public void setLifeSpan(final int lifeSpan) {
+	this.lifeSpan = lifeSpan;
     }
 }

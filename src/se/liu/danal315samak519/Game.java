@@ -124,6 +124,10 @@ public class Game
 	addEntity(player.getSword());
 	checkIfAnyEntityHit();
     }
+    public void playerShootArrow(){
+	player.becomeAttacking();
+	addEntity(player.shootProjectile());
+    }
 
     public List<Entity> getEntityList() {
 	return entityList;
