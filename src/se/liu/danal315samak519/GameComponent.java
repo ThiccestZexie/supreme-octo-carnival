@@ -1,5 +1,8 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.map.Tile;
+import se.liu.danal315samak519.map.World;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -40,14 +43,14 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintEntities(final Graphics g) {
-	for (MovableEntity movableEntity : game.getEntities()) {
+	for (Movable movable : game.getEntities()) {
 	    if (debug) {
 		// PAINT HITBOX
-		g.setColor(movableEntity.getColor());
-		g.drawRect(movableEntity.getIntX(), movableEntity.getIntY(), movableEntity.getIntWidth(), movableEntity.getIntHeight());
+		g.setColor(movable.getColor());
+		g.drawRect(movable.getIntX(), movable.getIntY(), movable.getIntWidth(), movable.getIntHeight());
 	    }
-	    if (movableEntity instanceof Character) {
-		Character character = (Character) movableEntity;
+	    if (movable instanceof Character) {
+		Character character = (Character) movable;
 		// PAINT SPRITE
 		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(),
 			    character.getIntHeight(), null);
@@ -57,9 +60,9 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintGUI(final Graphics g) {
 
-	for (MovableEntity movableEntity : game.getEntities()) {
-	    if (movableEntity instanceof Enemy) {
-		Enemy enemy = (Enemy) movableEntity;
+	for (Movable movable : game.getEntities()) {
+	    if (movable instanceof Enemy) {
+		Enemy enemy = (Enemy) movable;
 		// Maxhealth (BLACK)
 		g.setColor(Color.BLACK);
 		int blackWidth = enemy.getMaxHp() * 60;

@@ -1,5 +1,7 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.map.World;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;

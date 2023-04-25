@@ -1,5 +1,9 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.map.Obstacle;
+import se.liu.danal315samak519.map.Tile;
+import se.liu.danal315samak519.map.World;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -8,7 +12,7 @@ import java.util.List;
 
 public class Game
 {
-    public List<MovableEntity> entities = new ArrayList<>();
+    public List<Movable> entities = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player;
     private World world;
@@ -21,7 +25,7 @@ public class Game
 	handleWallCollisions();
 	checkIfPlayerTouchesZone();
 	checkForCollisionHits();
-	for (MovableEntity e : entities) {
+	for (Movable e : entities) {
 	    e.tick();
 	}
     }
@@ -35,8 +39,8 @@ public class Game
     }
 
     private void checkIfPlayerTouchesZone() {
-	for (Zone zone : getWorld().getZones()) {
-	    if(zone.getHitBox().intersects(player.getHitBox())){
+	for (Obstacle obstacle : getWorld().getZones()) {
+	    if(obstacle.getHitBox().intersects(player.getHitBox())){
 		changeWorld();
 	    }
 	}
@@ -63,14 +67,14 @@ public class Game
 	    }
 
 	    // Handle movableEntity-wall collision
-	    for (MovableEntity movableEntity : entities) {
-		if (movableEntity.getHitBox().intersects(tileHitBox)) {
+	    for (Movable movable : entities) {
+		if (movable.getHitBox().intersects(tileHitBox)) {
 		    Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
-		    Point2D to = new Point2D.Double(movableEntity.getHitBox().getCenterX(), movableEntity.getHitBox().getCenterY());
+		    Point2D to = new Point2D.Double(movable.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
 		    Direction pushBackDirection = DirectionUtil.getDirectionBetweenPoints(from, to);
 		    int pushBackAmount = 1;
-		    movableEntity.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
-		    movableEntity.setVelocity(0, 0);
+		    movable.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
+		    movable.setVelocity(0, 0);
 		}
 	    }
 	}
@@ -78,9 +82,9 @@ public class Game
 
     public void checkForHits(Character e)
     {
-	for (MovableEntity movableEntity : entities) {
-	    if (movableEntity instanceof Weapon) {
-		Weapon theMurderWeapon = (Weapon) movableEntity;
+	for (Movable movable : entities) {
+	    if (movable instanceof Weapon) {
+		Weapon theMurderWeapon = (Weapon) movable;
 		e.isHit(theMurderWeapon);
 	    }
 
@@ -91,9 +95,9 @@ public class Game
      * Check if anything damages the player.
      */
     public void checkForCollisionHits() {
-	for (MovableEntity movableEntity : entities) {
-	    if (movableEntity instanceof Enemy) {
-		if (((Enemy) movableEntity).playerCollision(player)) {
+	for (Movable movable : entities) {
+	    if (movable instanceof Enemy) {
+		if (((Enemy) movable).playerCollision(player)) {
 		    player.takeDamage();
 		}
 	    }
@@ -103,7 +107,7 @@ public class Game
 
 
     private void removeGarbage() {
-	entities.removeIf(MovableEntity::getIsGarbage);
+	entities.removeIf(Movable::getIsGarbage);
     }
 
     public void setPlayer(final Player player) {
@@ -152,14 +156,14 @@ public class Game
 	addEntity(player.shootProjectile());
     }
 
-    public List<MovableEntity> getEntities() {
+    public List<Movable> getEntities() {
 	return entities;
     }
 
     public void checkIfAnyEntityHit() {
-	for (MovableEntity movableEntity : entities) {
-	    if (movableEntity instanceof Character) {
-		checkForHits((Character) movableEntity);
+	for (Movable movable : entities) {
+	    if (movable instanceof Character) {
+		checkForHits((Character) movable);
 	    }
 
 	}
@@ -178,8 +182,8 @@ public class Game
 	addEnemy(new Point2D.Double(x, y));
     }
 
-    private void addEntity(final MovableEntity movableEntity) {
-	entities.add(movableEntity);
+    private void addEntity(final Movable movable) {
+	entities.add(movable);
     }
 
 }

@@ -1,10 +1,9 @@
 package se.liu.danal315samak519;
-import java.awt.geom.Point2D;
 
 /**
  *
  */
-public abstract class MovableEntity extends Entity
+public abstract class Movable extends Entity
 {
     protected Direction dir;
     protected double maxSpeed;

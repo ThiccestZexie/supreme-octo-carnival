@@ -1,4 +1,4 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.map;
 
 import java.awt.*;
 

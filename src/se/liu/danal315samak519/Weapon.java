@@ -3,7 +3,7 @@ package se.liu.danal315samak519;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-public class Weapon extends MovableEntity
+public class Weapon extends Movable
 {
     private BufferedImage currentSprite;
     private BufferedImage upSprite;

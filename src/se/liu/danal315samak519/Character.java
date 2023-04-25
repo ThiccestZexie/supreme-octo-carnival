@@ -1,10 +1,9 @@
 package se.liu.danal315samak519;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-public abstract class Character extends MovableEntity
+public abstract class Character extends Movable
 {
     // CONSTANTS FOR CHARACTERS
     private static final int TICKS_PER_FRAME = 8;

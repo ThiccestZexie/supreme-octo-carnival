@@ -72,7 +72,7 @@
 50,34,49,33,42,49,33,34,42,41,0,0,0,0,0,0,0,0,0,0,41,42,41,34,41,42,42,41,49,42
 </data>
  </layer>
- <objectgroup id="4" name="zones" opacity="0.9">
-  <object id="3" x="320" y="992" width="320" height="32"/>
+ <objectgroup id="4" name="blocks" opacity="0.9">
+  <object id="3" x="320" y="896" width="320" height="64"/>
  </objectgroup>
 </map>

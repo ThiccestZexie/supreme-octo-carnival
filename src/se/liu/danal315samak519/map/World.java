@@ -1,4 +1,4 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.map;
 
 import java.awt.*;
 import java.io.IOException;
@@ -10,7 +10,7 @@ public class World
     private final String name;
     private final int tileHeight;
     private final int tileWidth;
-    private List<Zone> zones;
+    private List<Obstacle> obstacles;
     private Tile[][][] tiles; // columns, rows, layers
     private final int rows, columns, layers;
 
@@ -24,7 +24,7 @@ public class World
 	    this.tiles = mapLoader.getTiles();
 	    this.tileWidth = mapLoader.getTileWidth();
 	    this.tileHeight = mapLoader.getTileHeight();
-	    this.zones = mapLoader.getZoneList();
+	    this.obstacles = mapLoader.getZoneList();
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
@@ -46,8 +46,8 @@ public class World
 	return this.rows;
     }
 
-    public List<Zone> getZones(){
-	return this.zones;
+    public List<Obstacle> getZones(){
+	return this.obstacles;
     }
 
     public int getColumns() {

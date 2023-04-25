@@ -1,9 +1,10 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import se.liu.danal315samak519.ImageLoader;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,7 +20,7 @@ public class MapLoader
     private final int layers;
     private int[] tilesetGIDs;
     private Tile[][][] tiles;
-    private List<Zone> zones;
+    private List<Obstacle> obstacles;
     private int rows, columns;
     private int tileWidth, tileHeight;
     private ImageLoader[] tileSetLoaders;
@@ -75,16 +76,16 @@ public class MapLoader
 	    }
 	}
 
-	// Read object layers (zones, etc..)
+	// Read object layers (obstacles, etc..)
 	Elements objects = doc.select("objectgroup[id=4] object");
-	zones = new ArrayList<>();
+	obstacles = new ArrayList<>();
 	for (Element object : objects) {
 	    int id = Integer.parseInt(object.attr("id"));
 	    double x = Double.parseDouble(object.attr("x"));
 	    double y = Double.parseDouble(object.attr("y"));
 	    double w = Double.parseDouble(object.attr("width"));
 	    double h = Double.parseDouble(object.attr("height"));
-	    zones.add(new Zone(id, x, y, w, h));
+	    obstacles.add(new Obstacle(id, x, y, w, h));
 	}
     }
 
@@ -155,8 +156,8 @@ public class MapLoader
 	return index;
     }
 
-    public List<Zone> getZoneList(){
-	return zones;
+    public List<Obstacle> getZoneList(){
+	return obstacles;
     }
 
     public int getLayers() {
