@@ -15,25 +15,25 @@ public class Weapon extends MovableEntity
 
     public Weapon(final Point2D.Double coord, final Character owner) {
 	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
-	super(coord);
+	setLocation(coord);
 	this.owner = owner;
 	lifeSpan = 5;
 	switch (owner.getDir()) {
 	    case UP:
 		setSize(10, 60);
-		setLocation((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2), (owner.getY() - this.getHeight()));
+		setLocation((owner.getX() + (owner.getWidth() / 2.0) - this.getWidth() / 2.0), (owner.getY() - this.getHeight()));
 		break;
 	    case DOWN:
 		setSize(10, 60);
-		setLocation((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2), (owner.getY() + (owner.getHeight())));
+		setLocation((owner.getX() + (owner.getWidth() / 2.0) - this.getWidth() / 2.0), (owner.getY() + (owner.getHeight())));
 		break;
 	    case LEFT:
 		setSize(60, 10);
-		setLocation((owner.getX() - this.getWidth()), (owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
+		setLocation((owner.getX() - this.getWidth()), (owner.getY() + (owner.getHeight() / 2.0)) - (this.getHeight() / 2.0));
 		break;
 	    case RIGHT:
 		setSize(60, 10);
-		setLocation((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
+		setLocation((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / 2.0)) - (this.getHeight() / 2.0));
 		break;
 	}
     }

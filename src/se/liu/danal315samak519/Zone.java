@@ -9,7 +9,7 @@ import java.awt.geom.Point2D;
 public class Zone extends Entity
 {
     protected Zone(int id, double x, double y, double width, double height) {
-	super(new Point2D.Double(x, y));
+	setLocation(x, y);
 	setSize(width, height);
     }
 }

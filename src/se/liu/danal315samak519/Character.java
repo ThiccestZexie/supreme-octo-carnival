@@ -31,8 +31,9 @@ public abstract class Character extends MovableEntity
 
 
     protected Character(final Point2D.Double coord) {
-	super(coord);
+	setLocation(coord);
 	setSize(50, 50);
+	setMaxSpeed(5);
 	setHitBox();
     }
 

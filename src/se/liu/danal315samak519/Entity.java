@@ -13,10 +13,6 @@ public abstract class Entity
     protected Rectangle2D hitBox;
     protected boolean isGarbage = false;
 
-    protected Entity(final Point2D.Double coord) {
-	setLocation(coord);
-    }
-
     protected void setLocation(final Point2D.Double coord) {
 	if (this.coord != null) {
 	    this.coord.setLocation(coord);

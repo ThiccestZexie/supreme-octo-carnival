@@ -11,11 +11,6 @@ public abstract class MovableEntity extends Entity
     protected double velX;
     protected double velY;
 
-    protected MovableEntity(final Point2D.Double coord) {
-	super(coord);
-	setMaxSpeed(5);
-    }
-
     public Direction getDir() {
 	return dir;
     }
