@@ -87,6 +87,14 @@ public abstract class Entity
 	setHitBox();
     }
 
+    public void setSize(Dimension size) {
+	this.size.setSize(size);
+    }
+
+    public void setSize(double w, double h) {
+	this.size.setSize(w, h);
+    }
+
     public double getWidth() {
 	return this.width;
     }
