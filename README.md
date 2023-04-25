@@ -17,6 +17,6 @@
 ## Introduction
 
 
-|<img src="media/tloz_sample0.png" alt="fig0" width="50%">|
-|:---------------------------------------------------------------------:|
-| **Figure 1:** Inspiration image from the 80s game The Legend of Zelda |
+| <img src="media/tloz_sample0.png" alt="fig0" width="50%" align="center"> |
+|:-----------------------------------------------------------------------:|
+|  **Figure 1:** Inspiration image from the 80s game The Legend of Zelda  |
