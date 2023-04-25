@@ -7,8 +7,8 @@ import java.awt.geom.Rectangle2D;
 
 public abstract class Entity
 {
-    protected Dimension2D size;
     protected Point2D.Double coord;
+    protected double width, height;
     protected Color color;
     protected Rectangle2D hitBox;
     protected boolean isGarbage = false;
@@ -81,24 +81,18 @@ public abstract class Entity
 	return color;
     }
 
-    public Dimension2D getSize() {
-	return size;
-    }
-
-    public void setSize(Dimension size) {
-	this.size.setSize(size);
-    }
-
     public void setSize(double w, double h) {
-	this.size.setSize(w, h);
+	this.width = w;
+	this.height = h;
+	setHitBox();
     }
 
     public double getWidth() {
-	return size.getWidth();
+	return this.width;
     }
 
     public double getHeight() {
-	return size.getHeight();
+	return this.height;
     }
 
     public void setLocation(final double x, final double y) {
@@ -107,5 +101,6 @@ public abstract class Entity
 	} else {
 	    coord = new Point2D.Double(x, y);
 	}
+	setHitBox();
     }
 }

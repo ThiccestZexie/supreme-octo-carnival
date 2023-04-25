@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapLoader
 {
@@ -17,6 +19,7 @@ public class MapLoader
     private final int layers;
     private int[] tilesetGIDs;
     private Tile[][][] tiles;
+    private List<Zone> zones;
     private int rows, columns;
     private int tileWidth, tileHeight;
     private ImageLoader[] tileSetLoaders;
@@ -42,7 +45,6 @@ public class MapLoader
 	this.tileHeight = Integer.parseInt(mapElement.attr("tileheight"));
 	this.layers = Integer.parseInt(mapElement.attr("nextlayerid")) - 1;
 
-
 	// Handle multiple tilesets
 	Elements tileSetElements = doc.select("tileset");
 	int numTileSets = tileSetElements.size();
@@ -53,14 +55,13 @@ public class MapLoader
 	    tilesetGIDs[i] = Integer.parseInt(element.attr("firstgid"));
 	    // Parse image
 	    String tilesetName = element.attr("source");
-	    String imageName = findImageName(tilesetName);
+	    String imageName = findTilesetsImage(tilesetName);
 	    tileSetLoaders[i] = new ImageLoader(imageName);
 	}
 
-	// Fill tileIDs using the CSV part of XML file
-	this.tiles = new Tile[rows][columns][layers];
-
+	// Read tile layers (the map)
 	Elements layerElements = doc.select("layer");
+	this.tiles = new Tile[rows][columns][layers];
 	for (int l = 0; l < this.layers; l++) {
 	    Element layerElement = layerElements.get(l);
 	    String dataString = layerElement.selectFirst("data").text();
@@ -74,6 +75,17 @@ public class MapLoader
 	    }
 	}
 
+	// Read object layers (zones, etc..)
+	Elements objects = doc.select("objectgroup[id=4] object");
+	zones = new ArrayList<>();
+	for (Element object : objects) {
+	    int id = Integer.parseInt(object.attr("id"));
+	    double x = Double.parseDouble(object.attr("x"));
+	    double y = Double.parseDouble(object.attr("y"));
+	    double w = Double.parseDouble(object.attr("width"));
+	    double h = Double.parseDouble(object.attr("height"));
+	    zones.add(new Zone(id, x, y, w, h));
+	}
     }
 
     public static void main(String[] args) throws IOException {
@@ -81,10 +93,10 @@ public class MapLoader
     }
 
     private void setTile(final int value, int y, int x, int l) {
-	if(value != 0){
-	    Point point = new Point(x*tileWidth, y*tileHeight);
+	if (value != 0) {
+	    Point point = new Point(x * tileWidth, y * tileHeight);
 	    tiles[y][x][l] = new Tile(getTileImage(value), point);
-	}else {
+	} else {
 	    tiles[y][x][l] = null;
 	}
     }
@@ -94,9 +106,9 @@ public class MapLoader
      *
      * @param tilesetName the path to a .tsx file
      *
-     * @return
+     * @return the name of the image used
      */
-    private String findImageName(String tilesetName) throws IOException {
+    private String findTilesetsImage(String tilesetName) throws IOException {
 	String filePath = DATA_FOLDER + tilesetName;
 	File file = new File(filePath);
 	Document doc = Jsoup.parse(file, "UTF-8");
@@ -110,9 +122,11 @@ public class MapLoader
     }
 
     /**
+     * Takes a value from the csv encoding Tiled makes and find out what part of the tileset corresponds to that.
+     *
      * @param value the value of a cell. A value above the current tileset image amount meaning the next tileset should be used.
      *
-     * @return
+     * @return an image for that specific value
      */
     public BufferedImage getTileImage(int value) {
 	if (value == 0) { // Catch "transparent / empty" tiles from map file
@@ -139,6 +153,10 @@ public class MapLoader
 	    index = i;
 	}
 	return index;
+    }
+
+    public List<Zone> getZoneList(){
+	return zones;
     }
 
     public int getLayers() {

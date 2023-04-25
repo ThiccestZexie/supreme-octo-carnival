@@ -32,7 +32,7 @@ public abstract class Character extends MovableEntity
 
     protected Character(final Point2D.Double coord) {
 	super(coord);
-	this.size = new Dimension(50, 50); // TODO CHARACTERS HARDCODED SIZE
+	setSize(50, 50);
 	setHitBox();
     }
 

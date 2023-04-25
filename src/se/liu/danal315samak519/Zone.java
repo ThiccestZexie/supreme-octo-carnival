@@ -8,18 +8,8 @@ import java.awt.geom.Point2D;
  */
 public class Zone extends Entity
 {
-    protected Zone(final Point2D.Double coord, double width, double height) {
-	super(coord);
-	setSize(width, height);
-    }
-
-    protected Zone(final Point2D.Double start, final Point2D.Double end) {
-	super(start);
-	if(start.getX() > end.getX() || start.getY() > end.getY()){
-	    throw new IllegalArgumentException("Invalid point coordinates: start must be lower-left corner and end must be upper-right corner");
-	}
-	double width = end.getX() - start.getX();
-	double height = end.getY() - start.getY();
+    protected Zone(int id, double x, double y, double width, double height) {
+	super(new Point2D.Double(x, y));
 	setSize(width, height);
     }
 }

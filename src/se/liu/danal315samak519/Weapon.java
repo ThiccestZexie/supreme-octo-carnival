@@ -1,6 +1,5 @@
 package se.liu.danal315samak519;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -21,28 +20,22 @@ public class Weapon extends MovableEntity
 	lifeSpan = 5;
 	switch (owner.getDir()) {
 	    case UP:
-		this.size = new Dimension(10, 60);
-		this.coord = new Point2D.Double((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2),
-						(owner.getY() - this.getHeight()));
+		setSize(10, 60);
+		setLocation((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2), (owner.getY() - this.getHeight()));
 		break;
 	    case DOWN:
-		this.size = new Dimension(10, 60);
-		this.coord = new Point2D.Double((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2),
-						(owner.getY() + (owner.getHeight())));
+		setSize(10, 60);
+		setLocation((owner.getX() + (owner.getWidth() / 2) - this.getWidth() / 2), (owner.getY() + (owner.getHeight())));
 		break;
 	    case LEFT:
-		size = new Dimension(60, 10);
-		this.coord = new Point2D.Double((owner.getX() - this.getWidth()),
-						(owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
+		setSize(60, 10);
+		setLocation((owner.getX() - this.getWidth()), (owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
 		break;
 	    case RIGHT:
-		size = new Dimension(60, 10);
-		this.coord = new Point2D.Double((owner.getX() + owner.getWidth()),
-						(owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
+		setSize(60, 10);
+		setLocation((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / 2)) - (this.getHeight() / 2));
 		break;
 	}
-
-	setHitBox();
     }
 
     public Character getOwner() {

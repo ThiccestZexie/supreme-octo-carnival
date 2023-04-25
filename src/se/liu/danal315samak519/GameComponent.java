@@ -40,7 +40,7 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintEntities(final Graphics g) {
-	for (MovableEntity movableEntity : game.getEntityList()) {
+	for (MovableEntity movableEntity : game.getEntities()) {
 	    if (debug) {
 		// PAINT HITBOX
 		g.setColor(movableEntity.getColor());
@@ -57,7 +57,7 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintGUI(final Graphics g) {
 
-	for (MovableEntity movableEntity : game.getEntityList()) {
+	for (MovableEntity movableEntity : game.getEntities()) {
 	    if (movableEntity instanceof Enemy) {
 		Enemy enemy = (Enemy) movableEntity;
 		// Maxhealth (BLACK)
@@ -138,6 +138,10 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintMapLayer(final Graphics g, final int layer) {
 	World world = game.getWorld();
+	if(layer >= world.getLayers()){
+	    throw new IllegalArgumentException("Can't draw the specified layer " + layer + " on map " + world.getName());
+	}
+
 	for (int y = 0; y < world.getRows(); y++) {
 	    for (int x = 0; x < world.getColumns(); x++) {
 		Tile tile = world.getTile(x, y, layer);

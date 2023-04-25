@@ -8,32 +8,51 @@ import java.util.List;
 
 public class Game
 {
-    public List<MovableEntity> movableEntityList = new ArrayList<>();
+    public List<MovableEntity> entities = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player;
     private World world;
-
-    public Game(final Player player) {
-	this.player = player;
-    }
+    private int currentWorldID = 0;
 
     public void tick()
     {
 	removeGarbage();
 	player.tick();
 	handleWallCollisions();
+	checkIfPlayerTouchesZone();
 	checkForCollisionHits();
-	for (MovableEntity e : movableEntityList) {
+	for (MovableEntity e : entities) {
 	    e.tick();
 	}
     }
 
+    private void changeWorld(){
+	currentWorldID++;
+	setWorld(new World("map" + currentWorldID + ".tmx"));
+	double centerX = world.getColumns() * world.getTileWidth() / 2.0;
+	double centerY = world.getRows() * world.getTileHeight() / 2.0;
+	player.setLocation(centerX, centerY);
+    }
+
+    private void checkIfPlayerTouchesZone() {
+	for (Zone zone : getWorld().getZones()) {
+	    if(zone.getHitBox().intersects(player.getHitBox())){
+		changeWorld();
+	    }
+	}
+    }
+
     /**
-     * Iterates through all foreground tiles and makes sure no entites can pass through them
+     * Makes sure no movableEntities pass through foreground tiles
      */
     private void handleWallCollisions() {
+	if(getWorld().getLayers() < 2){
+	    return; // Only background layers!
+	}
+
 	for (Tile tile : world.getForegroundTileList()) {
 	    Rectangle tileHitBox = new Rectangle(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
+	    // Handle player-wall collision
 	    if (player.getHitBox().intersects(tileHitBox)) {
 		Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
 		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), player.getHitBox().getCenterY());
@@ -43,7 +62,8 @@ public class Game
 		player.setVelocity(0, 0);
 	    }
 
-	    for (MovableEntity movableEntity : movableEntityList) {
+	    // Handle movableEntity-wall collision
+	    for (MovableEntity movableEntity : entities) {
 		if (movableEntity.getHitBox().intersects(tileHitBox)) {
 		    Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
 		    Point2D to = new Point2D.Double(movableEntity.getHitBox().getCenterX(), movableEntity.getHitBox().getCenterY());
@@ -58,7 +78,7 @@ public class Game
 
     public void checkForHits(Character e)
     {
-	for (MovableEntity movableEntity : movableEntityList) {
+	for (MovableEntity movableEntity : entities) {
 	    if (movableEntity instanceof Weapon) {
 		Weapon theMurderWeapon = (Weapon) movableEntity;
 		e.isHit(theMurderWeapon);
@@ -66,10 +86,14 @@ public class Game
 
 	}
     }
-    public void checkForCollisionHits(){
-	for (Entity entity :entityList){
-	    if (entity instanceof  Enemy){
-		if (((Enemy) entity).playerCollision(player)){
+
+    /**
+     * Check if anything damages the player.
+     */
+    public void checkForCollisionHits() {
+	for (MovableEntity movableEntity : entities) {
+	    if (movableEntity instanceof Enemy) {
+		if (((Enemy) movableEntity).playerCollision(player)) {
 		    player.takeDamage();
 		}
 	    }
@@ -79,13 +103,10 @@ public class Game
 
 
     private void removeGarbage() {
-	movableEntityList.removeIf(MovableEntity::getIsGarbage);
+	entities.removeIf(MovableEntity::getIsGarbage);
     }
 
-    public void addPlayer(final Player player) {
-	if (player != null) {
-	    throw new IllegalStateException("Cannot add player, already one present!");
-	}
+    public void setPlayer(final Player player) {
 	this.player = player;
     }
 
@@ -113,9 +134,10 @@ public class Game
     {
 	addEntity(new Enemy(coord, player));
     }
-    public void addEnemySword(Enemy enemy){
-	if (enemy.wantToAttack()){
-	    entityList.add(enemy.getSword());
+
+    public void addEnemySword(Enemy enemy) {
+	if (enemy.wantToAttack()) {
+	    addEntity(getPlayer().getSword());
 	}
     }
 
@@ -124,17 +146,18 @@ public class Game
 	addEntity(player.getSword());
 	checkIfAnyEntityHit();
     }
-    public void playerShootArrow(){
+
+    public void playerShootArrow() {
 	player.becomeAttacking();
 	addEntity(player.shootProjectile());
     }
 
-    public List<MovableEntity> getEntityList() {
-	return movableEntityList;
+    public List<MovableEntity> getEntities() {
+	return entities;
     }
 
     public void checkIfAnyEntityHit() {
-	for (MovableEntity movableEntity : movableEntityList) {
+	for (MovableEntity movableEntity : entities) {
 	    if (movableEntity instanceof Character) {
 		checkForHits((Character) movableEntity);
 	    }
@@ -156,7 +179,7 @@ public class Game
     }
 
     private void addEntity(final MovableEntity movableEntity) {
-	movableEntityList.add(movableEntity);
+	entities.add(movableEntity);
     }
 
 }
