@@ -3,8 +3,8 @@ package se.liu.danal315samak519.map;
 import se.liu.danal315samak519.Entity;
 
 /**
- * Used to mark specific points on the map where, upon entry, things will happen.
- * For example, loading the next map if player walks through map exit.
+ * Used to block entities on arbitrary areas (not on tiles)
+ * Can be moved (used as animating gate)
  */
 public class Obstacle extends Entity
 {

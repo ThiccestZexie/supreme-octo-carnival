@@ -80,7 +80,6 @@ public abstract class Entity
     public void setSize(double w, double h) {
 	this.width = w;
 	this.height = h;
-	setHitBox();
     }
 
     public double getWidth() {
