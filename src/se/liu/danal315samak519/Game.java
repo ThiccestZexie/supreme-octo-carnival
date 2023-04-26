@@ -1,5 +1,7 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.Weapons.Sword;
+import se.liu.danal315samak519.Weapons.Weapon;
 import se.liu.danal315samak519.map.Obstacle;
 import se.liu.danal315samak519.map.Tile;
 import se.liu.danal315samak519.map.World;

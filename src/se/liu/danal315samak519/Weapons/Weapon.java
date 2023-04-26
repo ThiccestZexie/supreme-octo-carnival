@@ -1,4 +1,7 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.Weapons;
+
+import se.liu.danal315samak519.Character;
+import se.liu.danal315samak519.Movable;
 
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -16,6 +19,7 @@ public abstract class Weapon extends Movable
     protected Weapon(final Point2D.Double coord, final Character owner) {
 	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
 	this.owner = owner;
+	this.coord = coord;
 	this.lifeSpan = 5;
     }
 

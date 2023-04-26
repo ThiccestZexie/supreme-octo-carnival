@@ -1,4 +1,7 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.Weapons;
+
+import se.liu.danal315samak519.Character;
+import se.liu.danal315samak519.Weapons.Weapon;
 
 import java.awt.geom.Point2D;
 

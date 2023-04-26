@@ -1,4 +1,7 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.Weapons;
+
+import se.liu.danal315samak519.Character;
+import se.liu.danal315samak519.Weapons.Weapon;
 
 import java.awt.geom.Point2D;
 
@@ -9,6 +12,7 @@ public class Arrow extends Weapon
 	super(coord, owner);
 	this.setLifeSpan(100);
 	setSize(5,5);
+	this.setHitBox();
 	setDir(owner.getDir());
     }
 

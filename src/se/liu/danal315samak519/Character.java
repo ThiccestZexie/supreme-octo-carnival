@@ -1,5 +1,8 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.Weapons.Arrow;
+import se.liu.danal315samak519.Weapons.Sword;
+
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
