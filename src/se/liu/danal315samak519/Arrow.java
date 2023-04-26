@@ -10,6 +10,7 @@ public class Arrow extends Weapon
 	this.setLifeSpan(100);
 	setSize(5,5);
 	setDir(owner.getDir());
+	setHitBox();
     }
 
     @Override public void tick() {

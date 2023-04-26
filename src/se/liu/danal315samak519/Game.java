@@ -6,13 +6,14 @@ import se.liu.danal315samak519.map.World;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Game
 {
-    public List<Movable> entities = new ArrayList<>();
+    public List<Movable> movables = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player;
     private World world;
@@ -23,35 +24,40 @@ public class Game
 	removeGarbage();
 	player.tick();
 	handleWallCollisions();
-	checkIfPlayerTouchesZone();
+	handleObstacleCollisions();
+	if (playerIsOutOfBounds()) {
+	    changeToNextWorld();
+	}
 	checkForCollisionHits();
-	for (Movable e : entities) {
-	    e.tick();
+	for (Movable movable : movables) {
+	    movable.tick();
 	}
     }
 
-    private void changeWorld(){
+    private void centerPlayerLocation() {
+	player.setLocation(getWorld().getCenterX() - player.getWidth() / 2, getWorld().getCenterY() - player.getHeight() / 2);
+    }
+
+    private void changeToNextWorld() {
 	currentWorldID++;
 	setWorld(new World("map" + currentWorldID + ".tmx"));
-	double centerX = world.getColumns() * world.getTileWidth() / 2.0;
-	double centerY = world.getRows() * world.getTileHeight() / 2.0;
-	player.setLocation(centerX, centerY);
+	centerPlayerLocation();
     }
 
-    private void checkIfPlayerTouchesZone() {
-	for (Obstacle obstacle : getWorld().getZones()) {
-	    if(obstacle.getHitBox().intersects(player.getHitBox())){
-		changeWorld();
-	    }
-	}
+    private boolean playerIsOutOfBounds() {
+	boolean above = player.getY() < 0;
+	boolean below = player.getY() > world.getHeight();
+	boolean left = player.getX() < 0;
+	boolean right = player.getX() > world.getWidth();
+	return above || below || left || right;
     }
 
     /**
      * Makes sure no movableEntities pass through foreground tiles
      */
     private void handleWallCollisions() {
-	if(getWorld().getLayers() < 2){
-	    return; // Only background layers!
+	if (getWorld().getLayers() < 2) {
+	    return; // No wall collision to handle, there are only background layers!
 	}
 
 	for (Tile tile : world.getForegroundTileList()) {
@@ -60,18 +66,18 @@ public class Game
 	    if (player.getHitBox().intersects(tileHitBox)) {
 		Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
 		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), player.getHitBox().getCenterY());
-		Direction pushBackDirection = DirectionUtil.getDirectionBetweenPoints(from, to);
+		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
 		int pushBackAmount = 5;
 		player.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
 		player.setVelocity(0, 0);
 	    }
 
-	    // Handle movableEntity-wall collision
-	    for (Movable movable : entities) {
+	    // Handle movable-wall collision
+	    for (Movable movable : movables) {
 		if (movable.getHitBox().intersects(tileHitBox)) {
 		    Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
 		    Point2D to = new Point2D.Double(movable.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
-		    Direction pushBackDirection = DirectionUtil.getDirectionBetweenPoints(from, to);
+		    Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
 		    int pushBackAmount = 1;
 		    movable.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
 		    movable.setVelocity(0, 0);
@@ -80,9 +86,24 @@ public class Game
 	}
     }
 
+    private void handleObstacleCollisions() {
+	for (Movable movable : movables) {
+	    if (movable instanceof Obstacle && movable.getHitBox().intersects(player.getHitBox())) {
+		Obstacle obstacle = (Obstacle) movable;
+		Rectangle2D obstacleHitBox = obstacle.getHitBox();
+		Point2D from = new Point2D.Double(obstacleHitBox.getCenterX(), obstacleHitBox.getCenterY());
+		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
+		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
+		int pushBackAmount = 2;
+		player.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
+		player.setVelocity(0, 0);
+	    }
+	}
+    }
+
     public void checkForHits(Character e)
     {
-	for (Movable movable : entities) {
+	for (Movable movable : movables) {
 	    if (movable instanceof Weapon) {
 		Weapon theMurderWeapon = (Weapon) movable;
 		e.isHit(theMurderWeapon);
@@ -95,7 +116,7 @@ public class Game
      * Check if anything damages the player.
      */
     public void checkForCollisionHits() {
-	for (Movable movable : entities) {
+	for (Movable movable : movables) {
 	    if (movable instanceof Enemy) {
 		if (((Enemy) movable).playerCollision(player)) {
 		    player.takeDamage();
@@ -105,17 +126,16 @@ public class Game
 
     }
 
-
     private void removeGarbage() {
-	entities.removeIf(Movable::getIsGarbage);
-    }
-
-    public void setPlayer(final Player player) {
-	this.player = player;
+	movables.removeIf(Movable::getIsGarbage);
     }
 
     public Player getPlayer() {
 	return this.player;
+    }
+
+    public void setPlayer(final Player player) {
+	this.player = player;
     }
 
     public void addFrameListener(FrameListener fl)
@@ -156,12 +176,12 @@ public class Game
 	addEntity(player.shootProjectile());
     }
 
-    public List<Movable> getEntities() {
-	return entities;
+    public List<Movable> getMovables() {
+	return movables;
     }
 
     public void checkIfAnyEntityHit() {
-	for (Movable movable : entities) {
+	for (Movable movable : movables) {
 	    if (movable instanceof Character) {
 		checkForHits((Character) movable);
 	    }
@@ -175,7 +195,16 @@ public class Game
     }
 
     public void setWorld(final World world) {
+	// Remove old obstacles
+//	for (Obstacle obstacle : world.getObstacles()) {
+//	    obstacle.isGarbage = true;
+//	}
+	// Actually change world
 	this.world = world;
+	// Add new obstacles
+	for (Obstacle obstacle : world.getObstacles()) {
+	    addEntity(obstacle);
+	}
     }
 
     public void addEnemy(final double x, final double y) {
@@ -183,7 +212,7 @@ public class Game
     }
 
     private void addEntity(final Movable movable) {
-	entities.add(movable);
+	movables.add(movable);
     }
 
 }
