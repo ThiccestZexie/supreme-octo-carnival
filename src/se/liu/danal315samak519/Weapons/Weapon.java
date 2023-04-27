@@ -19,8 +19,8 @@ public abstract class Weapon extends Movable
     protected Weapon(final Point2D.Double coord, final Character owner) {
 	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
 	this.owner = owner;
-	this.coord = coord;
 	this.lifeSpan = 5;
+
     }
 
     public Character getOwner() {

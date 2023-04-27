@@ -34,7 +34,7 @@ public class Viewer
 	game.setWorld(new World("map0.tmx"));
 	Random random = new Random();
 	// Enemies
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < 1; i++) {
 	    int randomX = 200 + random.nextInt(400);
 	    int randomY = 200 + random.nextInt(400);
 	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);

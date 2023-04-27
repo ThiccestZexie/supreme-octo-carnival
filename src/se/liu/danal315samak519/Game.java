@@ -1,5 +1,6 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.Weapons.Arrow;
 import se.liu.danal315samak519.Weapons.Sword;
 import se.liu.danal315samak519.Weapons.Weapon;
 import se.liu.danal315samak519.map.Obstacle;
@@ -16,8 +17,8 @@ public class Game
 {
     public List<Movable> entities = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
-    private Player player;
-    private World world;
+    private Player player = null;
+    private World world = null;
     private int currentWorldID = 0;
 
     public void tick()
@@ -87,7 +88,7 @@ public class Game
 	for (Movable movable : entities) {
 	    if (movable instanceof Weapon) {
 		Weapon theMurderWeapon = (Weapon) movable;
-		e.isHit((Sword) theMurderWeapon);
+		e.isHit(theMurderWeapon);
 	    }
 
 	}
@@ -103,10 +104,24 @@ public class Game
 		    player.takeDamage();
 		}
 	    }
+	    if(movable instanceof Arrow){
+		arrowHit((Arrow) movable);
+	    }
+
 	}
 
     }
 
+    private void arrowHit(Arrow arrow){
+	for(Movable target : entities){
+	    if (target instanceof Character && !target.equals(arrow))
+		if (arrow.hitEntity(target))
+		{
+			((Character) target).isHit(arrow);
+		}
+
+	}
+    }
 
     private void removeGarbage() {
 	entities.removeIf(Movable::getIsGarbage);
@@ -148,14 +163,17 @@ public class Game
     }
 
     public void playerAttack() {
-	player.becomeAttacking();
-	addEntity(player.getSword());
-	checkIfAnyEntityHit();
+	if(player.becomeAttacking()){
+	    addEntity(player.getSword());
+	    checkIfAnyEntityHit();
+	}
+
     }
 
     public void playerShootArrow() {
-	player.becomeAttacking();
-	addEntity(player.shootProjectile());
+	if(player.becomeAttacking()) {
+	    addEntity(player.shootProjectile());
+	}
     }
 
     public List<Movable> getEntities() {

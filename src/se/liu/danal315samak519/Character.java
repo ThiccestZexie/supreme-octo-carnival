@@ -2,21 +2,24 @@ package se.liu.danal315samak519;
 
 import se.liu.danal315samak519.Weapons.Arrow;
 import se.liu.danal315samak519.Weapons.Sword;
+import se.liu.danal315samak519.Weapons.Weapon;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 public abstract class Character extends Movable
 {
     // CONSTANTS FOR CHARACTERS
-    private static final int TICKS_PER_FRAME = 8;
-    private static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
-    private static final int MAXHP = 3;
+    protected static final int TICKS_PER_FRAME = 8;
+    protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
+    protected static final int MAXHP = 3;
 
-    private static final int iFrames = 90; //about 1.5 seconds of iFrames
+    protected static final int iFrames = 90; //about 1.5 seconds of iFrames
 
     protected int exp = 0;
-
+    protected static int attackSpeed = 60; // 1 attack per second max
+    protected static int attackSpeedCounter = 0;
     protected int currentIFramees = 0;
     protected int level;
     protected int hp = MAXHP;
@@ -57,7 +60,8 @@ public abstract class Character extends Movable
 	return MAXHP;
     }
 
-    public int[] getExpRequirements() {
+    public int[] getExpRequirements(){
+
 	return EXP_REQUIREMENTS;
     }
 
@@ -69,7 +73,7 @@ public abstract class Character extends Movable
 	return exp;
     }
 
-    public boolean isHit(Sword e)
+    public boolean isHit(Weapon e)
     {
 	Character owner = e.getOwner();
 	if (this.hitBox.getBounds().intersects(e.getHitBox())) {
@@ -92,9 +96,18 @@ public abstract class Character extends Movable
     }
 
     public Sword getSword() {
-	return new Sword(this.coord, this);
+	if (isStatusNormal())
+	{
+	    return new Sword(this.coord, this);
+	}
+	return new Sword(new Point2D.Double(0,0), this);
     }
-
+    public boolean isStatusNormal(){
+	if (status == Status.NORMAL){
+	    return true;
+	}
+	return false;
+    }
     public void incExp() { //Exp should depend on enemey level
 	exp++;
     }
@@ -112,6 +125,9 @@ public abstract class Character extends Movable
 	}
 	return false;
     }
+    public void takeDamage(){
+	hp--;
+    }
 
     @Override public void tick() {
 	if (getStatus() == Status.SLEEPING) {
@@ -123,6 +139,13 @@ public abstract class Character extends Movable
 	if (currentIFramees == iFrames){
 	    setStatus(Status.NORMAL);
 	    currentIFramees = 0;
+	}
+	if(getStatus() == Status.ATTACKING){
+	    attackSpeedCounter--;
+	    if (attackSpeedCounter == 0){
+		setStatus(Status.NORMAL);
+	    }
+
 	}
 	super.tick();
 	performWalkCycle();
@@ -157,9 +180,17 @@ public abstract class Character extends Movable
 	this.currentFrames = frames;
     }
 
-    public void becomeAttacking() {
-	this.currentFrameIndex = 2;
-	this.setStatus(Status.ATTACKING);
+    public boolean becomeAttacking() {
+	{
+	    if(isStatusNormal()){
+		this.currentFrameIndex = 2;
+		this.setStatus(Status.ATTACKING);
+		attackSpeedCounter = attackSpeed;
+		return true;
+	    }
+	    return false;
+	}
+
     }
 
     protected Status getStatus() {
