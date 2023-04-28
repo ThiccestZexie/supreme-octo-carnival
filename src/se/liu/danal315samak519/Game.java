@@ -106,7 +106,7 @@ public class Game
 	for (Movable movable : movables) {
 	    if (movable instanceof Weapon) {
 		Weapon theMurderWeapon = (Weapon) movable;
-		e.isHit(theMurderWeapon);
+		e.isHit((Sword) theMurderWeapon);
 	    }
 
 	}

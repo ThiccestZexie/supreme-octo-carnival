@@ -66,7 +66,7 @@ public abstract class Character extends Movable
 	return exp;
     }
 
-    public boolean isHit(Weapon e)
+    public boolean isHit(Sword e)
     {
 	Character owner = e.getOwner();
 	if (this.hitBox.getBounds().intersects(e.getHitBox())) {
@@ -88,8 +88,8 @@ public abstract class Character extends Movable
 	return new Arrow(this.coord, this);
     }
 
-    public Weapon getSword() {
-	return new Weapon(this.coord, this);
+    public Sword getSword() {
+	return new Sword(this.coord, this);
     }
 
     public void incExp() { //Exp should depend on enemey level
