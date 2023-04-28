@@ -22,26 +22,35 @@ public class Game
     public void tick()
     {
 	removeGarbage();
-	player.tick();
-	handleWallCollisions();
-	handleObstacleCollisions();
+
+	// Adding player to temp movables list for ease
+	List<Movable> movablesWithPlayer = new ArrayList<>(getMovables());
+	movablesWithPlayer.add(player);
+
+	for (Movable movable : movablesWithPlayer) {
+	    // handle collisions
+	    handleWallCollisions(movable);
+	    handleObstacleCollisions(movable);
+	    if (movable instanceof Enemy) {
+		checkForCollisionHits(movable);
+	    }
+
+	    // tick
+	    movable.tick();
+	}
 	if (playerIsOutOfBounds()) {
 	    changeToNextWorld();
 	}
-	checkForCollisionHits();
-	for (Movable movable : movables) {
-	    movable.tick();
-	}
     }
 
-    private void centerPlayerLocation() {
+    private void placePlayerInCenterOfWorld() {
 	player.setLocation(getWorld().getCenterX() - player.getWidth() / 2, getWorld().getCenterY() - player.getHeight() / 2);
     }
 
     private void changeToNextWorld() {
 	currentWorldID++;
 	setWorld(new World("map" + currentWorldID + ".tmx"));
-	centerPlayerLocation();
+	placePlayerInCenterOfWorld();
     }
 
     private boolean playerIsOutOfBounds() {
@@ -53,50 +62,46 @@ public class Game
     }
 
     /**
+     * Makes sure entities can't pass through obstacles
+     */
+    private void handleObstacleCollisions(final Movable movable) {
+	for(Obstacle obstacle : world.getObstacles()){
+	    Rectangle2D obstacleHitBox = obstacle.getHitBox();
+	    if(movable.getHitBox().intersects(obstacleHitBox)){
+		Point2D from = new Point2D.Double(obstacleHitBox.getCenterX(), obstacleHitBox.getCenterY());
+		Point2D to = new Point2D.Double(movable.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
+		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
+		switch(pushBackDirection){
+		    case UP, DOWN -> movable.setVelY(0);
+		    case LEFT, RIGHT-> movable.setVelX(0);
+		}
+		int pushBackAmount = 1;
+		movable.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
+	    }
+	}
+    }
+
+    /**
      * Makes sure no movableEntities pass through foreground tiles
      */
-    private void handleWallCollisions() {
+    private void handleWallCollisions(final Movable movable) {
 	if (getWorld().getLayers() < 2) {
 	    return; // No wall collision to handle, there are only background layers!
 	}
 
 	for (Tile tile : world.getForegroundTileList()) {
 	    Rectangle tileHitBox = new Rectangle(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
-	    // Handle player-wall collision
-	    if (player.getHitBox().intersects(tileHitBox)) {
-		Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
-		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), player.getHitBox().getCenterY());
-		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
-		int pushBackAmount = 5;
-		player.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
-		player.setVelocity(0, 0);
-	    }
-
 	    // Handle movable-wall collision
-	    for (Movable movable : movables) {
-		if (movable.getHitBox().intersects(tileHitBox)) {
-		    Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
-		    Point2D to = new Point2D.Double(movable.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
-		    Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
-		    int pushBackAmount = 1;
-		    movable.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
-		    movable.setVelocity(0, 0);
-		}
-	    }
-	}
-    }
-
-    private void handleObstacleCollisions() {
-	for (Movable movable : movables) {
-	    if (movable instanceof Obstacle && movable.getHitBox().intersects(player.getHitBox())) {
-		Obstacle obstacle = (Obstacle) movable;
-		Rectangle2D obstacleHitBox = obstacle.getHitBox();
-		Point2D from = new Point2D.Double(obstacleHitBox.getCenterX(), obstacleHitBox.getCenterY());
-		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
+	    if (movable.getHitBox().intersects(tileHitBox)) {
+		Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
+		Point2D to = new Point2D.Double(movable.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
 		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
-		int pushBackAmount = 2;
-		player.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
-		player.setVelocity(0, 0);
+		switch(pushBackDirection){
+		    case UP, DOWN -> movable.setVelY(0);
+		    case LEFT, RIGHT-> movable.setVelX(0);
+		}
+		int pushBackAmount = 1;
+		movable.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
 	    }
 	}
     }
@@ -108,22 +113,16 @@ public class Game
 		Weapon theMurderWeapon = (Weapon) movable;
 		e.isHit((Sword) theMurderWeapon);
 	    }
-
 	}
     }
 
     /**
      * Check if anything damages the player.
      */
-    public void checkForCollisionHits() {
-	for (Movable movable : movables) {
-	    if (movable instanceof Enemy) {
-		if (((Enemy) movable).playerCollision(player)) {
-		    player.takeDamage();
-		}
-	    }
+    public void checkForCollisionHits(Movable movable) {
+	if (((Enemy) movable).playerCollision(player)) {
+	    player.takeDamage();
 	}
-
     }
 
     private void removeGarbage() {

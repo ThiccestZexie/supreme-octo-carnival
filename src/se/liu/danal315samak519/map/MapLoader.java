@@ -93,7 +93,7 @@ public class MapLoader
     private double getProperty(Element object, String propertyName) throws IllegalArgumentException {
 	Element properties = object.selectFirst("properties");
 	if (properties == null) {
-	    throw new IllegalArgumentException("Object is missing properties element");
+	    throw new IllegalArgumentException("Object is missing custom properties (probably endX and endY).");
 	}
 	Element property = properties.selectFirst("property[name=" + propertyName + "]");
 	if (property == null) {
