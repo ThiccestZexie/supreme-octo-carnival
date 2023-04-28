@@ -66,11 +66,14 @@ public class Game
      */
     private void handleObstacleCollisions(final Movable movable) {
 	for(Obstacle obstacle : world.getObstacles()){
+	    if(obstacle.equals(movable)){
+		return; // Don't check collision with self
+	    }
 	    Rectangle2D obstacleHitBox = obstacle.getHitBox();
 	    if(movable.getHitBox().intersects(obstacleHitBox)){
 		Point2D from = new Point2D.Double(obstacleHitBox.getCenterX(), obstacleHitBox.getCenterY());
 		Point2D to = new Point2D.Double(movable.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
-		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
+		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to, obstacle.getWidth(), obstacle.getHeight());
 		switch(pushBackDirection){
 		    case UP, DOWN -> movable.setVelY(0);
 		    case LEFT, RIGHT-> movable.setVelX(0);

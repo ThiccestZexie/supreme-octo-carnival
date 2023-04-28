@@ -7,7 +7,8 @@ public enum Direction
 {
     UP, DOWN, LEFT, RIGHT;
 
-    public static Direction getDirectionBetweenPoints(double startX, double startY, double endX, double endY) {
+
+    public static Direction getDirectionBetweenPoints(double startX, double startY, double endX, double endY, double width, double height) {
 	double diffX = endX - startX;
 	double diffY = endY - startY;
 	double distance = Math.sqrt(diffX * diffX + diffY * diffY);
@@ -15,7 +16,6 @@ public enum Direction
 	    return null; // Can't calculate Direction
 	}
 	float radians = (float) Math.atan2(diffY, diffX);
-	Direction direction = null;
 
 //	if (-Math.PI / 4 < radians && radians < Math.PI / 4) {
 //	    direction = (Direction.RIGHT);
@@ -26,13 +26,14 @@ public enum Direction
 //        } else if (Math.PI / 4 < radians && radians < 3 * Math.PI / 4) {
 //            direction = (Direction.DOWN);
 //	}
-        direction = roundAngleToDirection(radians);
-
-	return direction;
+        return roundAngleToDirection(radians, width, height);
+    }
+    public static Direction getDirectionBetweenPoints(Point2D start, Point2D end, double width, double height) {
+	return getDirectionBetweenPoints(start.getX(), start.getY(), end.getX(), end.getY(), width, height);
     }
 
     public static Direction getDirectionBetweenPoints(Point2D start, Point2D end) {
-	return getDirectionBetweenPoints(start.getX(), start.getY(), end.getX(), end.getY());
+	return getDirectionBetweenPoints(start.getX(), start.getY(), end.getX(), end.getY(), 1, 1);
     }
 
     /**
@@ -60,6 +61,10 @@ public enum Direction
             return DOWN;
         }
         return LEFT; // Idk why the angle sometimes isn't caught
+    }
+
+    public static Direction getDirectionBetweenPoints(final double x, final double y, final double endX, final double endY) {
+	return getDirectionBetweenPoints(x, y, endX, endY, 1, 1);
     }
 
     /**

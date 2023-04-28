@@ -73,7 +73,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="blocks" opacity="0.9">
-  <object id="7" x="212.125" y="331.542" width="311.583" height="67.3333" rotation="90">
+  <object id="7" x="719.083" y="442" width="144.917" height="70">
    <properties>
     <property name="endX" type="float" value="200"/>
     <property name="endY" type="float" value="150"/>
