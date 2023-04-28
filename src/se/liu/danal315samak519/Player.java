@@ -71,6 +71,7 @@ public class Player extends Character
 	if (this.hp > 0 && this.getStatus() != Status.HIT){
 	    hp--;
 	    this.setStatus(Status.HIT);
+	    iFramesTimer.start();
 	}
     }
 

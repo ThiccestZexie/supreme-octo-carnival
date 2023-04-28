@@ -40,6 +40,7 @@ public class GameComponent extends JComponent implements FrameListener
 	paintLevelUpAnimation(g);
 	// PAINT SPRITE
 	g.drawImage(player.getCurrentSprite(), player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight(), null);
+
     }
 
     private void paintEntities(final Graphics g) {
