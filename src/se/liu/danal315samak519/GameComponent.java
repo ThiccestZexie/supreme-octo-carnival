@@ -53,8 +53,7 @@ public class GameComponent extends JComponent implements FrameListener
 	    if (movable instanceof Character) {
 		Character character = (Character) movable;
 		// PAINT SPRITE
-		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(),
-			    character.getIntHeight(), null);
+		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(), character.getIntHeight(), null);
 	    }
 	}
     }
@@ -112,6 +111,8 @@ public class GameComponent extends JComponent implements FrameListener
 	    this.i++;
 	}
     }
+
+
 
     @Override protected void paintComponent(final Graphics g) {
 	super.paintComponent(g);

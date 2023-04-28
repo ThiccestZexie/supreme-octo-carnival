@@ -5,12 +5,20 @@ import se.liu.danal315samak519.Weapons.Sword;
 import se.liu.danal315samak519.Weapons.Weapon;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 public abstract class Character extends Movable
 {
     // CONSTANTS FOR CHARACTERS
+
+    private double knockbackX = 0.0;
+    private double knockbackY = 0.0;
+
+    private Timer knockbackTimer; // Declare knockbackTimer as an instance field
+
     protected static final int TICKS_PER_FRAME = 8;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
     protected static final int MAXHP = 3;
@@ -34,7 +42,6 @@ public abstract class Character extends Movable
     Timer iFramesTimer = new Timer(1000, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
 
     Timer attackSpeedTimer = new Timer(500, e -> setStatus(Status.NORMAL)); // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
-
 
 
     protected Character(final Point2D.Double coord) {
@@ -82,6 +89,7 @@ public abstract class Character extends Movable
 	    if (hp > 1 && this.getStatus() != Status.HIT) {
 		hp--;
 		this.setStatus(Status.HIT);
+		startKnockbackAnimation(-this.getDir().getX(), -this.getDir().getY(), 25.0, 500);
 		iFramesTimer.start();
 	    } else if (this.getStatus() != Status.HIT) {
 		owner.incExp();
@@ -97,6 +105,36 @@ public abstract class Character extends Movable
     public Arrow shootProjectile(){
 	return new Arrow(this.coord, this);
     }
+
+    public void startKnockbackAnimation(double knockbackDirectionX, double knockbackDirectionY, double knockbackDistance, int animationDuration) {
+	double targetX = knockbackX + knockbackDistance * knockbackDirectionX;
+	double targetY = knockbackY + knockbackDistance * knockbackDirectionY;
+
+	int frameRate = 120;
+	knockbackTimer = new Timer(animationDuration / frameRate, new ActionListener() {
+	    private int frameCount = 0;
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		frameCount++;
+		if (frameCount > 35) {
+		    knockbackTimer.stop();
+		    return;
+		}
+
+		double t = (double) frameCount / frameRate;
+		double interpolatedX = knockbackX + (targetX - knockbackX) * t;
+		double interpolatedY = knockbackY + (targetY - knockbackY) * t;
+
+		// Update the position of the entity using the interpolated values
+		nudge(interpolatedX,interpolatedY);
+
+		// Repaint the component to reflect the updated position
+	    }
+	});
+
+	knockbackTimer.start();
+    }
+
 
     public Sword getSword() {
 	if (isStatusNormal())

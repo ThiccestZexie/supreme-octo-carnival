@@ -36,6 +36,8 @@ public class Player extends Character
 	}
     }
 
+
+
     private void storeSpriteFrames() {
 	try {
 	    int spriteHeight = 16;
