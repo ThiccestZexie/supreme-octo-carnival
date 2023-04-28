@@ -4,7 +4,7 @@ import se.liu.danal315samak519.Weapons.Arrow;
 import se.liu.danal315samak519.Weapons.Sword;
 import se.liu.danal315samak519.Weapons.Weapon;
 
-import java.awt.*;
+import javax.swing.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -18,8 +18,6 @@ public abstract class Character extends Movable
     protected static final int iFrames = 90; //about 1.5 seconds of iFrames
 
     protected int exp = 0;
-    protected static int attackSpeed = 60; // 1 attack per second max
-    protected static int attackSpeedCounter = 0;
     protected int currentIFramees = 0;
     protected int level;
     protected int hp = MAXHP;
@@ -33,6 +31,10 @@ public abstract class Character extends Movable
     protected BufferedImage attackFrame;
     private Status status = Status.NORMAL;
     private int ticksCounted;
+    Timer iFramesTimer = new Timer(1000, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
+
+    Timer attackSpeedTimer = new Timer(500, e -> setStatus(Status.NORMAL)); // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
+
 
 
     protected Character(final Point2D.Double coord) {
@@ -80,6 +82,7 @@ public abstract class Character extends Movable
 	    if (hp > 1 && this.getStatus() != Status.HIT) {
 		hp--;
 		this.setStatus(Status.HIT);
+		iFramesTimer.start();
 	    } else if (this.getStatus() != Status.HIT) {
 		owner.incExp();
 		owner.levelUp();
@@ -133,20 +136,6 @@ public abstract class Character extends Movable
 	if (getStatus() == Status.SLEEPING) {
 	    return; // Do nothing just sleep zZzZ
 	}
-	if (getStatus() == Status.HIT){
-	    currentIFramees++;
-	}
-	if (currentIFramees == iFrames){
-	    setStatus(Status.NORMAL);
-	    currentIFramees = 0;
-	}
-	if(getStatus() == Status.ATTACKING){
-	    attackSpeedCounter--;
-	    if (attackSpeedCounter == 0){
-		setStatus(Status.NORMAL);
-	    }
-
-	}
 	super.tick();
 	performWalkCycle();
     }
@@ -185,7 +174,7 @@ public abstract class Character extends Movable
 	    if(isStatusNormal()){
 		this.currentFrameIndex = 2;
 		this.setStatus(Status.ATTACKING);
-		attackSpeedCounter = attackSpeed;
+		attackSpeedTimer.start();
 		return true;
 	    }
 	    return false;
@@ -200,4 +189,7 @@ public abstract class Character extends Movable
     protected void setStatus(final Status status) {
 	this.status = status;
     }
+
+
+
 }
