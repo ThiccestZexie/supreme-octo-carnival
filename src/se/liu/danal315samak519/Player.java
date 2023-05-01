@@ -10,14 +10,17 @@ public class Player extends Character
     private static final String LEVEL_FOLDER = "resources/data/LevelUP/";
     public BufferedImage[] levelUpFrames;
 
+    public BufferedImage fullHeart = null, halfHeart = null, emptyHeart = null;
+
     public Player(final Point2D.Double coord)
     {
 	super(coord);
 	this.color = Color.GREEN; //TODO HARDCODED GREEN PLAYER
 	this.level = 1;
-	this.hp = 3;
+	this.hp = 6;
 	storeLevelUpFrames();
 	storeSpriteFrames();
+	storeHealthBars();
 	setDir(Direction.DOWN);
     }
 
@@ -67,6 +70,17 @@ public class Player extends Character
 
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
+	}
+    }
+
+    public void storeHealthBars(){
+	try{
+	    fullHeart = new ImageLoader("/hearts/heart_full.png").getImage();
+	    halfHeart = new ImageLoader("/hearts/heart_half.png").getImage();
+	    emptyHeart = new ImageLoader("/hearts/heart_blank.png").getImage();
+	}
+	catch (IOException e){
+	    e.printStackTrace();
 	}
     }
     public void takeDamage(){

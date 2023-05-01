@@ -21,14 +21,16 @@ public abstract class Character extends Movable
 
     protected static final int TICKS_PER_FRAME = 8;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
-    protected static final int MAXHP = 3;
+
 
     protected static final int iFrames = 90; //about 1.5 seconds of iFrames
 
     protected int exp = 0;
     protected int currentIFramees = 0;
     protected int level;
-    protected int hp = MAXHP;
+    protected int maxHP = 3;
+    protected int hp = maxHP;
+
     protected int currentFrameIndex = 0;
     // Sprite
     protected BufferedImage[] currentFrames;
@@ -66,7 +68,7 @@ public abstract class Character extends Movable
     }
 
     public int getMaxHp() {
-	return MAXHP;
+	return maxHP;
     }
 
     public int[] getExpRequirements(){
@@ -89,7 +91,7 @@ public abstract class Character extends Movable
 	    if (hp > 1 && this.getStatus() != Status.HIT) {
 		hp--;
 		this.setStatus(Status.HIT);
-		startKnockbackAnimation(-this.getDir().getX(), -this.getDir().getY(), 25.0, 500);
+		startKnockbackAnimation(-this.getDir().getX(), -this.getDir().getY(), 10.0, 5);
 		iFramesTimer.start();
 	    } else if (this.getStatus() != Status.HIT) {
 		owner.incExp();
@@ -113,9 +115,12 @@ public abstract class Character extends Movable
 	int frameRate = 120;
 	knockbackTimer = new Timer(animationDuration / frameRate, new ActionListener() {
 	    private int frameCount = 0;
+
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		frameCount++;
+		velX = 0;
+		velY = 0;
 		if (frameCount > 35) {
 		    knockbackTimer.stop();
 		    return;
@@ -157,6 +162,8 @@ public abstract class Character extends Movable
 	while (checkExpReq()) {
 	    exp -= EXP_REQUIREMENTS[level - 1];
 	    level++;
+	    this.maxHP += 1;
+	    this.hp = maxHP;
 	}
     }
 

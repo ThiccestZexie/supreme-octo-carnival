@@ -90,12 +90,22 @@ public class GameComponent extends JComponent implements FrameListener
 	g.fillRect(20, 20, game.getPlayer().exp * expBarLength / game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1],
 		   30);
 	// Player hp bar
-	int healthBarLength = 100;
-	g.setColor(Color.BLACK);
-	g.fillRect(20, 60, healthBarLength, 30);
-	g.setColor(Color.RED);
-	g.fillRect(20,60, game.getPlayer().getHp() * (healthBarLength/game.getPlayer().getMaxHp()), 30);
+	drawPlayerLife(g);
     }
+
+    public void drawPlayerLife(Graphics g){
+	int fullHearts = game.getPlayer().getHp() / 2;
+	int halfHearts = game.getPlayer().getHp() % 2;
+	int x = 0;
+	int y = 0;
+	int j = 0;
+	while (j < game.getPlayer().getMaxHp()/2){
+	    g.drawImage(game.getPlayer().emptyHeart, x ,y, null);
+	    j++;
+	    x += 30;
+	}
+    }
+
 
     private void paintLevelUpAnimation(final Graphics g) {
 	if (oldPlayerLevel < game.getPlayer().getLevel()) {
@@ -270,4 +280,5 @@ public class GameComponent extends JComponent implements FrameListener
 	    }
 	}
     }
+
 }
