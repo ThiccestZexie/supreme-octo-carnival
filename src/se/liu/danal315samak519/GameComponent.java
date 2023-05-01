@@ -44,7 +44,7 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintEntities(final Graphics g) {
-	for (Movable movable : game.getEntities()) {
+	for (Movable movable : game.getMovables()) {
 	    if (debug) {
 		// PAINT HITBOX
 		g.setColor(movable.getColor());
@@ -60,7 +60,7 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintGUI(final Graphics g) {
 
-	for (Movable movable : game.getEntities()) {
+	for (Movable movable : game.getMovables()) {
 	    if (movable instanceof Enemy) {
 		Enemy enemy = (Enemy) movable;
 		// Maxhealth (BLACK)

@@ -46,8 +46,16 @@ public class World
 	return this.rows;
     }
 
-    public List<Obstacle> getZones(){
+    public List<Obstacle> getObstacles(){
 	return this.obstacles;
+    }
+
+    public int getCenterX(){
+	return getWidth()/2;
+    }
+
+    public int getCenterY(){
+	return getHeight()/2;
     }
 
     public int getColumns() {
@@ -64,6 +72,13 @@ public class World
 
     public int getTileHeight() {
 	return tileHeight;
+    }
+    public int getHeight(){
+	return tileHeight*rows;
+    }
+
+    public int getWidth(){
+	return tileWidth*columns;
     }
 
     /**

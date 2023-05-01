@@ -47,7 +47,7 @@ public abstract class Movable extends Entity
     }
 
     private void setAppropiateDir() {
-	Direction newDirection = DirectionUtil.velocityToDirection(getVelX(), getVelY());
+	Direction newDirection = Direction.velocityToDirection(getVelX(), getVelY());
 	if(newDirection != null){
 	    setDir(newDirection);
 	}

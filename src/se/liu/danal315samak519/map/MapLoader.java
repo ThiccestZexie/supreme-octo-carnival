@@ -81,11 +81,29 @@ public class MapLoader
 	obstacles = new ArrayList<>();
 	for (Element object : objects) {
 	    int id = Integer.parseInt(object.attr("id"));
-	    double x = Double.parseDouble(object.attr("x"));
-	    double y = Double.parseDouble(object.attr("y"));
+	    double startX = Double.parseDouble(object.attr("x"));
+	    double startY = Double.parseDouble(object.attr("y"));
 	    double w = Double.parseDouble(object.attr("width"));
 	    double h = Double.parseDouble(object.attr("height"));
-	    obstacles.add(new Obstacle(id, x, y, w, h));
+	    double endX = getProperty(object, "endX");
+	    double endY = getProperty(object, "endY");
+	    obstacles.add(new Obstacle(startX, startY, w, h, endX, endY));
+	}
+    }
+    private double getProperty(Element object, String propertyName) throws IllegalArgumentException {
+	Element properties = object.selectFirst("properties");
+	if (properties == null) {
+	    throw new IllegalArgumentException("Object is missing properties element");
+	}
+	Element property = properties.selectFirst("property[name=" + propertyName + "]");
+	if (property == null) {
+	    throw new IllegalArgumentException("Missing property: " + propertyName);
+	}
+	String valueStr = property.attr("value");
+	try {
+	    return Double.parseDouble(valueStr);
+	} catch (NumberFormatException e) {
+	    throw new IllegalArgumentException("Invalid value for property " + propertyName + ": " + valueStr);
 	}
     }
 
