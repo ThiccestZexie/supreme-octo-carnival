@@ -41,8 +41,10 @@ public abstract class Character extends Movable
     protected BufferedImage attackFrame;
     private Status status = Status.NORMAL;
     private int ticksCounted;
-    Timer iFramesTimer = new Timer(1000, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
 
+    Timer iFramesTimer = new Timer(100, e ->  {
+	setStatus(Status.NORMAL);
+    }); // Timer for invisableFrames, 1s
     Timer attackSpeedTimer = new Timer(500, e -> setStatus(Status.NORMAL)); // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
 
 
@@ -91,7 +93,7 @@ public abstract class Character extends Movable
 	    if (hp > 1 && this.getStatus() != Status.HIT) {
 		hp--;
 		this.setStatus(Status.HIT);
-		startKnockbackAnimation(-this.getDir().getX(), -this.getDir().getY(), 10.0, 5);
+		this.setVelocity(0,0);
 		iFramesTimer.start();
 	    } else if (this.getStatus() != Status.HIT) {
 		owner.incExp();
@@ -107,39 +109,6 @@ public abstract class Character extends Movable
     public Arrow shootProjectile(){
 	return new Arrow(this.coord, this);
     }
-
-    public void startKnockbackAnimation(double knockbackDirectionX, double knockbackDirectionY, double knockbackDistance, int animationDuration) {
-	double targetX = knockbackX + knockbackDistance * knockbackDirectionX;
-	double targetY = knockbackY + knockbackDistance * knockbackDirectionY;
-
-	int frameRate = 120;
-	knockbackTimer = new Timer(animationDuration / frameRate, new ActionListener() {
-	    private int frameCount = 0;
-
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		frameCount++;
-		velX = 0;
-		velY = 0;
-		if (frameCount > 35) {
-		    knockbackTimer.stop();
-		    return;
-		}
-
-		double t = (double) frameCount / frameRate;
-		double interpolatedX = knockbackX + (targetX - knockbackX) * t;
-		double interpolatedY = knockbackY + (targetY - knockbackY) * t;
-
-		// Update the position of the entity using the interpolated values
-		nudge(interpolatedX,interpolatedY);
-
-		// Repaint the component to reflect the updated position
-	    }
-	});
-
-	knockbackTimer.start();
-    }
-
 
     public Sword getSword() {
 	if (isStatusNormal())
@@ -234,7 +203,5 @@ public abstract class Character extends Movable
     protected void setStatus(final Status status) {
 	this.status = status;
     }
-
-
 
 }
