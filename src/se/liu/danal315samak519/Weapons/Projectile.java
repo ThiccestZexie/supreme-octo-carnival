@@ -1,18 +1,16 @@
 package se.liu.danal315samak519.Weapons;
 
-import se.liu.danal315samak519.Character;
-import se.liu.danal315samak519.Entity;
-import se.liu.danal315samak519.Movable;
-import se.liu.danal315samak519.Weapons.Weapon;
+import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.Movable;
 
 import java.awt.geom.Point2D;
 
-public class Arrow extends Weapon
+public class Projectile extends Weapon
 {
 
-    public Arrow(final Point2D.Double coord, final Character owner) {
+    public Projectile(final Point2D.Double coord, final Character owner) {
 	super(coord, owner);
-	this.setLifeSpan(100);
+	this.setLifeSpan(120);
 	setSize(5,5);
 	switch (owner.getDir()) {
 	    case UP:
@@ -28,12 +26,13 @@ public class Arrow extends Weapon
 		setLocation((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / 2.0)) - (this.getHeight() / 2.0));
 		break;
 	}
+
 	setDir(owner.getDir());
 	switch (this.dir){
-	    case UP -> velY = -2;
-	    case DOWN -> velY = 2;
-	    case LEFT -> velX = -2;
-	    case RIGHT -> velX = 2;
+	    case UP -> setVelY(-3);
+	    case DOWN -> setVelY(3);
+	    case LEFT -> setVelX(-3);
+	    case RIGHT -> setVelX(3);
 	}
 	this.setHitBox();
 

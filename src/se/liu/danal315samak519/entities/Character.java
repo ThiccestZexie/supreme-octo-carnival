@@ -1,12 +1,12 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.entities;
 
-import se.liu.danal315samak519.Weapons.Arrow;
+import se.liu.danal315samak519.Direction;
+import se.liu.danal315samak519.Status;
+import se.liu.danal315samak519.Weapons.Projectile;
 import se.liu.danal315samak519.Weapons.Sword;
 import se.liu.danal315samak519.Weapons.Weapon;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -14,23 +14,14 @@ public abstract class Character extends Movable
 {
     // CONSTANTS FOR CHARACTERS
 
-    private double knockbackX = 0.0;
-    private double knockbackY = 0.0;
-
-    private Timer knockbackTimer; // Declare knockbackTimer as an instance field
-
     protected static final int TICKS_PER_FRAME = 8;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
-
-
-    protected static final int iFrames = 90; //about 1.5 seconds of iFrames
 
     protected int exp = 0;
     protected int currentIFramees = 0;
     protected int level;
-    protected int maxHP = 3;
-    protected int hp = maxHP;
-
+    protected int maxHP;
+    protected int hp;
     protected int currentFrameIndex = 0;
     // Sprite
     protected BufferedImage[] currentFrames;
@@ -41,10 +32,8 @@ public abstract class Character extends Movable
     protected BufferedImage attackFrame;
     private Status status = Status.NORMAL;
     private int ticksCounted;
+    Timer iFramesTimer = new Timer(1000, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
 
-    Timer iFramesTimer = new Timer(100, e ->  {
-	setStatus(Status.NORMAL);
-    }); // Timer for invisableFrames, 1s
     Timer attackSpeedTimer = new Timer(500, e -> setStatus(Status.NORMAL)); // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
 
 
@@ -57,12 +46,17 @@ public abstract class Character extends Movable
 
     @Override public void setDir(final Direction dir) {
 	super.setDir(dir);
-	this.currentFrames = switch (dir) {
+	setFramesBasedOnDirection();
+    }
+
+    public void setFramesBasedOnDirection(){
+	this.currentFrames = switch (this.getDir()) {
 	    case UP -> upFrames;
 	    case DOWN -> downFrames;
 	    case LEFT -> leftFrames;
 	    case RIGHT -> rightFrames;
 	};
+
     }
 
     public int getHp() {
@@ -93,7 +87,6 @@ public abstract class Character extends Movable
 	    if (hp > 1 && this.getStatus() != Status.HIT) {
 		hp--;
 		this.setStatus(Status.HIT);
-		this.setVelocity(0,0);
 		iFramesTimer.start();
 	    } else if (this.getStatus() != Status.HIT) {
 		owner.incExp();
@@ -106,9 +99,12 @@ public abstract class Character extends Movable
 	return false;
     }
 
-    public Arrow shootProjectile(){
-	return new Arrow(this.coord, this);
+    public Projectile getProjectile(){
+	return new Projectile(this.coord, this);
     }
+
+
+
 
     public Sword getSword() {
 	if (isStatusNormal())
@@ -183,7 +179,7 @@ public abstract class Character extends Movable
 	this.currentFrames = frames;
     }
 
-    public boolean becomeAttacking() {
+    public boolean tryToAttack() {
 	{
 	    if(isStatusNormal()){
 		this.currentFrameIndex = 2;
@@ -203,5 +199,7 @@ public abstract class Character extends Movable
     protected void setStatus(final Status status) {
 	this.status = status;
     }
+
+
 
 }

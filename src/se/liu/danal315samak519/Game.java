@@ -1,65 +1,72 @@
 package se.liu.danal315samak519;
 
-import se.liu.danal315samak519.Weapons.Sword;
+import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.enemies.Blue;
+import se.liu.danal315samak519.entities.enemies.Enemy;
+import se.liu.danal315samak519.entities.Movable;
+import se.liu.danal315samak519.entities.Player;
+import se.liu.danal315samak519.Weapons.Projectile;
 import se.liu.danal315samak519.Weapons.Weapon;
+import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.map.Obstacle;
 import se.liu.danal315samak519.map.Tile;
 import se.liu.danal315samak519.map.World;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
 public class Game
 {
-    public List<Movable> movables = new ArrayList<>();
+    public List<Movable> entities = new ArrayList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
-    private Player player;
-    private World world;
+    private Player player = null;
+    private World world = null;
     private int currentWorldID = 0;
+    LinkedList<Movable> wantsToBeBorn = new LinkedList<>();
 
     public void tick()
     {
 	removeGarbage();
+	birtherOfAllThings();
 	player.tick();
 	handleWallCollisions();
-	handleObstacleCollisions();
-	if (playerIsOutOfBounds()) {
-	    changeToNextWorld();
-	}
+//	checkIfPlayerTouchesZone();
 	checkForCollisionHits();
-	for (Movable movable : movables) {
-	    movable.tick();
+	for (Movable e : getEntities()) {
+	    if (e instanceof Enemy) {
+		Enemy enemy = (Enemy) e;
+		aiDecide(enemy);
+	    }
+	    e.tick();
 	}
     }
 
-    private void centerPlayerLocation() {
-	player.setLocation(getWorld().getCenterX() - player.getWidth() / 2, getWorld().getCenterY() - player.getHeight() / 2);
-    }
-
-    private void changeToNextWorld() {
+    private void changeWorld() {
 	currentWorldID++;
 	setWorld(new World("map" + currentWorldID + ".tmx"));
-	centerPlayerLocation();
+	double centerX = world.getColumns() * world.getTileWidth() / 2.0;
+	double centerY = world.getRows() * world.getTileHeight() / 2.0;
+	player.setLocation(centerX, centerY);
     }
 
-    private boolean playerIsOutOfBounds() {
-	boolean above = player.getY() < 0;
-	boolean below = player.getY() > world.getHeight();
-	boolean left = player.getX() < 0;
-	boolean right = player.getX() > world.getWidth();
-	return above || below || left || right;
-    }
+   // private void checkIfPlayerTouchesZone() {
+//	for (Obstacle obstacle : getWorld().getZones()) {
+//	    if (obstacle.getHitBox().intersects(player.getHitBox())) {
+//		changeWorld();
+//	    }
+//	}
+ //   }
 
     /**
      * Makes sure no movableEntities pass through foreground tiles
      */
     private void handleWallCollisions() {
 	if (getWorld().getLayers() < 2) {
-	    return; // No wall collision to handle, there are only background layers!
+	    return; // Only background layers!
 	}
 
 	for (Tile tile : world.getForegroundTileList()) {
@@ -74,8 +81,8 @@ public class Game
 		player.setVelocity(0, 0);
 	    }
 
-	    // Handle movable-wall collision
-	    for (Movable movable : movables) {
+	    // Handle movableEntity-wall collision
+	    for (Movable movable : entities) {
 		if (movable.getHitBox().intersects(tileHitBox)) {
 		    Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
 		    Point2D to = new Point2D.Double(movable.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
@@ -87,134 +94,143 @@ public class Game
 	    }
 	}
     }
-
-    private void handleObstacleCollisions() {
-	for (Movable movable : movables) {
-	    if (movable instanceof Obstacle && movable.getHitBox().intersects(player.getHitBox())) {
-		Obstacle obstacle = (Obstacle) movable;
-		Rectangle2D obstacleHitBox = obstacle.getHitBox();
-		Point2D from = new Point2D.Double(obstacleHitBox.getCenterX(), obstacleHitBox.getCenterY());
-		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
-		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
-		int pushBackAmount = 2;
-		player.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
-		player.setVelocity(0, 0);
-	    }
+    public void aiDecide(Enemy enemy){
+	if (!(enemy instanceof Blue)){
+	    return;
+	}
+	    if (enemy.checkIfPlayerIsInFront(500,100)){
+		if (enemy.tryToAttack())
+		{
+			wantsToBeBorn.push(enemy.getProjectile());
+		}
 	}
     }
-
+    private void birtherOfAllThings(){
+	while(!wantsToBeBorn.isEmpty()){
+	    addEntity(wantsToBeBorn.pop());
+	}
+    }
     public void checkForHits(Character e)
     {
-	for (Movable movable : movables) {
-	    if (movable instanceof Weapon) {
+	for (Movable movable : entities)
+	{
+	    if (movable instanceof Weapon)
+	    {
 		Weapon theMurderWeapon = (Weapon) movable;
-		e.isHit((Sword) theMurderWeapon);
+		e.isHit(theMurderWeapon);
 	    }
-
 	}
     }
 
-    /**
-     * Check if anything damages the player.
-     */
-    public void checkForCollisionHits() {
-	for (Movable movable : movables) {
-	    if (movable instanceof Enemy) {
-		if (((Enemy) movable).playerCollision(player)) {
-		    player.takeDamage();
+	    /**
+	     * Check if anything damages the player.
+	     */
+	    public void checkForCollisionHits () {
+		for (Movable movable : entities) {
+		    if (movable instanceof Enemy) {
+			if (((Enemy) movable).playerCollision(player)) {
+			    player.takeDamage();
+			}
+		    }
+		    if (movable instanceof Projectile) {
+			arrowHit((Projectile) movable);
+		    }
+
+		}
+
+	    }
+
+	    private void arrowHit (Projectile arrow){
+		for (Movable target : entities) {
+		    if (target instanceof Character && !target.equals(arrow))
+			if (arrow.hitEntity(target)) {
+			    ((Character) target).isHit(arrow);
+			}
+
 		}
 	    }
-	}
 
-    }
+	    private void removeGarbage () {
+		entities.removeIf(Movable::getIsGarbage);
+	    }
 
-    private void removeGarbage() {
-	movables.removeIf(Movable::getIsGarbage);
-    }
+	    public void setPlayer ( final Player player){
+		this.player = player;
+	    }
 
-    public Player getPlayer() {
-	return this.player;
-    }
+	    public Player getPlayer () {
+		return this.player;
+	    }
 
-    public void setPlayer(final Player player) {
-	this.player = player;
-    }
+	    public void addFrameListener (FrameListener fl)
+	    {
+		frameListeners.add(fl);
+	    }
 
-    public void addFrameListener(FrameListener fl)
-    {
-	frameListeners.add(fl);
-    }
+	    public void notifyListeners () {
+		for (FrameListener frameListener : frameListeners) {
+		    frameListener.frameChanged();
+		}
+	    }
 
-    public void notifyListeners() {
-	for (FrameListener frameListener : frameListeners) {
-	    frameListener.frameChanged();
-	}
-    }
+	    public void nudgePlayer ( final int dx, final int dy){
+		player.nudge(dx, dy);
+		notifyListeners();
+	    }
 
-    public void nudgePlayer(final int dx, final int dy) {
-	player.nudge(dx, dy);
-	notifyListeners();
-    }
+	    public void addBlue(Point2D.Double coord)
+	    {
+		addEntity(new Blue(coord, player));
+	    }
+	    public void addRed(Point2D.Double coord)
+	    {
+		addEntity(new Red(coord, player));
+	    }
 
-    public void addEnemy(Point2D.Double coord)
-    {
-	addEntity(new Enemy(coord, player));
-    }
+	    public void playerAttack () {
+		if (player.tryToAttack()) {
+		    addEntity(player.getSword());
+		    checkIfAnyEntityHit();
+		}
 
-    public void addEnemySword(Enemy enemy) {
-	if (enemy.wantToAttack()) {
-	    addEntity(getPlayer().getSword());
-	}
-    }
+	    }
 
-    public void playerAttack() {
-	player.becomeAttacking();
-	addEntity(player.getSword());
-	checkIfAnyEntityHit();
-    }
+	    public void playerShootArrow () {
+		if (player.tryToAttack()) {
+		    addEntity(player.getProjectile());
+		}
+	    }
 
-    public void playerShootArrow() {
-	player.becomeAttacking();
-	addEntity(player.shootProjectile());
-    }
+	    public List<Movable> getEntities () {
+		return entities;
+	    }
 
-    public List<Movable> getMovables() {
-	return movables;
-    }
+	    public void checkIfAnyEntityHit () {
+		for (Movable movable : entities) {
+		    if (movable instanceof Character) {
+			checkForHits((Character) movable);
+		    }
 
-    public void checkIfAnyEntityHit() {
-	for (Movable movable : movables) {
-	    if (movable instanceof Character) {
-		checkForHits((Character) movable);
+		}
+	    }
+
+
+	    public World getWorld () {
+		return world;
+	    }
+
+	    public void setWorld ( final World world){
+		this.world = world;
+	    }
+
+	    public void addBlue(final double x, final double y){
+		addBlue(new Point2D.Double(x, y));
+	    }
+
+	    private void addEntity ( final Movable movable){
+		entities.add(movable);
 	    }
 
 	}
-    }
 
 
-    public World getWorld() {
-	return world;
-    }
-
-    public void setWorld(final World world) {
-	// Remove old obstacles
-//	for (Obstacle obstacle : world.getObstacles()) {
-//	    obstacle.isGarbage = true;
-//	}
-	// Actually change world
-	this.world = world;
-	// Add new obstacles
-	for (Obstacle obstacle : world.getObstacles()) {
-	    addEntity(obstacle);
-	}
-    }
-
-    public void addEnemy(final double x, final double y) {
-	addEnemy(new Point2D.Double(x, y));
-    }
-
-    private void addEntity(final Movable movable) {
-	movables.add(movable);
-    }
-
-}
