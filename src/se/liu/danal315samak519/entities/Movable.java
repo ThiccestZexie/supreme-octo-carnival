@@ -1,4 +1,6 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.entities;
+
+import se.liu.danal315samak519.Direction;
 
 /**
  *

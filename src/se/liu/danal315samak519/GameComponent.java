@@ -1,5 +1,9 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.enemies.Enemy;
+import se.liu.danal315samak519.entities.Movable;
+import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.map.Tile;
 import se.liu.danal315samak519.map.World;
 
@@ -40,10 +44,11 @@ public class GameComponent extends JComponent implements FrameListener
 	paintLevelUpAnimation(g);
 	// PAINT SPRITE
 	g.drawImage(player.getCurrentSprite(), player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight(), null);
+
     }
 
     private void paintEntities(final Graphics g) {
-	for (Movable movable : game.getMovables()) {
+	for (Movable movable : game.getEntities()) {
 	    if (debug) {
 		// PAINT HITBOX
 		g.setColor(movable.getColor());
@@ -52,15 +57,14 @@ public class GameComponent extends JComponent implements FrameListener
 	    if (movable instanceof Character) {
 		Character character = (Character) movable;
 		// PAINT SPRITE
-		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(),
-			    character.getIntHeight(), null);
+		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(), character.getIntHeight(), null);
 	    }
 	}
     }
 
     private void paintGUI(final Graphics g) {
 
-	for (Movable movable : game.getMovables()) {
+	for (Movable movable : game.getEntities()) {
 	    if (movable instanceof Enemy) {
 		Enemy enemy = (Enemy) movable;
 		// Maxhealth (BLACK)
@@ -81,21 +85,45 @@ public class GameComponent extends JComponent implements FrameListener
 			   redWidth, redHeight);
 	    }
 	}
-	int expBarLength = 100;
+	int expBarLength = 165;
 
 	// Paint EXP bar
 	g.setColor(Color.BLACK);
-	g.fillRect(20, 20, expBarLength, 30);
+	g.fillRect(5, 60, expBarLength, 30);
 	g.setColor(Color.GREEN);
-	g.fillRect(20, 20, game.getPlayer().exp * expBarLength / game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1],
+	g.fillRect(5, 60, game.getPlayer().getExp() * expBarLength / game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1],
 		   30);
 	// Player hp bar
-	int healthBarLength = 100;
-	g.setColor(Color.BLACK);
-	g.fillRect(20, 60, healthBarLength, 30);
-	g.setColor(Color.RED);
-	g.fillRect(20,60, game.getPlayer().getHp() * (healthBarLength/game.getPlayer().getMaxHp()), 30);
+	drawPlayerLife(g);
     }
+
+    public void drawPlayerLife(Graphics g){
+	int fullHearts = game.getPlayer().getHp() / 2;
+	int halfHearts = game.getPlayer().getHp() % 2;
+	int xCoord = 0;
+	int yCoord = 0;
+	int heartPos = 0;
+	int spaceBetweenHearts = 60;
+	while (heartPos < game.getPlayer().getMaxHp()/2){
+
+	    g.drawImage(game.getPlayer().emptyHeart, xCoord ,yCoord, null);
+	    heartPos++;
+	    xCoord += spaceBetweenHearts;
+	}
+	xCoord = 0;
+	heartPos = 0;
+	while(heartPos < game.getPlayer().getHp()){
+	    g.drawImage(game.getPlayer().halfHeart,xCoord,yCoord,null);
+	    heartPos++;
+	    if (heartPos < game.getPlayer().getHp()){
+		g.drawImage(game.getPlayer().fullHeart, xCoord,yCoord,null);
+	    }
+	    heartPos++;
+	    xCoord+=spaceBetweenHearts;
+
+	}
+    }
+
 
     private void paintLevelUpAnimation(final Graphics g) {
 	if (oldPlayerLevel < game.getPlayer().getLevel()) {
@@ -111,6 +139,8 @@ public class GameComponent extends JComponent implements FrameListener
 	    this.i++;
 	}
     }
+
+
 
     @Override protected void paintComponent(final Graphics g) {
 	super.paintComponent(g);
@@ -268,4 +298,5 @@ public class GameComponent extends JComponent implements FrameListener
 	    }
 	}
     }
+
 }

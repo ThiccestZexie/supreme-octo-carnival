@@ -1,4 +1,7 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.Weapons;
+
+import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.Movable;
 
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -17,6 +20,7 @@ public abstract class Weapon extends Movable
 	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
 	this.owner = owner;
 	this.lifeSpan = 5;
+
     }
 
     public Character getOwner() {

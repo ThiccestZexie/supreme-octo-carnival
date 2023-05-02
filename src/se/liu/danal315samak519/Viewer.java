@@ -1,5 +1,6 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.map.World;
 
 import javax.swing.*;
@@ -33,13 +34,20 @@ public class Viewer
 	// World
 	game.setWorld(new World("map0.tmx"));
 	Random random = new Random();
-	// Enemies
-//	for (int i = 0; i < 7; i++) {
-//	    int randomX = 200 + random.nextInt(400);
-//	    int randomY = 200 + random.nextInt(400);
-//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-//	    game.addEnemy(randomCoord);
-//	}
+	// Spawn a bunch of blues
+	for (int i = 0; i < 1; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+	    game.addBlue(randomCoord);
+	}
+	// spawn a redss
+	for (int i = 0; i < 1; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+	    game.addRed(randomCoord);
+	}
 
 	// Put game in gameComponent
 	gameComponent = new GameComponent(game);
@@ -59,4 +67,6 @@ public class Viewer
 	clockTimer.setCoalesce(true);
 	clockTimer.start();
     }
+
+
 }

@@ -1,4 +1,6 @@
-package se.liu.danal315samak519;
+package se.liu.danal315samak519.Weapons;
+
+import se.liu.danal315samak519.entities.Character;
 
 import java.awt.geom.Point2D;
 
@@ -6,7 +8,6 @@ public class Sword extends Weapon
 {
     public Sword(final Point2D.Double coord, final Character owner) {
 	super(coord, owner);
-
 	switch (owner.getDir()) {
 	    case UP:
 		setSize(10, 60);
@@ -25,6 +26,7 @@ public class Sword extends Weapon
 		setLocation((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / 2.0)) - (this.getHeight() / 2.0));
 		break;
 	}
+
 	this.setLifeSpan(5);
 	setHitBox();
 
