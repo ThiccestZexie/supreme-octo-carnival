@@ -34,7 +34,7 @@ public abstract class Character extends Movable
     private int ticksCounted;
     Timer iFramesTimer = new Timer(1000, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
 
-    Timer attackSpeedTimer = new Timer(500, e -> setStatus(Status.NORMAL)); // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
+    Timer attackSpeedTimer = new Timer(750, e -> setStatus(Status.NORMAL)); // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
 
 
     protected Character(final Point2D.Double coord) {
@@ -84,7 +84,7 @@ public abstract class Character extends Movable
     {
 	Character owner = e.getOwner();
 	if (this.hitBox.getBounds().intersects(e.getHitBox())) {
-	    if (hp > 1 && this.getStatus() != Status.HIT) {
+	    if (hp > 1 && this.getStatus() != Status.HIT && !this.equals(owner)) {
 		hp--;
 		this.setStatus(Status.HIT);
 		iFramesTimer.start();

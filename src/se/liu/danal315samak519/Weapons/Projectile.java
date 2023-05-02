@@ -43,11 +43,13 @@ public class Projectile extends Weapon
     }
     public boolean hitEntity(Movable target){
 
-
 	if(this.hitBox.getBounds().intersects(target.getHitBox().getBounds())){
 		this.isGarbage = true;
 		return true;
 	}
 	return false;
+    }
+    public void setGarbage(boolean b){
+	this.isGarbage = b;
     }
 }

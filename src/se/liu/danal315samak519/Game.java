@@ -1,6 +1,7 @@
 package se.liu.danal315samak519;
 
 import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.Entity;
 import se.liu.danal315samak519.entities.enemies.Blue;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.Movable;
@@ -41,6 +42,9 @@ public class Game
 		Enemy enemy = (Enemy) e;
 		aiDecide(enemy);
 	    }
+	    if(e instanceof Projectile){
+		checkForPlayerHits(e);
+	    }
 	    e.tick();
 	}
     }
@@ -52,7 +56,7 @@ public class Game
 	double centerY = world.getRows() * world.getTileHeight() / 2.0;
 	player.setLocation(centerX, centerY);
     }
-
+//TODO idunno
    // private void checkIfPlayerTouchesZone() {
 //	for (Obstacle obstacle : getWorld().getZones()) {
 //	    if (obstacle.getHitBox().intersects(player.getHitBox())) {
@@ -90,6 +94,9 @@ public class Game
 		    int pushBackAmount = 1;
 		    movable.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
 		    movable.setVelocity(0, 0);
+		    if (movable instanceof Projectile){
+			((Projectile) movable).setGarbage(true);
+		    }
 		}
 	    }
 	}
@@ -146,10 +153,13 @@ public class Game
 			if (arrow.hitEntity(target)) {
 			    ((Character) target).isHit(arrow);
 			}
-
 		}
 	    }
-
+	    private void checkForPlayerHits(Entity e){
+		if(player.getHitBox().intersects(e.getHitBox())){
+		    player.isHit((Weapon) e);
+		}
+	    }
 	    private void removeGarbage () {
 		entities.removeIf(Movable::getIsGarbage);
 	    }

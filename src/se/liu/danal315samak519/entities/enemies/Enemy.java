@@ -2,6 +2,7 @@ package se.liu.danal315samak519.entities.enemies;
 
 import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.ImageLoader;
+import se.liu.danal315samak519.Status;
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Player;
 
@@ -87,32 +88,34 @@ public abstract class Enemy extends Character
     }
 
     public boolean checkIfPlayerIsInFront(int length, int width){
-	Rectangle arrowLength = new Rectangle();
-	switch (getDir()) {
-	    case UP:
-		arrowLength.setSize(width, length);
-		arrowLength.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - arrowLength.getWidth() / 2.0),
-					(int) (this.getY() - arrowLength.getHeight()));
-		break;
-	    case DOWN:
-		arrowLength.setSize(width, length);
-		arrowLength.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - arrowLength.getWidth() / 2.0),
-					(int) (this.getY() + (this.getHeight())));
-		break;
-	    case LEFT:
-		arrowLength.setSize(length, width);
-		arrowLength.setLocation((int) (this.getX() - arrowLength.getWidth()),
-					(int) ((this.getY() + (this.getHeight() / 2.0)) - (arrowLength.getHeight() / 2.0)));
-		break;
-	    case RIGHT:
-		arrowLength.setSize(length, width);
-		arrowLength.setLocation((int) (this.getX() + this.getWidth()),
-					(int) ((this.getY() + (this.getHeight() / 2.0)) - (arrowLength.getHeight() / 2.0)));
-		break;
-	}
+	if (this.getStatus() != Status.ATTACKING){
+	    Rectangle arrowLength = new Rectangle();
+	    switch (getDir()) {
+		case UP:
+		    arrowLength.setSize(width, length);
+		    arrowLength.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - arrowLength.getWidth() / 2.0),
+					    (int) (this.getY() - arrowLength.getHeight()));
+		    break;
+		case DOWN:
+		    arrowLength.setSize(width, length);
+		    arrowLength.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - arrowLength.getWidth() / 2.0),
+					    (int) (this.getY() + (this.getHeight())));
+		    break;
+		case LEFT:
+		    arrowLength.setSize(length, width);
+		    arrowLength.setLocation((int) (this.getX() - arrowLength.getWidth()),
+					    (int) ((this.getY() + (this.getHeight() / 2.0)) - (arrowLength.getHeight() / 2.0)));
+		    break;
+		case RIGHT:
+		    arrowLength.setSize(length, width);
+		    arrowLength.setLocation((int) (this.getX() + this.getWidth()),
+					    (int) ((this.getY() + (this.getHeight() / 2.0)) - (arrowLength.getHeight() / 2.0)));
+		    break;
+	    }
 
-	if(arrowLength.intersects(player.getHitBox())){
-	    return true;
+	    if(arrowLength.intersects(player.getHitBox())){
+		return true;
+	    }
 	}
 	return false;
     }
