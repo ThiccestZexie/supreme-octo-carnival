@@ -1,10 +1,8 @@
 package se.liu.danal315samak519.entities.enemies;
 
 import se.liu.danal315samak519.Direction;
-import se.liu.danal315samak519.Weapons.Sword;
 import se.liu.danal315samak519.entities.Player;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class Blue extends Enemy

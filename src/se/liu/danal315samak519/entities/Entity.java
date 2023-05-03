@@ -97,4 +97,8 @@ public abstract class Entity
 	}
 	setHitBox();
     }
+
+    public void markGarbage(){
+	this.isGarbage = true;
+    }
 }

@@ -1,4 +1,4 @@
-package se.liu.danal315samak519.Weapons;
+package se.liu.danal315samak519.weapons;
 
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;

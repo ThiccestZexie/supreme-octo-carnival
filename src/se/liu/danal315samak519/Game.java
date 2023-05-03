@@ -1,15 +1,13 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.weapons.Projectile;
+import se.liu.danal315samak519.weapons.Weapon;
 import se.liu.danal315samak519.entities.Character;
-import se.liu.danal315samak519.entities.Entity;
-import se.liu.danal315samak519.entities.enemies.Blue;
-import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
-import se.liu.danal315samak519.Weapons.Projectile;
-import se.liu.danal315samak519.Weapons.Weapon;
+import se.liu.danal315samak519.entities.enemies.Blue;
+import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Red;
-import se.liu.danal315samak519.map.Obstacle;
 import se.liu.danal315samak519.map.Tile;
 import se.liu.danal315samak519.map.World;
 
@@ -22,44 +20,45 @@ import java.util.List;
 
 public class Game
 {
-    public List<Movable> entities = new ArrayList<>();
+    public List<Movable> movables = new ArrayList<>();
+    private LinkedList<Movable> pendingMovables = new LinkedList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
     private World world = null;
     private int currentWorldID = 0;
-    LinkedList<Movable> wantsToBeBorn = new LinkedList<>();
 
     /**
-     * Make the entire game state update!
-     * - Remove and add new movables to movableList
-     * - Tick every movable
-     * - Handle all collisions
+     * Make the entire game state update! 1. Remove and add new movables to movableList 2. Tick every movable 3. Handle all collisions
      */
     public void tick()
     {
 	removeGarbage();
 	birthNewEntites();
-	checkForCollisionHits();
-	// Iterate through ALL movables (including player)
-	for (Movable movable : getMovableInclPlayer()) {
-	    handleWallCollision(movable);
-	    if (movable instanceof Enemy) {
-		Enemy enemy = (Enemy) movable;
-		aiDecide(enemy);
+
+	// Iterate through all movables (incl. player) and do appropiate actions
+	List<Movable> allMovables = getMovablesInclPlayer();
+	for (int i = 0; i < allMovables.size(); i++) {
+	    Movable movable0 = allMovables.get(i);
+	    movable0.tick();
+	    handleWallCollision(movable0);
+
+	    if (movable0 instanceof Enemy) {
+		aiDecide((Enemy) movable0);
 	    }
-	    else if (movable instanceof Projectile) {
-		checkForPlayerHits(movable);
+
+	    // Second iteration of all movables, for handling
+	    // combinations of movables (e.g. colliding with eachother)
+	    for (int j = 0; j < allMovables.size(); j++) {
+		Movable movable1 = allMovables.get(j);
+		handleMovableCollision(movable0, movable1);
 	    }
-	    movable.tick();
 	}
     }
 
     /**
-     *
-     * @return a list of "all" movables, which includes the player.
-     * Makes iterating easier.
+     * @return a list of "all" movables, which includes the player. Makes iterating easier.
      */
-    private List<Movable> getMovableInclPlayer(){
+    private List<Movable> getMovablesInclPlayer() {
 	List<Movable> list = new ArrayList<>(getMovables());
 	list.add(getPlayer());
 	return list;
@@ -75,11 +74,12 @@ public class Game
 
     /**
      * Makes sure the input movable can't pass through walls.
+     *
      * @param movable
      */
     private void handleWallCollision(final Movable movable) {
 	if (getWorld().getLayers() < 2) {
-	    return; // Only background layers!
+	    throw new RuntimeException("There is no foreground layer in loaded world! Can't check wall collisions.");
 	}
 
 	for (Tile tile : world.getForegroundTileList()) {
@@ -103,7 +103,7 @@ public class Game
 		movable.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
 		movable.setVelocity(0, 0);
 		if (movable instanceof Projectile) {
-		    ((Projectile) movable).setGarbage(true);
+		    movable.markGarbage();
 		}
 	    }
 	}
@@ -115,71 +115,62 @@ public class Game
 	}
 	if (enemy.checkIfPlayerIsInFront(500, 100)) {
 	    if (enemy.tryToAttack()) {
-		wantsToBeBorn.push(enemy.getProjectile());
+		pendingMovables.push(enemy.getProjectile());
 	    }
 	}
     }
 
     private void birthNewEntites() {
-	while (!wantsToBeBorn.isEmpty()) {
-	    addEntity(wantsToBeBorn.pop());
+	while (!pendingMovables.isEmpty()) {
+	    addEntity(pendingMovables.pop());
 	}
     }
 
     public void checkForHits(Character e)
     {
-	for (Movable movable : entities) {
+	for (Movable movable : movables) {
 	    if (movable instanceof Weapon) {
 		Weapon theMurderWeapon = (Weapon) movable;
-		e.isHit(theMurderWeapon);
+		e.getHitByWeapon(theMurderWeapon);
 	    }
 	}
     }
 
     /**
-     * Check if anything damages the player.
+     * 1. if the movable is Enemy, and intersecting with player -> player.takeDamage() 2. if the movable is Projectile, cast to projectile
+     * and call arrowHit with self.
      */
-    public void checkForCollisionHits() {
-	for (Movable movable : entities) {
-	    if (movable instanceof Enemy) {
-		if (((Enemy) movable).playerCollision(player)) {
-		    player.takeDamage();
-		}
-	    }
-	    if (movable instanceof Projectile) {
-		arrowHit((Projectile) movable);
-	    }
-
+    public void handleMovableCollision(final Movable movable0, final Movable movable1) {
+	if (!movable0.getHitBox().intersects(movable1.getHitBox())) {
+	    return; // No need to continue if no collision between movable0 and movable1
 	}
 
-    }
+	// Enemy-Player
+	if (movable0 instanceof Enemy && movable1 instanceof Player) {
+	    ((Player) movable1).takeDamage();
 
-    private void arrowHit(Projectile arrow) {
-	for (Movable target : entities) {
-	    if (target instanceof Character && !target.equals(arrow)) {
-		if (arrow.hitEntity(target)) {
-		    ((Character) target).isHit(arrow);
-		}
-	    }
 	}
-    }
-
-    private void checkForPlayerHits(Entity e) {
-	if (player.getHitBox().intersects(e.getHitBox())) {
-	    player.isHit((Weapon) e);
+	// Projectile-Character
+	else if (movable0 instanceof Weapon && movable1 instanceof Character) {
+	    Weapon weapon = (Weapon) movable0;
+	    Character character = (Character) movable1;
+	    if (!character.equals(weapon.getOwner())) {
+		character.takeDamage();
+		weapon.markGarbage();
+	    }
 	}
     }
 
     private void removeGarbage() {
-	entities.removeIf(Movable::getIsGarbage);
-    }
-
-    public void setPlayer(final Player player) {
-	this.player = player;
+	movables.removeIf(Movable::getIsGarbage);
     }
 
     public Player getPlayer() {
 	return this.player;
+    }
+
+    public void setPlayer(final Player player) {
+	this.player = player;
     }
 
     public void addFrameListener(FrameListener fl)
@@ -211,7 +202,6 @@ public class Game
     public void playerAttack() {
 	if (player.tryToAttack()) {
 	    addEntity(player.getSword());
-	    checkIfAnyEntityHit();
 	}
 
     }
@@ -223,11 +213,11 @@ public class Game
     }
 
     public List<Movable> getMovables() {
-	return entities;
+	return movables;
     }
 
     public void checkIfAnyEntityHit() {
-	for (Movable movable : entities) {
+	for (Movable movable : movables) {
 	    if (movable instanceof Character) {
 		checkForHits((Character) movable);
 	    }
@@ -249,7 +239,7 @@ public class Game
     }
 
     private void addEntity(final Movable movable) {
-	entities.add(movable);
+	movables.add(movable);
     }
 
 }

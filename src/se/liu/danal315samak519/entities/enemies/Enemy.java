@@ -1,6 +1,5 @@
 package se.liu.danal315samak519.entities.enemies;
 
-import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.ImageLoader;
 import se.liu.danal315samak519.Status;
 import se.liu.danal315samak519.entities.Character;
@@ -80,15 +79,9 @@ public abstract class Enemy extends Character
 	}
 	return false;
     }
-    public boolean playerCollision(Player player){
-	if(this.hitBox.getBounds().intersects(player.getHitBox().getBounds())){
-	    return true;
-	}
-	return false;
-    }
 
-    public boolean checkIfPlayerIsInFront(int length, int width){
-	if (this.getStatus() != Status.ATTACKING){
+    public boolean checkIfPlayerIsInFront(int length, int width) {
+	if (this.getStatus() != Status.ATTACKING) {
 	    Rectangle arrowLength = new Rectangle();
 	    switch (getDir()) {
 		case UP:
@@ -113,22 +106,10 @@ public abstract class Enemy extends Character
 		    break;
 	    }
 
-	    if(arrowLength.intersects(player.getHitBox())){
+	    if (arrowLength.intersects(player.getHitBox())) {
 		return true;
 	    }
 	}
 	return false;
-    }
-
-    /**
-     * Must be overridden by subclass enemies.
-     * Is used to make enemies move.
-     */
-    protected void decide(){
-    }
-
-    @Override public void tick() {
-	super.tick();
-	this.decide();
     }
 }

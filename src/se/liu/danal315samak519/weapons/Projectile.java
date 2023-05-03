@@ -1,4 +1,4 @@
-package se.liu.danal315samak519.Weapons;
+package se.liu.danal315samak519.weapons;
 
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
@@ -11,7 +11,7 @@ public class Projectile extends Weapon
     public Projectile(final Point2D.Double coord, final Character owner) {
 	super(coord, owner);
 	this.setLifeSpan(120);
-	setSize(5,5);
+	setSize(5, 5);
 	switch (owner.getDir()) {
 	    case UP:
 		setLocation((owner.getX() + (owner.getWidth() / 2.0) - this.getWidth() / 2.0), (owner.getY() - this.getHeight()));
@@ -28,7 +28,7 @@ public class Projectile extends Weapon
 	}
 
 	setDir(owner.getDir());
-	switch (this.dir){
+	switch (this.dir) {
 	    case UP -> setVelY(-3);
 	    case DOWN -> setVelY(3);
 	    case LEFT -> setVelX(-3);
@@ -41,15 +41,13 @@ public class Projectile extends Weapon
     @Override public void tick() {
 	super.tick();
     }
-    public boolean hitEntity(Movable target){
 
-	if(this.hitBox.getBounds().intersects(target.getHitBox().getBounds())){
-		this.isGarbage = true;
-		return true;
+    public boolean hitEntity(Movable target) {
+
+	if (this.hitBox.intersects(target.getHitBox())) {
+	    this.isGarbage = true;
+	    return true;
 	}
 	return false;
-    }
-    public void setGarbage(boolean b){
-	this.isGarbage = b;
     }
 }

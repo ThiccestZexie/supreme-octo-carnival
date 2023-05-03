@@ -2,9 +2,9 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.Status;
-import se.liu.danal315samak519.Weapons.Projectile;
-import se.liu.danal315samak519.Weapons.Sword;
-import se.liu.danal315samak519.Weapons.Weapon;
+import se.liu.danal315samak519.weapons.Projectile;
+import se.liu.danal315samak519.weapons.Sword;
+import se.liu.danal315samak519.weapons.Weapon;
 
 import javax.swing.*;
 import java.awt.geom.Point2D;
@@ -31,10 +31,10 @@ public abstract class Character extends Movable
     protected BufferedImage[] rightFrames;
     protected BufferedImage attackFrame;
     private Status status = Status.NORMAL;
-    private int ticksCounted;
     Timer iFramesTimer = new Timer(1000, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
-
-    Timer attackSpeedTimer = new Timer(750, e -> setStatus(Status.NORMAL)); // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
+    Timer attackSpeedTimer = new Timer(750, e -> setStatus(Status.NORMAL));
+    private int ticksCounted;
+    // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
 
 
     protected Character(final Point2D.Double coord) {
@@ -49,7 +49,7 @@ public abstract class Character extends Movable
 	setFramesBasedOnDirection();
     }
 
-    public void setFramesBasedOnDirection(){
+    public void setFramesBasedOnDirection() {
 	this.currentFrames = switch (this.getDir()) {
 	    case UP -> upFrames;
 	    case DOWN -> downFrames;
@@ -63,12 +63,15 @@ public abstract class Character extends Movable
 	return hp;
     }
 
+    private void setHp(int hp) {
+	this.hp = hp;
+    }
+
     public int getMaxHp() {
 	return maxHP;
     }
 
-    public int[] getExpRequirements(){
-
+    public int[] getExpRequirements() {
 	return EXP_REQUIREMENTS;
     }
 
@@ -80,10 +83,11 @@ public abstract class Character extends Movable
 	return exp;
     }
 
-    public boolean isHit(Weapon e)
+    public boolean getHitByWeapon(Weapon weapon)
     {
-	Character owner = e.getOwner();
-	if (this.hitBox.getBounds().intersects(e.getHitBox())) {
+	Character owner = weapon.getOwner();
+
+	if (this.hitBox.intersects(weapon.getHitBox())) {
 	    if (hp > 1 && this.getStatus() != Status.HIT && !this.equals(owner)) {
 		hp--;
 		this.setStatus(Status.HIT);
@@ -99,26 +103,17 @@ public abstract class Character extends Movable
 	return false;
     }
 
-    public Projectile getProjectile(){
+    public Projectile getProjectile() {
 	return new Projectile(this.coord, this);
     }
 
-
-
-
     public Sword getSword() {
-	if (isStatusNormal())
-	{
+	if (this.status == Status.NORMAL) {
 	    return new Sword(this.coord, this);
 	}
-	return new Sword(new Point2D.Double(0,0), this);
+	return new Sword(new Point2D.Double(0, 0), this);
     }
-    public boolean isStatusNormal(){
-	if (status == Status.NORMAL){
-	    return true;
-	}
-	return false;
-    }
+
     public void incExp() { //Exp should depend on enemey level
 	exp++;
     }
@@ -128,7 +123,7 @@ public abstract class Character extends Movable
 	    exp -= EXP_REQUIREMENTS[level - 1];
 	    level++;
 	    this.maxHP += 1;
-	    this.hp = maxHP;
+	    setHp(maxHP);
 	}
     }
 
@@ -138,8 +133,17 @@ public abstract class Character extends Movable
 	}
 	return false;
     }
-    public void takeDamage(){
+
+    private void decrHp() {
 	hp--;
+    }
+
+    public void takeDamage() {
+	if (getHp() > 0) {
+	    decrHp();
+	} else {
+	    this.markGarbage();
+	}
     }
 
     @Override public void tick() {
@@ -147,13 +151,13 @@ public abstract class Character extends Movable
 	    return; // Do nothing just sleep zZzZ
 	}
 	super.tick();
-	performWalkCycle();
+	showNextStepInWalk();
     }
 
     /**
-     * Increments currentSpriteFrameIndex IFF the player is walking. Resets to zero if player stops.
+     * Increments currentSpriteFrameIndex IFF the character is walking. Resets to zero if player stops.
      */
-    private void performWalkCycle() {
+    private void showNextStepInWalk() {
 	if (velX == 0 && velY == 0) {
 	    currentFrameIndex = 0;
 	    ticksCounted = 0;
@@ -179,10 +183,13 @@ public abstract class Character extends Movable
 	this.currentFrames = frames;
     }
 
+    public boolean canAttack() {
+	return getStatus() == Status.NORMAL;
+    }
+
     public boolean tryToAttack() {
 	{
-	    if(isStatusNormal()){
-		this.currentFrameIndex = 2;
+	    if (this.status == Status.NORMAL) {
 		this.setStatus(Status.ATTACKING);
 		attackSpeedTimer.start();
 		return true;
@@ -199,7 +206,6 @@ public abstract class Character extends Movable
     protected void setStatus(final Status status) {
 	this.status = status;
     }
-
 
 
 }
