@@ -1,7 +1,5 @@
 package se.liu.danal315samak519;
 
-import se.liu.danal315samak519.weapons.Projectile;
-import se.liu.danal315samak519.weapons.Weapon;
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
@@ -10,6 +8,8 @@ import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.map.Tile;
 import se.liu.danal315samak519.map.World;
+import se.liu.danal315samak519.weapons.Projectile;
+import se.liu.danal315samak519.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -37,8 +37,8 @@ public class Game
 
 	// Iterate through all movables (incl. player) and do appropiate actions
 	List<Movable> allMovables = getMovablesInclPlayer();
-	for (int i = 0; i < allMovables.size(); i++) {
-	    Movable movable0 = allMovables.get(i);
+	for (Movable movable0 : allMovables) {
+
 	    movable0.tick();
 	    handleWallCollision(movable0);
 
@@ -48,8 +48,7 @@ public class Game
 
 	    // Second iteration of all movables, for handling
 	    // combinations of movables (e.g. colliding with eachother)
-	    for (int j = 0; j < allMovables.size(); j++) {
-		Movable movable1 = allMovables.get(j);
+	    for (Movable movable1 : allMovables) {
 		handleMovableCollision(movable0, movable1);
 	    }
 	}
