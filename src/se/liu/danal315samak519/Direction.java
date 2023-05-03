@@ -16,16 +16,6 @@ public enum Direction
 	    return null; // Can't calculate Direction
 	}
 	float radians = (float) Math.atan2(diffY, diffX);
-
-//	if (-Math.PI / 4 < radians && radians < Math.PI / 4) {
-//	    direction = (Direction.RIGHT);
-//	} else if (-3 * Math.PI / 4 < radians && radians < -Math.PI / 4) {
-//	    direction = (Direction.UP);
-//        } else if (radians < -3 * Math.PI / 4 || radians > 3 * Math.PI / 4) {
-//            direction = (Direction.LEFT);
-//        } else if (Math.PI / 4 < radians && radians < 3 * Math.PI / 4) {
-//            direction = (Direction.DOWN);
-//	}
         return roundAngleToDirection(radians, width, height);
     }
     public static Direction getDirectionBetweenPoints(Point2D start, Point2D end, double width, double height) {
@@ -37,7 +27,7 @@ public enum Direction
     }
 
     /**
-     * Calculates what direction would be normal to the surface of rectangle given shape
+     * Calculates what direction would be normal to the surface of rectangle given rectangle shape
      *
      * @param radians
      * @param width
