@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Viewer
 {
-    private static final int TARGET_FPS = 120;
+    private static final int TARGET_FPS = 60;
     private GameComponent gameComponent;
     private final Action doTimerTick = new AbstractAction()
     {
