@@ -33,6 +33,10 @@ public class Game
      */
     public void tick()
     {
+	if (getIfMovableOutOfBounds(getPlayer())) {
+	    changeToNextWorld();
+	}
+
 	removeGarbage();
 	birthNewEntites();
 
@@ -64,7 +68,7 @@ public class Game
 	return list;
     }
 
-    private void changeWorld() {
+    private void changeToNextWorld() {
 	currentWorldID++;
 	setWorld(new World("map" + currentWorldID + ".tmx"));
 	double centerX = world.getColumns() * world.getTileWidth() / 2.0;
@@ -107,6 +111,21 @@ public class Game
 		}
 	    }
 	}
+    }
+
+    /**
+     * Return true if input movable is out of world border
+     *
+     * @param movable
+     *
+     * @return
+     */
+    private boolean getIfMovableOutOfBounds(Movable movable) {
+	double centerX = movable.getHitBox().getCenterX();
+	double centerY = movable.getHitBox().getCenterY();
+	boolean outOfBoundsX = centerX < 0 || centerX > getWorld().getWidth();
+	boolean outOfBoundsY = centerY < 0 || centerY > getWorld().getHeight();
+	return outOfBoundsX || outOfBoundsY;
     }
 
     public void aiDecide(Enemy enemy) {
@@ -198,6 +217,7 @@ public class Game
     {
 	addEntity(new Knight(coord, player));
     }
+
     public void addRed(Point2D.Double coord)
     {
 	addEntity(new Red(coord, player));
