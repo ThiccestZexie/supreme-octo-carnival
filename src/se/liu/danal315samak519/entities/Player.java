@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class Player extends Character
 {
+    public int skillPoints = 0;
     public BufferedImage[] levelUpFrames;
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
 
@@ -20,12 +21,18 @@ public class Player extends Character
     {
 	super(coord);
 	this.color = Color.GREEN; //TODO HARDCODED GREEN PLAYER
+	setMaxSpeed(4);
 	setStats(6,1);
 	storeLevelUpFrames();
 	storeSpriteFrames();
 	storeHealthBars();
 	setDir(Direction.DOWN);
 	setFramesBasedOnDirection();
+    }
+
+    @Override public void levelUp() {
+	super.levelUp();
+	skillPoints++;
     }
 
     private void storeLevelUpFrames() {

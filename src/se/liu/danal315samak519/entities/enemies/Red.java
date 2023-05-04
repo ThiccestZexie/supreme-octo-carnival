@@ -10,6 +10,7 @@ public class Red extends Enemy
 
     public Red(final Point2D.Double coord, final Player player) {
 	super(coord, player);
+	setMaxSpeed(3);
 	setStats(3, 1);
 	storeDirectionalFrames(0, 0);
 	setDir(Direction.DOWN);

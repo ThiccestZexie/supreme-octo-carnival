@@ -10,6 +10,7 @@ public class Knight extends Enemy
 
     public Knight(final Point2D.Double coord, final Player player) {
 	super(coord, player);
+	setMaxSpeed(2);
 	setStats(5, 2);
 	storeDirectionalFrames(120,180);
 	setDir(Direction.DOWN);
