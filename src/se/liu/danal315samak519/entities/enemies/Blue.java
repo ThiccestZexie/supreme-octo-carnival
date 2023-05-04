@@ -9,6 +9,7 @@ public class Blue extends Enemy
 {
     public Blue(final Point2D.Double coord, final Player player) {
 	super(coord, player);
+	setStats(2, 1);
 	storeDirectionalFrames(120,0);
 	setDir(Direction.DOWN);
     }

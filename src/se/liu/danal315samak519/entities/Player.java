@@ -20,9 +20,7 @@ public class Player extends Character
     {
 	super(coord);
 	this.color = Color.GREEN; //TODO HARDCODED GREEN PLAYER
-	this.level = 1;
-	this.maxHP = 6;
-	this.hp = maxHP;
+	setStats(6,1);
 	storeLevelUpFrames();
 	storeSpriteFrames();
 	storeHealthBars();

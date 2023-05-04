@@ -51,3 +51,4 @@ public abstract class Weapon extends Movable
 	this.lifeSpan = lifeSpan;
     }
 }
+	

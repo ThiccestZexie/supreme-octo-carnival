@@ -48,6 +48,12 @@ public class Viewer
 	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
 	    game.addRed(randomCoord);
 	}
+	for (int i = 0; i < 1; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+	    game.addKnight(randomCoord);
+	}
 
 	// Put game in gameComponent
 	gameComponent = new GameComponent(game);

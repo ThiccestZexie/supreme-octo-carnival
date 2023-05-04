@@ -5,13 +5,13 @@ import se.liu.danal315samak519.entities.Player;
 
 import java.awt.geom.Point2D;
 
-public class Red extends Enemy
+public class Knight extends Enemy
 {
 
-    public Red(final Point2D.Double coord, final Player player) {
+    public Knight(final Point2D.Double coord, final Player player) {
 	super(coord, player);
-	setStats(3, 1);
-	storeDirectionalFrames(0, 0);
+	setStats(5, 2);
+	storeDirectionalFrames(120,180);
 	setDir(Direction.DOWN);
     }
 

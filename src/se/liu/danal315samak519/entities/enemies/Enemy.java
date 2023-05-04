@@ -17,9 +17,7 @@ public abstract class Enemy extends Character
     protected Enemy(final Point2D.Double coord, final Player player)
     {
 	super(coord);
-	this.maxHP = 3;
 	this.level = 1;
-	this.hp = maxHP;
 	this.player = player;
 	setMaxSpeed(2);
     }
@@ -111,5 +109,13 @@ public abstract class Enemy extends Character
 	    }
 	}
 	return false;
+    }
+    public void chasePlayer(){
+	if (canSeePlayer()) { // CHASe PLAYER!!
+	    Point2D velocity = getVelocityTowardsPlayer();
+	    setVelocity((int) velocity.getX(), (int) velocity.getY());
+	} else { // Chill...
+	    setVelocity(0, 0);
+	}
     }
 }

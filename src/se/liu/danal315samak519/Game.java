@@ -5,6 +5,7 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.enemies.Blue;
 import se.liu.danal315samak519.entities.enemies.Enemy;
+import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.map.Tile;
 import se.liu.danal315samak519.map.World;
@@ -193,6 +194,10 @@ public class Game
 	addEntity(new Blue(coord, player));
     }
 
+    public void addKnight(Point2D.Double coord)
+    {
+	addEntity(new Knight(coord, player));
+    }
     public void addRed(Point2D.Double coord)
     {
 	addEntity(new Red(coord, player));
@@ -231,10 +236,6 @@ public class Game
 
     public void setWorld(final World world) {
 	this.world = world;
-    }
-
-    public void addBlue(final double x, final double y) {
-	addBlue(new Point2D.Double(x, y));
     }
 
     private void addEntity(final Movable movable) {

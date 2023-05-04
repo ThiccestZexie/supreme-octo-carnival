@@ -17,6 +17,10 @@ public abstract class Character extends Movable
     protected static final int TICKS_PER_FRAME = 8;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
 
+    protected static final int iFramesDuration = 1000;
+
+    protected static final int attackSpeed = 750;
+
     protected int exp = 0;
     protected int currentIFramees = 0;
     protected int level;
@@ -31,8 +35,8 @@ public abstract class Character extends Movable
     protected BufferedImage[] rightFrames;
     protected BufferedImage attackFrame;
     private Status status = Status.NORMAL;
-    Timer iFramesTimer = new Timer(1000, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
-    Timer attackSpeedTimer = new Timer(750, e -> setStatus(Status.NORMAL));
+    Timer iFramesTimer = new Timer(iFramesDuration, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
+    Timer attackSpeedTimer = new Timer(attackSpeed, e -> setStatus(Status.NORMAL));
     private int ticksCounted;
     // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
 
@@ -67,6 +71,12 @@ public abstract class Character extends Movable
 	this.hp = hp;
     }
 
+    protected void setStats(int maxHP, int level){
+	this.maxHP = maxHP;
+	this.hp = this.maxHP;
+	this.level = level;
+    }
+
     public int getMaxHp() {
 	return maxHP;
     }
@@ -88,7 +98,7 @@ public abstract class Character extends Movable
 	Character owner = weapon.getOwner();
 
 	if (this.hitBox.intersects(weapon.getHitBox())) {
-	    if (hp > 1 && this.getStatus() != Status.HIT && !this.equals(owner)) {
+	    if (hp >= 1 && this.getStatus() != Status.HIT && !this.equals(owner)) {
 		hp--;
 		this.setStatus(Status.HIT);
 		iFramesTimer.start();
