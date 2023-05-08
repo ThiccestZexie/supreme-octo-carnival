@@ -25,6 +25,7 @@ public class Viewer
     };
 
     public void checkForDeath(){
+	//Checks if a enemy has died if so adds a drop from them
 	for (Movable m: gameComponent.game.getMovables()) {
 	    if (m instanceof Enemy)
 	    {

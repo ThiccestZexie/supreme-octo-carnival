@@ -16,6 +16,7 @@ public class Knight extends Enemy
 	setDir(Direction.DOWN);
     }
 
+
     @Override public void tick() {
 	super.tick();
 	chasePlayer();

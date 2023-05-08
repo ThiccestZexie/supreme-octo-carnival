@@ -52,6 +52,7 @@ public abstract class Enemy extends Character
 	    throw new RuntimeException(e);
 	}
     }
+    //TODO make drops random and not guaranteed...
     public Movable dropItem(){
 	return new Potion(this.coord);
     }

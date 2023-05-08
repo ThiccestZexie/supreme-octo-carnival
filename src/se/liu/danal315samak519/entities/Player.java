@@ -1,5 +1,6 @@
 package se.liu.danal315samak519.entities;
 
+import se.liu.danal315samak519.Decrees;
 import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.ImageLoader;
 import se.liu.danal315samak519.Status;
@@ -10,12 +11,14 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class Player extends Character
 {
-    public int skillPoints = 0;
     public BufferedImage[] levelUpFrames;
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
+
+    public LinkedList<Decrees> decrees = new LinkedList<>();
 
     public Player(final Point2D.Double coord)
     {
@@ -32,7 +35,15 @@ public class Player extends Character
 
     @Override public void levelUp() {
 	super.levelUp();
-	skillPoints++;
+	decrees.add(new Decrees(1));
+	changeStats();
+    }
+    public void changeStats(){ //Get effect apply effect profit
+	for (Decrees decree:decrees)
+	{
+	    attackSpeed = (int) Math.ceil(attackSpeed / decree.getIncrease());
+	}
+
     }
 
     private void storeLevelUpFrames() {

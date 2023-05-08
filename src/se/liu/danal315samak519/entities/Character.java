@@ -20,7 +20,7 @@ public abstract class Character extends Movable
 
     protected static final int iFramesDuration = 1000;
 
-    protected static final int attackSpeed = 750;
+    protected static int attackSpeed = 750;
 
     protected int exp = 0;
     protected int currentIFramees = 0;
@@ -37,7 +37,7 @@ public abstract class Character extends Movable
     protected BufferedImage attackFrame;
     private Status status = Status.NORMAL;
     Timer iFramesTimer = new Timer(iFramesDuration, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
-    Timer attackSpeedTimer = new Timer(attackSpeed, e -> setStatus(Status.NORMAL));
+    Timer attackSpeedTimer;
     private int ticksCounted;
     // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
 
@@ -199,12 +199,17 @@ public abstract class Character extends Movable
     public boolean canAttack() {
 	return getStatus() == Status.NORMAL;
     }
-
+    public void startAttackSpeedTimer(){
+	attackSpeedTimer = new Timer(attackSpeed, e -> {
+	    setStatus(Status.NORMAL);
+	    attackSpeedTimer.stop();
+	});
+    }
     public boolean tryToAttack() {
 	{
 	    if (this.status == Status.NORMAL) {
 		this.setStatus(Status.ATTACKING);
-		attackSpeedTimer.start();
+		startAttackSpeedTimer();
 		return true;
 	    }
 	    return false;

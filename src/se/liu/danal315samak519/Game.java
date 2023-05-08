@@ -183,6 +183,7 @@ public class Game
 		weapon.markGarbage();
 	    }
 	}
+	// Player-Potion
 	if(movable0 instanceof Potion && movable1 instanceof Player){
 	    Potion potion = (Potion) movable0;
 	    Player player = (Player) movable1;
