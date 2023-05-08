@@ -236,7 +236,6 @@ public class Game
 	    return; // No need to continue if no collision between movable0 and movable1
 	}
 
-	// Obstacle-Player
 	if (movable0 instanceof Obstacle && movable1 instanceof Player) {
 	    movable1.nudgeAwayFrom(movable0.getHitBox());
 	}
