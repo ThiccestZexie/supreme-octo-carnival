@@ -1,32 +1,28 @@
 package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
-import se.liu.danal315samak519.Status;
 import se.liu.danal315samak519.weapons.Projectile;
 import se.liu.danal315samak519.weapons.Sword;
-import se.liu.danal315samak519.weapons.Weapon;
 
-import javax.swing.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 public abstract class Character extends Movable
 {
-    // CONSTANTS FOR CHARACTERS
-
+    // CONSTANTS
     protected static final int TICKS_PER_FRAME = 8;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
+    private static final int INVINCIBILITY_TICKS = 1000;
 
-    protected static final int iFramesDuration = 1000;
-
-    protected static int attackSpeed = 750;
+    protected static int attackSpeed = 20;
 
     protected int exp = 0;
-    protected int currentIFramees = 0;
     protected int level;
     protected int maxHP;
     protected int hp;
-    protected int currentFrameIndex = 0;
+    protected int walkCycleIndex = 0;
+    protected int ticksInvincible = 0;
+    protected boolean isShooting = false;
     // Sprite
     protected BufferedImage[] currentFrames;
     protected BufferedImage[] downFrames;
@@ -34,11 +30,8 @@ public abstract class Character extends Movable
     protected BufferedImage[] upFrames;
     protected BufferedImage[] rightFrames;
     protected BufferedImage attackFrame;
-    Timer attackSpeedTimer;
-    private Status status = Status.NORMAL;
-    Timer iFramesTimer = new Timer(iFramesDuration, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
-    private int ticksCounted;
-    // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
+    private int ticksSinceWalkFrameChange;
+    private int ticksAttackCooldown = 0;
 
 
     protected Character(final Point2D.Double coord) {
@@ -93,24 +86,16 @@ public abstract class Character extends Movable
 	return exp;
     }
 
-    public boolean getHitByWeapon(Weapon weapon)
-    {
-	Character owner = weapon.getOwner();
+    protected void becomeInvincible() {
+	startInvincibilityTimer();
+    }
 
-	if (this.hitBox.intersects(weapon.getHitBox())) {
-	    if (hp >= 1 && this.getStatus() != Status.HIT && !this.equals(owner)) {
-		hp--;
-		this.setStatus(Status.HIT);
-		iFramesTimer.start();
-	    } else if (this.getStatus() != Status.HIT) {
-		owner.incExp();
-		owner.levelUp();
-		this.isGarbage = true;
-	    }
-	    return true;
+    private void startInvincibilityTimer() {
+	ticksInvincible = INVINCIBILITY_TICKS;
+    }
 
-	}
-	return false;
+    private void startAttackCooldownTimer() {
+	ticksAttackCooldown = attackSpeed;
     }
 
     public Projectile getProjectile() {
@@ -118,18 +103,18 @@ public abstract class Character extends Movable
     }
 
     public Sword getSword() {
-	if (this.status == Status.NORMAL) {
+	if (canAttack()) {
 	    return new Sword(this.coord, this);
 	}
-	return new Sword(new Point2D.Double(0, 0), this);
+	return null;
     }
 
-    public void incExp() { //Exp should depend on enemey level
+    public void incrementExp() { //Exp should depend on enemey level
 	exp++;
     }
 
     public void levelUp() {
-	while (checkExpReq()) {
+	while (getIfReadyToLevelUp()) {
 	    exp -= EXP_REQUIREMENTS[level - 1];
 	    level++;
 	    this.maxHP += 1;
@@ -137,35 +122,69 @@ public abstract class Character extends Movable
 	}
     }
 
-    public void heal(int healAmmount) {
-	this.hp += healAmmount;
+    public void heal(int healAmount) {
+	this.hp += healAmount;
     }
 
-    public boolean checkExpReq() { // You start as level 1 so index 0 of exp req and the exp is exp needed for next level...
+    public boolean getIfReadyToLevelUp() { // You start as level 1 so index 0 of exp req and the exp is exp needed for next level...
 	if (this.exp >= EXP_REQUIREMENTS[level - 1]) {
 	    return true;
 	}
 	return false;
     }
 
-    private void decrHp() {
+    protected void decrementHp() {
 	hp--;
     }
 
-    public void takeDamage() {
+    public void startShooting(){
+	isShooting = true;
+    }
+
+    public void stopShooting(){
+	isShooting = false;
+    }
+
+    public boolean getIsInvincible(){
+	return ticksInvincible > 0;
+    }
+
+    public boolean getHasAttackCooldown(){
+	return ticksAttackCooldown > 0;
+    }
+
+    public void tryTakeDamage() {
+	if(getIsInvincible()){
+	    return; // Don't take damage!
+	}
+
 	if (getHp() > 0) {
-	    decrHp();
+	    decrementHp();
 	} else {
-	    this.markAsGarbage();
+	    this.markAsGarbage(); // DEAD
 	}
     }
 
     @Override public void tick() {
-	if (getStatus() == Status.SLEEPING) {
-	    return; // Do nothing just sleep zZzZ
-	}
 	super.tick();
+	tickAttackCooldown();
+//	tickInvincibility();
 	showNextStepInWalk();
+    }
+
+    private void tickInvincibility() {
+	if(ticksInvincible > 0){
+	    ticksInvincible--;
+	}
+    }
+
+    /**
+     * Keep track of ticks since attacked, and set status to NORMAL if ready to attack again.
+     */
+    private void tickAttackCooldown() {
+	if (ticksAttackCooldown > 0) {
+	    ticksAttackCooldown--;
+	}
     }
 
     /**
@@ -173,23 +192,23 @@ public abstract class Character extends Movable
      */
     private void showNextStepInWalk() {
 	if (velX == 0 && velY == 0) {
-	    currentFrameIndex = 0;
-	    ticksCounted = 0;
+	    walkCycleIndex = 0;
+	    ticksSinceWalkFrameChange = 0;
 	} else {
-	    ticksCounted++;
-	    if (ticksCounted > TICKS_PER_FRAME) {
-		currentFrameIndex++;
-		currentFrameIndex %= 2;
-		ticksCounted = 0;
+	    ticksSinceWalkFrameChange++;
+	    if (ticksSinceWalkFrameChange > TICKS_PER_FRAME) {
+		walkCycleIndex++;
+		walkCycleIndex %= 2;
+		ticksSinceWalkFrameChange = 0;
 	    }
 	}
     }
 
     public BufferedImage getCurrentSprite() {
-	return getSpriteFrameAt(currentFrameIndex);
+	return getSpriteFrame(walkCycleIndex);
     }
 
-    private BufferedImage getSpriteFrameAt(int index) {
+    private BufferedImage getSpriteFrame(int index) {
 	return currentFrames[index];
     }
 
@@ -198,35 +217,22 @@ public abstract class Character extends Movable
     }
 
     public boolean canAttack() {
-	return getStatus() == Status.NORMAL;
+	return this.ticksAttackCooldown < 1;
     }
 
-    public void startAttackSpeedTimer() {
-	attackSpeedTimer = new Timer(attackSpeed, e -> {
-	    setStatus(Status.NORMAL);
-	    attackSpeedTimer.stop();
-	});
-    }
-
+    /**
+     * If able to attack, become attacking.
+     * @return whether succesful
+     */
     public boolean tryToAttack() {
-	{
-	    if (this.status == Status.NORMAL) {
-		this.setStatus(Status.ATTACKING);
-		startAttackSpeedTimer();
-		return true;
-	    }
-	    return false;
+	if (canAttack()) {
+	    becomeAttacking();
+	    return true;
 	}
-
+	return false;
     }
 
-    protected Status getStatus() {
-	return this.status;
+    private void becomeAttacking() {
+	this.ticksAttackCooldown = attackSpeed;
     }
-
-    protected void setStatus(final Status status) {
-	this.status = status;
-    }
-
-
 }

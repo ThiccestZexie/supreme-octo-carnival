@@ -1,9 +1,7 @@
 package se.liu.danal315samak519.entities.enemies;
 
 import se.liu.danal315samak519.ImageLoader;
-import se.liu.danal315samak519.Status;
 import se.liu.danal315samak519.entities.Character;
-import se.liu.danal315samak519.entities.Entity;
 import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
@@ -85,7 +83,7 @@ public abstract class Enemy extends Character
     }
 
     public boolean checkIfPlayerIsInFront(int length, int width) {
-	if (this.getStatus() != Status.ATTACKING) {
+	if (canAttack()) {
 	    Rectangle raycastRectangle = new Rectangle();
 	    switch (getDir()) {
 		case UP:

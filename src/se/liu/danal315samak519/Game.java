@@ -54,6 +54,7 @@ public class Game
      */
     public void tick()
     {
+	System.out.println(player.getHasAttackCooldown());
 	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
 	if (outOfBoundsDirection != null) {
 //	    changeToNextWorld();
@@ -109,7 +110,7 @@ public class Game
 
     public void changeWorld(World world) {
 	// Clear previous movables (if necessary)
-	if(getMovables() != null){
+	if (getMovables() != null) {
 	    for (Movable movable : getMovables()) {
 		movable.markAsGarbage();
 	    }
@@ -124,7 +125,7 @@ public class Game
     /**
      * "Changes" the world to the same one, effectively resetting everything
      */
-    public void resetWorld(){
+    public void resetWorld() {
 	changeWorld(getWorld());
     }
 
@@ -173,7 +174,7 @@ public class Game
 	if (getWorld().getLayers() < 2) {
 	    throw new RuntimeException("There is no foreground layer in loaded world! Can't check wall collisions.");
 	}
-	if(movable instanceof Obstacle){
+	if (movable instanceof Obstacle) {
 	    return; // Don't handle wall collisions on obstacles!!
 	}
 	for (Tile tile : world.getForegroundTileList()) {
@@ -226,16 +227,6 @@ public class Game
 	}
     }
 
-    public void checkForHits(Character e)
-    {
-	for (Movable movable : movables) {
-	    if (movable instanceof Weapon) {
-		Weapon theMurderWeapon = (Weapon) movable;
-		e.getHitByWeapon(theMurderWeapon);
-	    }
-	}
-    }
-
     /**
      * Handle collisions where two movables are involved
      */
@@ -251,14 +242,14 @@ public class Game
 	// Enemy-Player
 	else if (movable0 instanceof Enemy && movable1 instanceof Player) {
 	    movable0.nudgeAwayFrom(movable1.getHitBox());
-	    ((Player) movable1).takeDamage();
+	    ((Player) movable1).tryTakeDamage();
 	}
 	// Projectile-Character
 	else if (movable0 instanceof Weapon && movable1 instanceof Character) {
 	    Weapon weapon = (Weapon) movable0;
 	    Character character = (Character) movable1;
 	    if (!character.equals(weapon.getOwner())) {
-		character.takeDamage();
+		character.tryTakeDamage();
 		weapon.markAsGarbage();
 	    }
 	}
@@ -330,15 +321,6 @@ public class Game
 	return movables;
     }
 
-    public void checkIfAnyEntityHit() {
-	for (Movable movable : movables) {
-	    if (movable instanceof Character) {
-		checkForHits((Character) movable);
-	    }
-	}
-    }
-
-
     public World getWorld() {
 	return world;
     }
@@ -348,7 +330,9 @@ public class Game
     }
 
     public void addMovable(final Movable movable) {
-	movables.add(movable);
+	if (movable != null) {
+	    movables.add(movable);
+	}
     }
 
 }

@@ -251,7 +251,7 @@ public class GameComponent extends JComponent implements FrameListener
     {
 	//Primary Keys
 	addNewKeyBinding("SPACE", new AttackAction());
-	addNewKeyBinding("Z", new ArrowAction());
+	addNewKeyBinding("Z", new ShootAction());
 
 	// Pressing keys
 	addNewKeyBinding("pressed UP", new MoveAction(Direction.UP));
@@ -299,7 +299,7 @@ public class GameComponent extends JComponent implements FrameListener
 	    game.playerAttack();
 	}
     }
-    private class ArrowAction extends AbstractAction
+    private class ShootAction extends AbstractAction
     {
 	public void actionPerformed(ActionEvent e) {
 	    game.playerShootArrow();

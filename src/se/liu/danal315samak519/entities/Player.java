@@ -3,7 +3,6 @@ package se.liu.danal315samak519.entities;
 import se.liu.danal315samak519.Decrees;
 import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.ImageLoader;
-import se.liu.danal315samak519.Status;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -25,7 +24,7 @@ public class Player extends Character
 	super(coord);
 	this.color = Color.GREEN; //TODO HARDCODED GREEN PLAYER
 	setMaxSpeed(4);
-	setStats(6,1);
+	setStats(6, 1);
 	storeLevelUpFrames();
 	storeSpriteFrames();
 	storeHealthBars();
@@ -38,9 +37,9 @@ public class Player extends Character
 	decrees.add(new Decrees(1));
 	changeStats();
     }
-    public void changeStats(){ //Get effect apply effect profit
-	for (Decrees decree:decrees)
-	{
+
+    public void changeStats() { //Get effect apply effect profit
+	for (Decrees decree : decrees) {
 	    attackSpeed = (int) Math.ceil(attackSpeed / decree.getIncrease());
 	}
 
@@ -50,16 +49,13 @@ public class Player extends Character
 	try {
 	    // HARDCODED FOR EXACTLY 20 FRAMES
 	    levelUpFrames = new BufferedImage[20];
-	    for (int tens = 0; tens < 2; tens++)
-	    {
-		for (int ones = 0; ones < 10; ones++)
-		{
+	    for (int tens = 0; tens < 2; tens++) {
+		for (int ones = 0; ones < 10; ones++) {
 		    ImageLoader levelUpFrameLoader = new ImageLoader("/levelUP/level_up" + tens + ones + ".png");
 		    levelUpFrames[10 * tens + ones] = levelUpFrameLoader.getImage();
 		}
 	    }
-	} catch (IOException e)
-	{
+	} catch (IOException e) {
 	    e.printStackTrace();
 	}
     }
@@ -92,32 +88,21 @@ public class Player extends Character
 	    rightFrames[1] = linkImageLoader.getSubImage(32 * 3, 0, spriteWidth, spriteHeight);
 	    rightFrames[2] = linkImageLoader.getSubImage(32 * 3, 32 * 2, spriteWidth, spriteHeight);
 
-	} catch (IOException e)
-	{
+	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
-    public void storeHealthBars(){
-	try
-	{
+    public void storeHealthBars() {
+	try {
 	    BufferedImage bufferedImage = ImageIO.read(new File("resources/images/hearts/heart_full.png"));
-	    fullHeart = bufferedImage.getScaledInstance(50,50,Image.SCALE_DEFAULT);
+	    fullHeart = bufferedImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 	    bufferedImage = ImageIO.read(new File("resources/images/hearts/heart_half.png"));
-	    halfHeart = bufferedImage.getScaledInstance(50,50,Image.SCALE_DEFAULT);
+	    halfHeart = bufferedImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 	    bufferedImage = ImageIO.read(new File("resources/images/hearts/heart_blank.png"));
-	    emptyHeart = bufferedImage.getScaledInstance(50,50,Image.SCALE_DEFAULT);
-	}
-	catch (IOException e)
-	{
+	    emptyHeart = bufferedImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+	} catch (IOException e) {
 	    e.printStackTrace();
-	}
-    }
-    public void takeDamage(){
-	if (this.hp > 0 && this.getStatus() != Status.HIT){
-	    hp--;
-	    this.setStatus(Status.HIT);
-	    iFramesTimer.start();
 	}
     }
 }
