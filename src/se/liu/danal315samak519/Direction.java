@@ -63,8 +63,8 @@ public enum Direction
         return LEFT; // Idk why the angle sometimes isn't caught
     }
 
-    public static Direction getDirectionBetweenPoints(final double x, final double y, final double endX, final double endY) {
-	return getDirectionBetweenPoints(x, y, endX, endY, 1, 1);
+    public static Direction getDirectionBetweenPoints(final double startX, final double startY, final double endX, final double endY) {
+	return getDirectionBetweenPoints(startX, startY, endX, endY, 1, 1);
     }
 
     /**

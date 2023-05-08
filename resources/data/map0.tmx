@@ -85,7 +85,7 @@
     <property name="endY" type="float" value="0"/>
    </properties>
   </object>
-  <object id="17" x="0" y="320" width="64" height="320">
+  <object id="17" x="0" y="32" width="64" height="320">
    <properties>
     <property name="endX" type="float" value="0"/>
     <property name="endY" type="float" value="320"/>

@@ -45,9 +45,8 @@ public class Game
      */
     public Game(World world) {
 	random = new Random();
-	setWorld(world);
-	setPlayer(new Player(new Point2D.Double(getWorld().getCenterX(), getWorld().getCenterY())));
-	spawnEnemies();
+	setPlayer(new Player(new Point2D.Double(world.getCenterX(), world.getCenterY())));
+	changeWorld(world);
     }
 
     /**
@@ -108,12 +107,23 @@ public class Game
     }
 
     public void changeWorld(World world) {
-	// Clear all movables
-	for (Movable movable : getMovables()) {
-	    movable.markAsGarbage();
+	// Clear previous movables (if necessary)
+	if(getMovables() != null){
+	    for (Movable movable : getMovables()) {
+		movable.markAsGarbage();
+	    }
 	}
+	// Actually set to new world
 	setWorld(world);
+	// Populate with new movables
 	spawnEnemies();
+	spawnObstacles();
+    }
+
+    private void spawnObstacles() {
+	for (Obstacle obstacle : getWorld().getObstacles()) {
+	    addMovable(obstacle);
+	}
     }
 
     private void spawnEnemies() {
@@ -139,7 +149,7 @@ public class Game
 
     private void changeToNextWorld() {
 	currentWorldID++;
-	setWorld(new World("map" + currentWorldID + ".tmx"));
+	changeWorld(new World("map" + currentWorldID + ".tmx"));
     }
 
     public LinkedList<Movable> getPendingMovables() {
@@ -154,6 +164,9 @@ public class Game
     private void handleWallCollision(final Movable movable) {
 	if (getWorld().getLayers() < 2) {
 	    throw new RuntimeException("There is no foreground layer in loaded world! Can't check wall collisions.");
+	}
+	if(movable instanceof Obstacle){
+	    return; // Don't handle wall collisions on obstacles!!
 	}
 	for (Tile tile : world.getForegroundTileList()) {
 	    Rectangle2D.Double tileHitBox = new Rectangle2D.Double(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
