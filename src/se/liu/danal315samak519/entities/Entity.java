@@ -98,7 +98,11 @@ public abstract class Entity
 	setHitBox();
     }
 
-    public void markGarbage(){
+    public void setCenterLocation(final double x, final double y) {
+	setLocation(x - this.getWidth() / 2.0, y - this.getHeight() / 2.0);
+    }
+
+    public void markGarbage() {
 	this.isGarbage = true;
     }
 }

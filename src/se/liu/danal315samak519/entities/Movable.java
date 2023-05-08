@@ -7,7 +7,7 @@ import java.awt.geom.Rectangle2D;
 /**
  *
  */
-public abstract class Movable extends Entity
+public class Movable extends Entity
 {
     protected Direction dir;
     protected double maxSpeed;

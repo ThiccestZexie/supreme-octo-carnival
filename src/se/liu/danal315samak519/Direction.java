@@ -18,6 +18,16 @@ public enum Direction
 	float radians = (float) Math.atan2(diffY, diffX);
         return roundAngleToDirection(radians, width, height);
     }
+
+    public Direction getOpposite(){
+	return switch(this){
+	    case DOWN -> UP;
+	    case LEFT -> RIGHT;
+	    case UP -> DOWN;
+	    case RIGHT -> LEFT;
+	};
+    }
+
     public static Direction getDirectionBetweenPoints(Point2D start, Point2D end, double width, double height) {
 	return getDirectionBetweenPoints(start.getX(), start.getY(), end.getX(), end.getY(), width, height);
     }

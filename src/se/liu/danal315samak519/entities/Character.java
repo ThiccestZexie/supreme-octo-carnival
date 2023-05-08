@@ -2,7 +2,6 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.Status;
-import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.weapons.Projectile;
 import se.liu.danal315samak519.weapons.Sword;
 import se.liu.danal315samak519.weapons.Weapon;
@@ -35,9 +34,9 @@ public abstract class Character extends Movable
     protected BufferedImage[] upFrames;
     protected BufferedImage[] rightFrames;
     protected BufferedImage attackFrame;
+    Timer attackSpeedTimer;
     private Status status = Status.NORMAL;
     Timer iFramesTimer = new Timer(iFramesDuration, e -> setStatus(Status.NORMAL)); // Timer for invisableFrames, 1s
-    Timer attackSpeedTimer;
     private int ticksCounted;
     // Lamda function som körs av en timer som gör så att man kan attackera, 0.5s
 
@@ -72,7 +71,7 @@ public abstract class Character extends Movable
 	this.hp = hp;
     }
 
-    protected void setStats(int maxHP, int level){
+    protected void setStats(int maxHP, int level) {
 	this.maxHP = maxHP;
 	this.hp = this.maxHP;
 	this.level = level;
@@ -137,9 +136,11 @@ public abstract class Character extends Movable
 	    setHp(maxHP);
 	}
     }
-    public void heal(int healAmmount){
+
+    public void heal(int healAmmount) {
 	this.hp += healAmmount;
     }
+
     public boolean checkExpReq() { // You start as level 1 so index 0 of exp req and the exp is exp needed for next level...
 	if (this.exp >= EXP_REQUIREMENTS[level - 1]) {
 	    return true;
@@ -199,12 +200,14 @@ public abstract class Character extends Movable
     public boolean canAttack() {
 	return getStatus() == Status.NORMAL;
     }
-    public void startAttackSpeedTimer(){
+
+    public void startAttackSpeedTimer() {
 	attackSpeedTimer = new Timer(attackSpeed, e -> {
 	    setStatus(Status.NORMAL);
 	    attackSpeedTimer.stop();
 	});
     }
+
     public boolean tryToAttack() {
 	{
 	    if (this.status == Status.NORMAL) {

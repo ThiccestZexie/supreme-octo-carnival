@@ -1,6 +1,7 @@
 package se.liu.danal315samak519;
 
 import se.liu.danal315samak519.entities.Movable;
+import se.liu.danal315samak519.entities.Obstacle;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.map.World;
@@ -48,24 +49,25 @@ public class Viewer
 	game.setWorld(new World("map0.tmx"));
 	Random random = new Random();
 
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
-	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-	    game.addBlue(randomCoord);
-	}
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
-	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-	    game.addRed(randomCoord);
-	}
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
-	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-	    game.addKnight(randomCoord);
-	}
+//	for (int i = 0; i < 1; i++) {
+//	    int randomX = 200 + random.nextInt(400);
+//	    int randomY = 200 + random.nextInt(400);
+//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+//	    game.addBlue(randomCoord);
+//	}
+//	for (int i = 0; i < 1; i++) {
+//	    int randomX = 200 + random.nextInt(400);
+//	    int randomY = 200 + random.nextInt(400);
+//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+//	    game.addRed(randomCoord);
+//	}
+//	for (int i = 0; i < 1; i++) {
+//	    int randomX = 200 + random.nextInt(400);
+//	    int randomY = 200 + random.nextInt(400);
+//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+//	    game.addKnight(randomCoord);
+//	}
+	game.addMovable(new Obstacle(new Point2D.Double(200, 200), 10, 10));
 
 	// Put game in gameComponent
 	gameComponent = new GameComponent(game);

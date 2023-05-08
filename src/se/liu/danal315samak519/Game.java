@@ -2,6 +2,7 @@ package se.liu.danal315samak519;
 
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
+import se.liu.danal315samak519.entities.Obstacle;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Blue;
@@ -10,10 +11,8 @@ import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.map.Tile;
 import se.liu.danal315samak519.map.World;
-import se.liu.danal315samak519.weapons.Projectile;
 import se.liu.danal315samak519.weapons.Weapon;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -31,14 +30,15 @@ public class Game
     private int currentWorldID = 0;
 
     /**
-     * Make the entire game state update by handling collisions and removing / adding entities.
+     * Make the entire game state update removing / adding entities and handle collisions
      */
     public void tick()
     {
-	if (getIfMovableOutOfBounds(getPlayer())) {
+	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
+	if (outOfBoundsDirection != null) {
 	    changeToNextWorld();
+	    placePlayerAtEntrance(outOfBoundsDirection);
 	}
-
 	removeGarbage();
 	birthNewEntites();
 
@@ -58,6 +58,21 @@ public class Game
 	    for (Movable movable1 : allMovables) {
 		handleMovableCollision(movable0, movable1);
 	    }
+	}
+    }
+
+    /**
+     * Place the player at appropiate entrance in the new map, when player has exited the previous
+     * @param outOfBoundsDirection
+     */
+    private void placePlayerAtEntrance(final Direction outOfBoundsDirection) {
+	Direction entranceDirection = outOfBoundsDirection.getOpposite();
+	double margin = 10.0;
+	switch(entranceDirection){
+	    case UP -> getPlayer().setCenterLocation(this.getWorld().getCenterX(), margin);
+	    case DOWN -> getPlayer().setCenterLocation(this.getWorld().getCenterX(), this.getWorld().getHeight() - margin);
+	    case LEFT -> getPlayer().setCenterLocation(margin, this.getWorld().getCenterY());
+	    case RIGHT -> getPlayer().setCenterLocation(this.getWorld().getWidth() - margin, this.getWorld().getCenterY());
 	}
     }
 
@@ -98,18 +113,27 @@ public class Game
     }
 
     /**
-     * Return true if input movable is out of world border
+     * Return the direction the given movable is out of bounds in.
+     * Return null if inside of bounds.
      *
      * @param movable
      *
      * @return
      */
-    private boolean getIfMovableOutOfBounds(Movable movable) {
+    private Direction getOutOfBoundsDirection(Movable movable) {
 	double centerX = movable.getHitBox().getCenterX();
 	double centerY = movable.getHitBox().getCenterY();
-	boolean outOfBoundsX = centerX < 0 || centerX > getWorld().getWidth();
-	boolean outOfBoundsY = centerY < 0 || centerY > getWorld().getHeight();
-	return outOfBoundsX || outOfBoundsY;
+
+	if(centerX < 0){
+	    return Direction.LEFT;
+	} else if (centerX > getWorld().getWidth()) {
+	    return Direction.RIGHT;
+	} else if (centerY < 0) {
+	    return Direction.UP;
+	} else if (centerY > getWorld().getHeight()) {
+	    return Direction.DOWN;
+	}
+	return null; // Movable is in bounds
     }
 
     public void aiDecide(Enemy enemy) {
@@ -125,7 +149,7 @@ public class Game
 
     private void birthNewEntites() {
 	while (!pendingMovables.isEmpty()) {
-	    addEntity(pendingMovables.pop());
+	    addMovable(pendingMovables.pop());
 	}
     }
 
@@ -140,18 +164,20 @@ public class Game
     }
 
     /**
-     * 1. if the movable is Enemy, and intersecting with player -> player.takeDamage() 2. if the movable is Projectile, cast to projectile
-     * and call arrowHit with self.
+     * Handle collisions where two movables are involved
      */
     public void handleMovableCollision(final Movable movable0, final Movable movable1) {
 	if (!movable0.getHitBox().intersects(movable1.getHitBox())) {
 	    return; // No need to continue if no collision between movable0 and movable1
 	}
 
+	// Obstacle-Player
+	if (movable0 instanceof Obstacle && movable1 instanceof Player) {
+	    movable1.nudgeAwayFrom(movable0.getHitBox());
+	}
 	// Enemy-Player
-	if (movable0 instanceof Enemy && movable1 instanceof Player) {
+	else if (movable0 instanceof Enemy && movable1 instanceof Player) {
 	    ((Player) movable1).takeDamage();
-
 	}
 	// Projectile-Character
 	else if (movable0 instanceof Weapon && movable1 instanceof Character) {
@@ -163,7 +189,7 @@ public class Game
 	    }
 	}
 	// Player-Potion
-	if(movable0 instanceof Potion && movable1 instanceof Player){
+	else if (movable0 instanceof Potion && movable1 instanceof Player) {
 	    Potion potion = (Potion) movable0;
 	    Player player = (Player) movable1;
 	    potion.pickUp(player);
@@ -200,29 +226,29 @@ public class Game
 
     public void addBlue(Point2D.Double coord)
     {
-	addEntity(new Blue(coord, player));
+	addMovable(new Blue(coord, player));
     }
 
     public void addKnight(Point2D.Double coord)
     {
-	addEntity(new Knight(coord, player));
+	addMovable(new Knight(coord, player));
     }
 
     public void addRed(Point2D.Double coord)
     {
-	addEntity(new Red(coord, player));
+	addMovable(new Red(coord, player));
     }
 
     public void playerAttack() {
 	if (player.tryToAttack()) {
-	    addEntity(player.getSword());
+	    addMovable(player.getSword());
 	}
 
     }
 
     public void playerShootArrow() {
 	if (player.tryToAttack()) {
-	    addEntity(player.getProjectile());
+	    addMovable(player.getProjectile());
 	}
     }
 
@@ -248,7 +274,7 @@ public class Game
 	this.world = world;
     }
 
-    private void addEntity(final Movable movable) {
+    public void addMovable(final Movable movable) {
 	movables.add(movable);
     }
 
