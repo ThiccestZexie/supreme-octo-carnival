@@ -35,7 +35,7 @@ public class Potion extends Movable
 	if(this.hitBox.intersects(e.hitBox) && e instanceof Player){
 	    setUser((Player) e);
 	    user.heal(2);
-	    isGarbage = true;
+	    this.markAsGarbage();
 	}
     }
     public void storeImage()  {
