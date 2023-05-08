@@ -54,7 +54,7 @@ public class Game
      */
     public void tick()
     {
-	System.out.println(player.getHasAttackCooldown());
+	System.out.println(player.ticksInvincible);
 	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
 	if (outOfBoundsDirection != null) {
 //	    changeToNextWorld();
@@ -211,7 +211,8 @@ public class Game
 	    return;
 	}
 	if (enemy.checkIfPlayerIsInFront(500, 100)) {
-	    if (enemy.tryToAttack()) {
+	    if (enemy.canAttack()) {
+		enemy.becomeAttacking();
 		pushPending(enemy.getProjectile());
 	    }
 	}
@@ -304,15 +305,16 @@ public class Game
 	addMovable(new Red(coord, player));
     }
 
-    public void playerAttack() {
-	if (player.tryToAttack()) {
+    public void playerSwordAttack() {
+	if (player.canAttack()) {
+	    player.becomeAttacking();
 	    addMovable(player.getSword());
 	}
-
     }
 
     public void playerShootArrow() {
-	if (player.tryToAttack()) {
+	if (player.canAttack()) {
+	    player.becomeAttacking();
 	    addMovable(player.getProjectile());
 	}
     }

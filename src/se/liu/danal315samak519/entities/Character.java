@@ -12,16 +12,16 @@ public abstract class Character extends Movable
     // CONSTANTS
     protected static final int TICKS_PER_FRAME = 8;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
-    private static final int INVINCIBILITY_TICKS = 1000;
+    private static final int INVINCIBILITY_TICKS = 20;
 
     protected static int attackSpeed = 20;
-
+    public int ticksAttackCooldown = 0;
     protected int exp = 0;
     protected int level;
     protected int maxHP;
     protected int hp;
     protected int walkCycleIndex = 0;
-    protected int ticksInvincible = 0;
+    public int ticksInvincible = 0;
     protected boolean isShooting = false;
     // Sprite
     protected BufferedImage[] currentFrames;
@@ -31,7 +31,6 @@ public abstract class Character extends Movable
     protected BufferedImage[] rightFrames;
     protected BufferedImage attackFrame;
     private int ticksSinceWalkFrameChange;
-    private int ticksAttackCooldown = 0;
 
 
     protected Character(final Point2D.Double coord) {
@@ -87,10 +86,6 @@ public abstract class Character extends Movable
     }
 
     protected void becomeInvincible() {
-	startInvincibilityTimer();
-    }
-
-    private void startInvincibilityTimer() {
 	ticksInvincible = INVINCIBILITY_TICKS;
     }
 
@@ -103,10 +98,7 @@ public abstract class Character extends Movable
     }
 
     public Sword getSword() {
-	if (canAttack()) {
-	    return new Sword(this.coord, this);
-	}
-	return null;
+	return new Sword(this.coord, this);
     }
 
     public void incrementExp() { //Exp should depend on enemey level
@@ -137,24 +129,24 @@ public abstract class Character extends Movable
 	hp--;
     }
 
-    public void startShooting(){
+    public void startShooting() {
 	isShooting = true;
     }
 
-    public void stopShooting(){
+    public void stopShooting() {
 	isShooting = false;
     }
 
-    public boolean getIsInvincible(){
+    public boolean getIsInvincible() {
 	return ticksInvincible > 0;
     }
 
-    public boolean getHasAttackCooldown(){
+    public boolean getHasAttackCooldown() {
 	return ticksAttackCooldown > 0;
     }
 
     public void tryTakeDamage() {
-	if(getIsInvincible()){
+	if (getIsInvincible()) {
 	    return; // Don't take damage!
 	}
 
@@ -163,17 +155,18 @@ public abstract class Character extends Movable
 	} else {
 	    this.markAsGarbage(); // DEAD
 	}
+	becomeInvincible();
     }
 
     @Override public void tick() {
 	super.tick();
 	tickAttackCooldown();
-//	tickInvincibility();
+	tickInvincibility();
 	showNextStepInWalk();
     }
 
     private void tickInvincibility() {
-	if(ticksInvincible > 0){
+	if (ticksInvincible > 0) {
 	    ticksInvincible--;
 	}
     }
@@ -220,19 +213,7 @@ public abstract class Character extends Movable
 	return this.ticksAttackCooldown < 1;
     }
 
-    /**
-     * If able to attack, become attacking.
-     * @return whether succesful
-     */
-    public boolean tryToAttack() {
-	if (canAttack()) {
-	    becomeAttacking();
-	    return true;
-	}
-	return false;
-    }
-
-    private void becomeAttacking() {
+    public void becomeAttacking() {
 	this.ticksAttackCooldown = attackSpeed;
     }
 }

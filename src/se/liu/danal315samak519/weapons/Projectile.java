@@ -38,10 +38,6 @@ public class Projectile extends Weapon
 
     }
 
-    @Override public void tick() {
-	super.tick();
-    }
-
     public boolean hitEntity(Movable target) {
 
 	if (this.hitBox.intersects(target.getHitBox())) {
