@@ -30,8 +30,8 @@ public class GameComponent extends JComponent implements FrameListener
     public GameComponent(Game game)
     {
 	this.game = game;
-	this.tileWidth = game.getWorld().getTileWidth();
-	this.tileHeight = game.getWorld().getTileHeight();
+	this.tileWidth = game.getRoom().getTileWidth();
+	this.tileHeight = game.getRoom().getTileHeight();
 	setKeyBindings();
 	game.addFrameListener(this);
 	oldPlayerLevel = game.getPlayer().getLevel();
@@ -209,7 +209,7 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintMapLayer(final Graphics g, final int layer) {
-	Room room = game.getWorld();
+	Room room = game.getRoom();
 	if(layer >= room.getLayers()){
 	    throw new IllegalArgumentException("Can't draw the specified layer " + layer + " on map " + room.getName());
 	}
@@ -230,8 +230,8 @@ public class GameComponent extends JComponent implements FrameListener
      * This method is called when JFrame tries to pack all the components. Ensures the window size is the same as world size.
      */
     @Override public Dimension getPreferredSize() {
-	int preferredWidth = game.getWorld().getRows() * tileWidth;
-	int preferredHeight = game.getWorld().getColumns() * tileHeight;
+	int preferredWidth = game.getRoom().getRows() * tileWidth;
+	int preferredHeight = game.getRoom().getColumns() * tileHeight;
 	return new Dimension(preferredWidth, preferredHeight);
     }
 

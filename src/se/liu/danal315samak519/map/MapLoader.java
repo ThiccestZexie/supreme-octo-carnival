@@ -18,7 +18,7 @@ public class MapLoader
 {
     private static final String DATA_FOLDER = "resources/data/";
     private static final String IMAGES_FOLDER = "resources/images/";
-    private final int layers;
+    private final int numLayers;
     private int[] tilesetGIDs;
     private Tile[][][] tiles;
     private List<Obstacle> obstacles;
@@ -45,7 +45,7 @@ public class MapLoader
 	this.rows = Integer.parseInt(mapElement.attr("height"));
 	this.tileWidth = Integer.parseInt(mapElement.attr("tilewidth"));
 	this.tileHeight = Integer.parseInt(mapElement.attr("tileheight"));
-	this.layers = Integer.parseInt(mapElement.attr("nextlayerid")) - 1;
+	this.numLayers = Integer.parseInt(mapElement.attr("nextlayerid")) - 1;
 
 	// Handle multiple tilesets
 	Elements tileSetElements = doc.select("tileset");
@@ -63,8 +63,8 @@ public class MapLoader
 
 	// Read tile layers (the map)
 	Elements layerElements = doc.select("layer");
-	this.tiles = new Tile[rows][columns][layers];
-	for (int l = 0; l < this.layers; l++) {
+	this.tiles = new Tile[rows][columns][numLayers];
+	for (int l = 0; l < this.numLayers; l++) {
 	    Element layerElement = layerElements.get(l);
 	    String dataString = layerElement.selectFirst("data").text();
 	    String[] dataRows = dataString.split(", ");
@@ -142,11 +142,11 @@ public class MapLoader
     }
 
     /**
-     * Takes a value from the csv encoding Tiled makes and find out what part of the tileset corresponds to that.
+     * Takes value from the csv encoding Tiled makes and returns corresponding subimage of tileset.
      *
      * @param value the value of a cell. A value above the current tileset image amount meaning the next tileset should be used.
      *
-     * @return an image for that specific value
+     * @return an image for value
      */
     public BufferedImage getTileImage(int value) {
 	if (value == 0) { // Catch "transparent / empty" tiles from map file
@@ -179,8 +179,8 @@ public class MapLoader
 	return obstacles;
     }
 
-    public int getLayers() {
-	return layers;
+    public int getNumLayers() {
+	return numLayers;
     }
 
     public int getRows() {

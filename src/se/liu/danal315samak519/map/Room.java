@@ -22,7 +22,7 @@ public class Room
 	    MapLoader mapLoader = new MapLoader(fileName);
 	    this.rows = mapLoader.getRows();
 	    this.columns = mapLoader.getColumns();
-	    this.layers = mapLoader.getLayers();
+	    this.layers = mapLoader.getNumLayers();
 	    this.tiles = mapLoader.getTiles();
 	    this.tileWidth = mapLoader.getTileWidth();
 	    this.tileHeight = mapLoader.getTileHeight();

@@ -29,6 +29,7 @@ public class Game
     private Player player = null;
     private Room room = null;
     private int currentWorldID = 0;
+    private boolean roomIsCleared;
 
     /**
      * A game with assumed map0.tmx
@@ -45,7 +46,7 @@ public class Game
     public Game(Room room) {
 	random = new Random();
 	setPlayer(new Player(new Point2D.Double(room.getCenterX(), room.getCenterY())));
-	changeWorld(room);
+	changeRoom(room);
     }
 
     /**
@@ -53,7 +54,6 @@ public class Game
      */
     public void tick()
     {
-	System.out.println(player.ticksInvincible);
 	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
 	if (outOfBoundsDirection != null) {
 //	    changeToNextWorld();
@@ -62,24 +62,26 @@ public class Game
 	}
 	removeGarbage();
 	birthNewEntites();
-
+	setRoomIsCleared(true); // Assume room is cleared
 	// Iterate through all movables (incl. player) and do appropiate actions
 	List<Movable> allMovables = getMovablesInclPlayer();
 	for (Movable movable0 : allMovables) {
-
 	    movable0.tick();
 	    handleWallCollision(movable0);
-
 	    if (movable0 instanceof Enemy) {
 		aiDecide((Enemy) movable0);
+		setRoomIsCleared(false); // Found enemy! Not cleared.
 	    }
-
 	    // Second iteration of all movables, for handling
 	    // combinations of movables (e.g. colliding with eachother)
 	    for (Movable movable1 : allMovables) {
 		handleMovableCollision(movable0, movable1);
 	    }
+	    if(movable0 instanceof Obstacle && getRoomIsCleared()){ // OPEN GATES IF NO MORE ENEMIES
+		((Obstacle) movable0).activate();
+	    }
 	}
+
     }
 
     /**
@@ -91,10 +93,10 @@ public class Game
 	Direction entranceDirection = outOfBoundsDirection.getOpposite();
 	double margin = 10.0;
 	switch (entranceDirection) {
-	    case UP -> getPlayer().setCenterLocation(this.getWorld().getCenterX(), margin);
-	    case DOWN -> getPlayer().setCenterLocation(this.getWorld().getCenterX(), this.getWorld().getHeight() - margin);
-	    case LEFT -> getPlayer().setCenterLocation(margin, this.getWorld().getCenterY());
-	    case RIGHT -> getPlayer().setCenterLocation(this.getWorld().getWidth() - margin, this.getWorld().getCenterY());
+	    case UP -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), margin);
+	    case DOWN -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), this.getRoom().getHeight() - margin);
+	    case LEFT -> getPlayer().setCenterLocation(margin, this.getRoom().getCenterY());
+	    case RIGHT -> getPlayer().setCenterLocation(this.getRoom().getWidth() - margin, this.getRoom().getCenterY());
 	}
     }
 
@@ -107,7 +109,7 @@ public class Game
 	return list;
     }
 
-    public void changeWorld(Room room) {
+    public void changeRoom(Room room) {
 	// Clear previous movables (if necessary)
 	if (getMovables() != null) {
 	    for (Movable movable : getMovables()) {
@@ -115,49 +117,49 @@ public class Game
 	    }
 	}
 	// Actually set to new room
-	setWorld(room);
+	setRoom(room);
 	// Populate with new movables
 	spawnEnemies();
-//	spawnObstacles();
+	spawnObstacles();
     }
 
     /**
      * "Changes" the room to the same one, effectively resetting everything
      */
     public void resetWorld() {
-	changeWorld(getWorld());
+	changeRoom(getRoom());
     }
 
     private void spawnObstacles() {
-	for (Obstacle obstacle : getWorld().getObstacles()) {
+	for (Obstacle obstacle : getRoom().getObstacles()) {
 	    addMovable(obstacle);
 	}
     }
 
     private void spawnEnemies() {
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
-	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-	    this.addBlue(randomCoord);
-	}
-	for (int i = 0; i < 1; i++) {
+//	for (int i = 0; i < 1; i++) {
+//	    int randomX = 200 + random.nextInt(400);
+//	    int randomY = 200 + random.nextInt(400);
+//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+//	    this.addBlue(randomCoord);
+//	}
+	for (int i = 0; i < 10; i++) {
 	    int randomX = 200 + random.nextInt(400);
 	    int randomY = 200 + random.nextInt(400);
 	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
 	    this.addRed(randomCoord);
 	}
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
-	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-	    this.addKnight(randomCoord);
-	}
+//	for (int i = 0; i < 1; i++) {
+//	    int randomX = 200 + random.nextInt(400);
+//	    int randomY = 200 + random.nextInt(400);
+//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+//	    this.addKnight(randomCoord);
+//	}
     }
 
     private void changeToNextWorld() {
 	currentWorldID++;
-	changeWorld(new Room("map" + currentWorldID + ".tmx"));
+	changeRoom(new Room("map" + currentWorldID + ".tmx"));
     }
 
     public List<Movable> getPendingMovables() {
@@ -170,7 +172,7 @@ public class Game
      * @param movable
      */
     private void handleWallCollision(final Movable movable) {
-	if (getWorld().getLayers() < 2) {
+	if (getRoom().getLayers() < 2) {
 	    throw new RuntimeException("There is no foreground layer in loaded room! Can't check wall collisions.");
 	}
 	if (movable instanceof Obstacle) {
@@ -194,11 +196,11 @@ public class Game
 
 	if (centerX < 0) {
 	    return Direction.LEFT;
-	} else if (centerX > getWorld().getWidth()) {
+	} else if (centerX > getRoom().getWidth()) {
 	    return Direction.RIGHT;
 	} else if (centerY < 0) {
 	    return Direction.UP;
-	} else if (centerY > getWorld().getHeight()) {
+	} else if (centerY > getRoom().getHeight()) {
 	    return Direction.DOWN;
 	}
 	return null; // Movable is in bounds
@@ -230,16 +232,18 @@ public class Game
      * Handle collisions where two movables are involved
      */
     public void handleMovableCollision(final Movable movable0, final Movable movable1) {
-	if (!movable0.getHitBox().intersects(movable1.getHitBox())) {
-	    return; // No need to continue if no collision between movable0 and movable1
+	if (!movable0.getHitBox().intersects(movable1.getHitBox()) || movable0.equals(movable1)) {
+	    return; // No need to continue if no collision between movable0 and movable1, or if they are equal.
 	}
 
-	if (movable0 instanceof Obstacle && movable1 instanceof Player) {
+	if (movable0 instanceof Obstacle && movable1 instanceof Character) {
 	    movable1.nudgeAwayFrom(movable0.getHitBox());
 	}
-	// Enemy-Player
-	else if (movable0 instanceof Enemy && movable1 instanceof Player) {
+	if(movable0 instanceof Enemy && movable1 instanceof Character){
 	    movable0.nudgeAwayFrom(movable1.getHitBox());
+	}
+	// Enemy-Player
+	if (movable0 instanceof Enemy && movable1 instanceof Player) {
 	    ((Player) movable1).tryTakeDamage();
 	}
 	// Projectile-Character
@@ -263,6 +267,14 @@ public class Game
 	movables.removeIf(Movable::getIsGarbage);
     }
 
+    public boolean getRoomIsCleared() {
+	return roomIsCleared;
+    }
+
+    private void setRoomIsCleared(final boolean b) {
+	roomIsCleared = b;
+    }
+
     public Player getPlayer() {
 	return this.player;
     }
@@ -282,10 +294,6 @@ public class Game
 	}
     }
 
-    public void nudgePlayer(final int dx, final int dy) {
-	player.nudge(dx, dy);
-	notifyListeners();
-    }
 
     public void addBlue(Point2D.Double coord)
     {
@@ -320,16 +328,16 @@ public class Game
 	return movables;
     }
 
-    public Room getWorld() {
+    public Room getRoom() {
 	return room;
     }
 
-    private void setWorld(final Room room) {
+    private void setRoom(final Room room) {
 	this.room = room;
     }
 
     public void addMovable(final Movable movable) {
-	if (movable != null) {
+	if (movable != null) { // Don't add null objects
 	    movables.add(movable);
 	}
     }

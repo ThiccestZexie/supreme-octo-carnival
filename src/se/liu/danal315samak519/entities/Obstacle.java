@@ -6,6 +6,7 @@ public class Obstacle extends Movable
 {
     private final int id;
     private double endX, endY;
+    private double speed = 8; // RANDOM MAGIC CONSTANT
 
     public Obstacle(double x, double y, double endX, double endY, double width, double height, int id) {
 	setLocation(x, y);
@@ -16,20 +17,23 @@ public class Obstacle extends Movable
 	this.id = id;
     }
 
-    @Override public void tick() {
-	super.tick();
-	nudgeTowardsEnd();
+    public void activate() {
+	setVelocityTowardsEnd();
+    }
+
+    public void deactivate() {
+	setVelocity(0, 0);
     }
 
     /**
      * Make obstacle glide towards end position
      */
-    public void nudgeTowardsEnd(){
-	if(getX() == endX && getY() == endY){
-	    return; // Already at end location
+    public void setVelocityTowardsEnd() {
+	if (getX() == endX && getY() == endY) {
+	    setVelocity(0,0); // At end!
+	    return;
 	}
 	Direction towardsEnd = Direction.getDirectionBetweenPoints(getX(), getY(), endX, endY);
-	double speed = 8;
-	this.nudge(speed*towardsEnd.getX(), speed*towardsEnd.getY());
+	setVelocity(speed * towardsEnd.getX(), speed * towardsEnd.getY());
     }
 }
