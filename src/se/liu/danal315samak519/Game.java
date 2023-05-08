@@ -56,7 +56,8 @@ public class Game
     {
 	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
 	if (outOfBoundsDirection != null) {
-	    changeToNextWorld();
+//	    changeToNextWorld();
+	    resetWorld();
 	    placePlayerAtEntrance(outOfBoundsDirection);
 	}
 	removeGarbage();
@@ -117,7 +118,14 @@ public class Game
 	setWorld(world);
 	// Populate with new movables
 	spawnEnemies();
-	spawnObstacles();
+//	spawnObstacles();
+    }
+
+    /**
+     * "Changes" the world to the same one, effectively resetting everything
+     */
+    public void resetWorld(){
+	changeWorld(getWorld());
     }
 
     private void spawnObstacles() {
