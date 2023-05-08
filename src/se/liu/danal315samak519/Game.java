@@ -161,7 +161,7 @@ public class Game
 	changeWorld(new World("map" + currentWorldID + ".tmx"));
     }
 
-    public LinkedList<Movable> getPendingMovables() {
+    public List<Movable> getPendingMovables() {
 	return pendingMovables;
     }
 
@@ -178,13 +178,12 @@ public class Game
 	    return; // Don't handle wall collisions on obstacles!!
 	}
 	for (Tile tile : world.getForegroundTileList()) {
-	    Rectangle2D.Double tileHitBox = new Rectangle2D.Double(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
-	    movable.nudgeAwayFrom(tileHitBox);
+	    movable.nudgeAwayFrom(tile.getHitBox());
 	}
     }
 
     /**
-     * Return the direction the given movable is out of bounds in. Return null if inside of bounds.
+     * Return the direction the movable is out of bounds in. Return null if inside of bounds.
      *
      * @param movable
      *
