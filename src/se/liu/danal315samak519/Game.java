@@ -31,7 +31,7 @@ public class Game
     private int currentWorldID = 0;
 
     /**
-     * Make the entire game state update! 1. Remove and add new movables to movableList 2. Tick every movable 3. Handle all collisions
+     * Make the entire game state update by handling collisions and removing / adding entities.
      */
     public void tick()
     {

@@ -40,23 +40,20 @@ public class Viewer
 	// Initisalise frame
 	JFrame frame = new JFrame("Gamers");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	// Game
+
 	Game game = new Game();
-	// Player
 	Player player = new Player(new Point2D.Double(500, 500));
-	player.setMaxSpeed(5);
 	game.setPlayer(player);
-	// World
+
 	game.setWorld(new World("map0.tmx"));
 	Random random = new Random();
-	// Spawn a bunch of blues
+
 	for (int i = 0; i < 1; i++) {
 	    int randomX = 200 + random.nextInt(400);
 	    int randomY = 200 + random.nextInt(400);
 	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
 	    game.addBlue(randomCoord);
 	}
-	// spawn a redss
 	for (int i = 0; i < 1; i++) {
 	    int randomX = 200 + random.nextInt(400);
 	    int randomY = 200 + random.nextInt(400);
