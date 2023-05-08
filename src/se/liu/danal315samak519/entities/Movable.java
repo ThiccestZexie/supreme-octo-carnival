@@ -2,6 +2,8 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
 
+import java.awt.geom.Rectangle2D;
+
 /**
  *
  */
@@ -18,6 +20,28 @@ public abstract class Movable extends Entity
 
     public void setDir(final Direction dir) {
 	this.dir = dir;
+    }
+
+    public void nudgeAwayFrom(Rectangle2D otherHitBox) {
+	if (!this.getHitBox().intersects(otherHitBox)) {
+	    return; // not intersecting!
+	}
+
+	Rectangle2D intersection = this.getHitBox().createIntersection(otherHitBox);
+	boolean isHorizontalCollision = intersection.getWidth() < intersection.getHeight();
+	if (isHorizontalCollision) { // Left-right collision
+	    if (intersection.getCenterX() < this.getHitBox().getCenterX()) { // Left collision
+		nudge(intersection.getWidth(), 0);
+	    } else { // Right collision
+		nudge(-intersection.getWidth(), 0);
+	    }
+	} else { // Up-down collision
+	    if (intersection.getCenterY() < this.getHitBox().getCenterY()) { // Up collision
+		nudge(0, intersection.getHeight());
+	    } else { // Down collision
+		nudge(0, -intersection.getHeight());
+	    }
+	}
     }
 
     public double getMaxSpeed() {
@@ -38,19 +62,9 @@ public abstract class Movable extends Entity
 	setVelY(vy);
     }
 
-    public void setVelY(final double vy){
-	this.velY = vy;
-	setAppropiateDir();
-    }
-
-    public void setVelX(final double vx){
-	this.velX = vx;
-	setAppropiateDir();
-    }
-
     private void setAppropiateDir() {
 	Direction newDirection = Direction.velocityToDirection(getVelX(), getVelY());
-	if(newDirection != null){
+	if (newDirection != null) {
 	    setDir(newDirection);
 	}
     }
@@ -67,8 +81,18 @@ public abstract class Movable extends Entity
 	return velX;
     }
 
+    public void setVelX(final double vx) {
+	this.velX = vx;
+	setAppropiateDir();
+    }
+
     public double getVelY() {
 	return velY;
+    }
+
+    public void setVelY(final double vy) {
+	this.velY = vy;
+	setAppropiateDir();
     }
 
     public boolean getIsGarbage() {

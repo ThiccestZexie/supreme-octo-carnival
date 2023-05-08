@@ -15,6 +15,7 @@ import se.liu.danal315samak519.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -90,31 +91,9 @@ public class Game
 	if (getWorld().getLayers() < 2) {
 	    throw new RuntimeException("There is no foreground layer in loaded world! Can't check wall collisions.");
 	}
-
 	for (Tile tile : world.getForegroundTileList()) {
-	    Rectangle tileHitBox = new Rectangle(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
-	    // Handle player-wall collision
-	    if (player.getHitBox().intersects(tileHitBox)) {
-		Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
-		Point2D to = new Point2D.Double(player.getHitBox().getCenterX(), player.getHitBox().getCenterY());
-		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
-		int pushBackAmount = 5;
-		player.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
-		player.setVelocity(0, 0);
-	    }
-
-	    // Handle movableEntity-wall collision
-	    if (movable.getHitBox().intersects(tileHitBox)) {
-		Point2D from = new Point2D.Double(tileHitBox.getCenterX(), tileHitBox.getCenterY());
-		Point2D to = new Point2D.Double(movable.getHitBox().getCenterX(), movable.getHitBox().getCenterY());
-		Direction pushBackDirection = Direction.getDirectionBetweenPoints(from, to);
-		int pushBackAmount = 1;
-		movable.nudge(pushBackAmount * pushBackDirection.getX(), pushBackAmount * pushBackDirection.getY());
-		movable.setVelocity(0, 0);
-		if (movable instanceof Projectile) {
-		    movable.markGarbage();
-		}
-	    }
+	    Rectangle2D.Double tileHitBox = new Rectangle2D.Double(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
+	    movable.nudgeAwayFrom(tileHitBox);
 	}
     }
 

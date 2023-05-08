@@ -86,31 +86,31 @@ public abstract class Enemy extends Character
 
     public boolean checkIfPlayerIsInFront(int length, int width) {
 	if (this.getStatus() != Status.ATTACKING) {
-	    Rectangle arrowLength = new Rectangle();
+	    Rectangle raycastRectangle = new Rectangle();
 	    switch (getDir()) {
 		case UP:
-		    arrowLength.setSize(width, length);
-		    arrowLength.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - arrowLength.getWidth() / 2.0),
-					    (int) (this.getY() - arrowLength.getHeight()));
+		    raycastRectangle.setSize(width, length);
+		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - raycastRectangle.getWidth() / 2.0),
+					    (int) (this.getY() - raycastRectangle.getHeight()));
 		    break;
 		case DOWN:
-		    arrowLength.setSize(width, length);
-		    arrowLength.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - arrowLength.getWidth() / 2.0),
+		    raycastRectangle.setSize(width, length);
+		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - raycastRectangle.getWidth() / 2.0),
 					    (int) (this.getY() + (this.getHeight())));
 		    break;
 		case LEFT:
-		    arrowLength.setSize(length, width);
-		    arrowLength.setLocation((int) (this.getX() - arrowLength.getWidth()),
-					    (int) ((this.getY() + (this.getHeight() / 2.0)) - (arrowLength.getHeight() / 2.0)));
+		    raycastRectangle.setSize(length, width);
+		    raycastRectangle.setLocation((int) (this.getX() - raycastRectangle.getWidth()),
+					    (int) ((this.getY() + (this.getHeight() / 2.0)) - (raycastRectangle.getHeight() / 2.0)));
 		    break;
 		case RIGHT:
-		    arrowLength.setSize(length, width);
-		    arrowLength.setLocation((int) (this.getX() + this.getWidth()),
-					    (int) ((this.getY() + (this.getHeight() / 2.0)) - (arrowLength.getHeight() / 2.0)));
+		    raycastRectangle.setSize(length, width);
+		    raycastRectangle.setLocation((int) (this.getX() + this.getWidth()),
+					    (int) ((this.getY() + (this.getHeight() / 2.0)) - (raycastRectangle.getHeight() / 2.0)));
 		    break;
 	    }
 
-	    if (arrowLength.intersects(player.getHitBox())) {
+	    if (raycastRectangle.intersects(player.getHitBox())) {
 		return true;
 	    }
 	}
