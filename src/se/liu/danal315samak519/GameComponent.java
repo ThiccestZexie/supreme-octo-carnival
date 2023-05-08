@@ -5,8 +5,8 @@ import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
+import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
-import se.liu.danal315samak519.map.World;
 
 import javax.swing.*;
 import java.awt.*;
@@ -209,14 +209,14 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintMapLayer(final Graphics g, final int layer) {
-	World world = game.getWorld();
-	if(layer >= world.getLayers()){
-	    throw new IllegalArgumentException("Can't draw the specified layer " + layer + " on map " + world.getName());
+	Room room = game.getWorld();
+	if(layer >= room.getLayers()){
+	    throw new IllegalArgumentException("Can't draw the specified layer " + layer + " on map " + room.getName());
 	}
 
-	for (int y = 0; y < world.getRows(); y++) {
-	    for (int x = 0; x < world.getColumns(); x++) {
-		Tile tile = world.getTile(x, y, layer);
+	for (int y = 0; y < room.getRows(); y++) {
+	    for (int x = 0; x < room.getColumns(); x++) {
+		Tile tile = room.getTile(x, y, layer);
 		if(tile != null){
 		    int tileX = x * tileWidth;
 		    int tileY = y * tileHeight;

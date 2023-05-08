@@ -9,12 +9,11 @@ import se.liu.danal315samak519.entities.enemies.Blue;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
+import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
-import se.liu.danal315samak519.map.World;
 import se.liu.danal315samak519.weapons.Weapon;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,25 +27,25 @@ public class Game
     private LinkedList<Movable> pendingMovables = new LinkedList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
-    private World world = null;
+    private Room room = null;
     private int currentWorldID = 0;
 
     /**
      * A game with assumed map0.tmx
      */
     public Game() {
-	this(new World("map0.tmx"));
+	this(new Room("map0.tmx"));
     }
 
     /**
-     * A game with argument world
+     * A game with argument room
      *
-     * @param world
+     * @param room
      */
-    public Game(World world) {
+    public Game(Room room) {
 	random = new Random();
-	setPlayer(new Player(new Point2D.Double(world.getCenterX(), world.getCenterY())));
-	changeWorld(world);
+	setPlayer(new Player(new Point2D.Double(room.getCenterX(), room.getCenterY())));
+	changeWorld(room);
     }
 
     /**
@@ -108,22 +107,22 @@ public class Game
 	return list;
     }
 
-    public void changeWorld(World world) {
+    public void changeWorld(Room room) {
 	// Clear previous movables (if necessary)
 	if (getMovables() != null) {
 	    for (Movable movable : getMovables()) {
 		movable.markAsGarbage();
 	    }
 	}
-	// Actually set to new world
-	setWorld(world);
+	// Actually set to new room
+	setWorld(room);
 	// Populate with new movables
 	spawnEnemies();
 //	spawnObstacles();
     }
 
     /**
-     * "Changes" the world to the same one, effectively resetting everything
+     * "Changes" the room to the same one, effectively resetting everything
      */
     public void resetWorld() {
 	changeWorld(getWorld());
@@ -158,7 +157,7 @@ public class Game
 
     private void changeToNextWorld() {
 	currentWorldID++;
-	changeWorld(new World("map" + currentWorldID + ".tmx"));
+	changeWorld(new Room("map" + currentWorldID + ".tmx"));
     }
 
     public List<Movable> getPendingMovables() {
@@ -172,12 +171,12 @@ public class Game
      */
     private void handleWallCollision(final Movable movable) {
 	if (getWorld().getLayers() < 2) {
-	    throw new RuntimeException("There is no foreground layer in loaded world! Can't check wall collisions.");
+	    throw new RuntimeException("There is no foreground layer in loaded room! Can't check wall collisions.");
 	}
 	if (movable instanceof Obstacle) {
 	    return; // Don't handle wall collisions on obstacles!!
 	}
-	for (Tile tile : world.getForegroundTileList()) {
+	for (Tile tile : room.getForegroundTileList()) {
 	    movable.nudgeAwayFrom(tile.getHitBox());
 	}
     }
@@ -321,12 +320,12 @@ public class Game
 	return movables;
     }
 
-    public World getWorld() {
-	return world;
+    public Room getWorld() {
+	return room;
     }
 
-    private void setWorld(final World world) {
-	this.world = world;
+    private void setWorld(final Room room) {
+	this.room = room;
     }
 
     public void addMovable(final Movable movable) {

@@ -1,14 +1,10 @@
 package se.liu.danal315samak519;
 
 import se.liu.danal315samak519.entities.Movable;
-import se.liu.danal315samak519.entities.Obstacle;
-import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.enemies.Enemy;
-import se.liu.danal315samak519.map.World;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class Viewer

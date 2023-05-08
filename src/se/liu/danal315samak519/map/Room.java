@@ -7,19 +7,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class World
+public class Room
 {
-    private final String name;
+    private final String fileName;
     private final int tileHeight;
     private final int tileWidth;
     private List<Obstacle> obstacles;
     private Tile[][][] tiles; // columns, rows, layers
     private final int rows, columns, layers;
 
-    public World(final String tmxName) {
+    public Room(final String fileName) {
 	try {
-	    this.name = tmxName;
-	    MapLoader mapLoader = new MapLoader(tmxName);
+	    this.fileName = fileName;
+	    MapLoader mapLoader = new MapLoader(fileName);
 	    this.rows = mapLoader.getRows();
 	    this.columns = mapLoader.getColumns();
 	    this.layers = mapLoader.getLayers();
@@ -40,7 +40,7 @@ public class World
 	return getTile(point.x, point.y, layer);
     }
     public String getName(){
-	return this.name;
+	return this.fileName;
     }
 
 
