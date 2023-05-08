@@ -3,7 +3,10 @@ package se.liu.danal315samak519.entities.enemies;
 import se.liu.danal315samak519.ImageLoader;
 import se.liu.danal315samak519.Status;
 import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.Entity;
+import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
+import se.liu.danal315samak519.entities.Potion;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -49,7 +52,9 @@ public abstract class Enemy extends Character
 	    throw new RuntimeException(e);
 	}
     }
-
+    public Movable dropItem(){
+	return new Potion(this.coord);
+    }
     public Point2D.Double getVelocityTowardsPlayer() {
 	double x = player.getX() - this.getX();
 	double y = player.getY() - this.getY();

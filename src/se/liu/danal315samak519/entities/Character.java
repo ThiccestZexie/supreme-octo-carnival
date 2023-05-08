@@ -2,6 +2,7 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.Status;
+import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.weapons.Projectile;
 import se.liu.danal315samak519.weapons.Sword;
 import se.liu.danal315samak519.weapons.Weapon;
@@ -136,7 +137,9 @@ public abstract class Character extends Movable
 	    setHp(maxHP);
 	}
     }
-
+    public void heal(int healAmmount){
+	this.hp += healAmmount;
+    }
     public boolean checkExpReq() { // You start as level 1 so index 0 of exp req and the exp is exp needed for next level...
 	if (this.exp >= EXP_REQUIREMENTS[level - 1]) {
 	    return true;

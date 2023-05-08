@@ -1,6 +1,8 @@
 package se.liu.danal315samak519;
 
+import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
+import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.map.World;
 
 import javax.swing.*;
@@ -10,17 +12,29 @@ import java.util.Random;
 
 public class Viewer
 {
-    private static final int TARGET_FPS = 60;
+    private static final int TARGET_FPS = 120;
     private GameComponent gameComponent;
     private final Action doTimerTick = new AbstractAction()
     {
 	@Override public void actionPerformed(final ActionEvent e)
 	{
+	    checkForDeath();
 	    gameComponent.frameChanged();
 	    gameComponent.game.tick();
 	}
     };
 
+    public void checkForDeath(){
+	for (Movable m: gameComponent.game.getMovables()) {
+	    if (m instanceof Enemy)
+	    {
+		Enemy e = (Enemy) m;
+		if (e.getIsGarbage()){
+		  gameComponent.game.getPendingMovables().add(e.dropItem());
+		}
+	    }
+	}
+    }
     public void show() {
 	// Initisalise frame
 	JFrame frame = new JFrame("Gamers");

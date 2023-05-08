@@ -1,6 +1,7 @@
 package se.liu.danal315samak519;
 
 import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
@@ -63,6 +64,10 @@ public class GameComponent extends JComponent implements FrameListener
 		// PAINT SPRITE
 		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(), character.getIntHeight(), null);
 	    }
+	    if (movable instanceof Potion){
+		Potion potion = (Potion) movable;
+		g.drawImage(potion.getFullHeart(),potion.getIntX(), potion.getIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
+ 	    }
 	}
     }
 

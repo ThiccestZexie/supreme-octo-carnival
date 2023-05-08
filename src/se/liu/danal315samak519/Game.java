@@ -3,6 +3,7 @@ package se.liu.danal315samak519;
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
+import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Blue;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
@@ -74,6 +75,10 @@ public class Game
 	double centerX = world.getColumns() * world.getTileWidth() / 2.0;
 	double centerY = world.getRows() * world.getTileHeight() / 2.0;
 	player.setLocation(centerX, centerY);
+    }
+
+    public LinkedList<Movable> getPendingMovables() {
+	return pendingMovables;
     }
 
     /**
@@ -177,6 +182,11 @@ public class Game
 		character.takeDamage();
 		weapon.markGarbage();
 	    }
+	}
+	if(movable0 instanceof Potion && movable1 instanceof Player){
+	    Potion potion = (Potion) movable0;
+	    Player player = (Player) movable1;
+	    potion.pickUp(player);
 	}
     }
 
