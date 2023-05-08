@@ -247,7 +247,7 @@ public class Game
 	    ((Player) movable1).tryTakeDamage();
 	}
 	// Projectile-Character
-	else if (movable0 instanceof Weapon && movable1 instanceof Character) {
+	if (movable0 instanceof Weapon && movable1 instanceof Character) {
 	    Weapon weapon = (Weapon) movable0;
 	    Character character = (Character) movable1;
 	    if (!character.equals(weapon.getOwner())) {
@@ -256,7 +256,7 @@ public class Game
 	    }
 	}
 	// Player-Potion
-	else if (movable0 instanceof Potion && movable1 instanceof Player) {
+	if (movable0 instanceof Potion && movable1 instanceof Player) {
 	    Potion potion = (Potion) movable0;
 	    Player player = (Player) movable1;
 	    potion.pickUp(player);
