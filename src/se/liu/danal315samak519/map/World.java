@@ -1,5 +1,7 @@
 package se.liu.danal315samak519.map;
 
+import se.liu.danal315samak519.entities.Obstacle;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class World
 	    this.tiles = mapLoader.getTiles();
 	    this.tileWidth = mapLoader.getTileWidth();
 	    this.tileHeight = mapLoader.getTileHeight();
-	    this.obstacles = mapLoader.getZoneList();
+	    this.obstacles = mapLoader.getObstacles();
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

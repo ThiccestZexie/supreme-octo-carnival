@@ -102,7 +102,7 @@ public abstract class Entity
 	setLocation(x - this.getWidth() / 2.0, y - this.getHeight() / 2.0);
     }
 
-    public void markGarbage() {
+    public void markAsGarbage() {
 	this.isGarbage = true;
     }
 }

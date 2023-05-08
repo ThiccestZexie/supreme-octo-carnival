@@ -43,31 +43,9 @@ public class Viewer
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	Game game = new Game();
-	Player player = new Player(new Point2D.Double(500, 500));
-	game.setPlayer(player);
 
-	game.setWorld(new World("map0.tmx"));
 	Random random = new Random();
 
-//	for (int i = 0; i < 1; i++) {
-//	    int randomX = 200 + random.nextInt(400);
-//	    int randomY = 200 + random.nextInt(400);
-//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-//	    game.addBlue(randomCoord);
-//	}
-//	for (int i = 0; i < 1; i++) {
-//	    int randomX = 200 + random.nextInt(400);
-//	    int randomY = 200 + random.nextInt(400);
-//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-//	    game.addRed(randomCoord);
-//	}
-//	for (int i = 0; i < 1; i++) {
-//	    int randomX = 200 + random.nextInt(400);
-//	    int randomY = 200 + random.nextInt(400);
-//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-//	    game.addKnight(randomCoord);
-//	}
-	game.addMovable(new Obstacle(new Point2D.Double(200, 200), 10, 10));
 
 	// Put game in gameComponent
 	gameComponent = new GameComponent(game);

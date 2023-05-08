@@ -18,16 +18,37 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 
 public class Game
 {
+    private final Random random;
     public List<Movable> movables = new ArrayList<>();
     private LinkedList<Movable> pendingMovables = new LinkedList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
     private World world = null;
     private int currentWorldID = 0;
+
+    /**
+     * A game with assumed map0.tmx
+     */
+    public Game() {
+	this(new World("map0.tmx"));
+    }
+
+    /**
+     * A game with argument world
+     *
+     * @param world
+     */
+    public Game(World world) {
+	random = new Random();
+	setWorld(world);
+	setPlayer(new Player(new Point2D.Double(getWorld().getCenterX(), getWorld().getCenterY())));
+	spawnEnemies();
+    }
 
     /**
      * Make the entire game state update removing / adding entities and handle collisions
@@ -63,12 +84,13 @@ public class Game
 
     /**
      * Place the player at appropiate entrance in the new map, when player has exited the previous
+     *
      * @param outOfBoundsDirection
      */
     private void placePlayerAtEntrance(final Direction outOfBoundsDirection) {
 	Direction entranceDirection = outOfBoundsDirection.getOpposite();
 	double margin = 10.0;
-	switch(entranceDirection){
+	switch (entranceDirection) {
 	    case UP -> getPlayer().setCenterLocation(this.getWorld().getCenterX(), margin);
 	    case DOWN -> getPlayer().setCenterLocation(this.getWorld().getCenterX(), this.getWorld().getHeight() - margin);
 	    case LEFT -> getPlayer().setCenterLocation(margin, this.getWorld().getCenterY());
@@ -85,12 +107,39 @@ public class Game
 	return list;
     }
 
+    public void changeWorld(World world) {
+	// Clear all movables
+	for (Movable movable : getMovables()) {
+	    movable.markAsGarbage();
+	}
+	setWorld(world);
+	spawnEnemies();
+    }
+
+    private void spawnEnemies() {
+	for (int i = 0; i < 1; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+	    this.addBlue(randomCoord);
+	}
+	for (int i = 0; i < 1; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+	    this.addRed(randomCoord);
+	}
+	for (int i = 0; i < 1; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+	    this.addKnight(randomCoord);
+	}
+    }
+
     private void changeToNextWorld() {
 	currentWorldID++;
 	setWorld(new World("map" + currentWorldID + ".tmx"));
-	double centerX = world.getColumns() * world.getTileWidth() / 2.0;
-	double centerY = world.getRows() * world.getTileHeight() / 2.0;
-	player.setLocation(centerX, centerY);
     }
 
     public LinkedList<Movable> getPendingMovables() {
@@ -113,8 +162,7 @@ public class Game
     }
 
     /**
-     * Return the direction the given movable is out of bounds in.
-     * Return null if inside of bounds.
+     * Return the direction the given movable is out of bounds in. Return null if inside of bounds.
      *
      * @param movable
      *
@@ -124,7 +172,7 @@ public class Game
 	double centerX = movable.getHitBox().getCenterX();
 	double centerY = movable.getHitBox().getCenterY();
 
-	if(centerX < 0){
+	if (centerX < 0) {
 	    return Direction.LEFT;
 	} else if (centerX > getWorld().getWidth()) {
 	    return Direction.RIGHT;
@@ -142,9 +190,13 @@ public class Game
 	}
 	if (enemy.checkIfPlayerIsInFront(500, 100)) {
 	    if (enemy.tryToAttack()) {
-		pendingMovables.push(enemy.getProjectile());
+		pushPending(enemy.getProjectile());
 	    }
 	}
+    }
+
+    private void pushPending(Movable movable) {
+	pendingMovables.push(movable);
     }
 
     private void birthNewEntites() {
@@ -177,6 +229,7 @@ public class Game
 	}
 	// Enemy-Player
 	else if (movable0 instanceof Enemy && movable1 instanceof Player) {
+	    movable0.nudgeAwayFrom(movable1.getHitBox());
 	    ((Player) movable1).takeDamage();
 	}
 	// Projectile-Character
@@ -185,7 +238,7 @@ public class Game
 	    Character character = (Character) movable1;
 	    if (!character.equals(weapon.getOwner())) {
 		character.takeDamage();
-		weapon.markGarbage();
+		weapon.markAsGarbage();
 	    }
 	}
 	// Player-Potion
@@ -261,7 +314,6 @@ public class Game
 	    if (movable instanceof Character) {
 		checkForHits((Character) movable);
 	    }
-
 	}
     }
 
@@ -270,7 +322,7 @@ public class Game
 	return world;
     }
 
-    public void setWorld(final World world) {
+    private void setWorld(final World world) {
 	this.world = world;
     }
 

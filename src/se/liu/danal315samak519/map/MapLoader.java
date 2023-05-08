@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import se.liu.danal315samak519.ImageLoader;
+import se.liu.danal315samak519.entities.Obstacle;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -77,7 +78,6 @@ public class MapLoader
 	}
 
 	// Read object layers (obstacles, etc..)
-	//TODO SAMUEL I COMMENTERD OUT STUFF HERE ME CONFUSION
 	Elements objects = doc.select("objectgroup[id=4] object");
 	obstacles = new ArrayList<>();
 	for (Element object : objects) {
@@ -88,7 +88,7 @@ public class MapLoader
 	    double h = Double.parseDouble(object.attr("height"));
 	    double endX = getProperty(object, "endX");
 	    double endY = getProperty(object, "endY");
-	//    obstacles.add(new Obstacle(startX, startY, w, h, endX, endY));
+	    obstacles.add(new Obstacle(startX, startY, endX, endY, w, h, id));
 	}
     }
     private double getProperty(Element object, String propertyName) throws IllegalArgumentException {
@@ -175,7 +175,7 @@ public class MapLoader
 	return index;
     }
 
-    public List<Obstacle> getZoneList(){
+    public List<Obstacle> getObstacles(){
 	return obstacles;
     }
 

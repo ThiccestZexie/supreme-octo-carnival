@@ -48,7 +48,7 @@ public class Player extends Character
 
     private void storeLevelUpFrames() {
 	try {
-	    // TODO HARDCODED FOR EXACTLY 20 FRAMES
+	    // HARDCODED FOR EXACTLY 20 FRAMES
 	    levelUpFrames = new BufferedImage[20];
 	    for (int tens = 0; tens < 2; tens++)
 	    {

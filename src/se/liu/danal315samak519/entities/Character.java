@@ -156,7 +156,7 @@ public abstract class Character extends Movable
 	if (getHp() > 0) {
 	    decrHp();
 	} else {
-	    this.markGarbage();
+	    this.markAsGarbage();
 	}
     }
 
