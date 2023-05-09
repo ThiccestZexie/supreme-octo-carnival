@@ -1,18 +1,16 @@
 package se.liu.danal315samak519;
 
 import se.liu.danal315samak519.entities.Character;
-import se.liu.danal315samak519.entities.Potion;
-import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
+import se.liu.danal315samak519.entities.Potion;
+import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.map.Tile;
 import se.liu.danal315samak519.map.World;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class GameComponent extends JComponent implements FrameListener
 {
@@ -62,12 +60,13 @@ public class GameComponent extends JComponent implements FrameListener
 	    if (movable instanceof Character) {
 		Character character = (Character) movable;
 		// PAINT SPRITE
-		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(), character.getIntHeight(), null);
+		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(),
+			    character.getIntHeight(), null);
 	    }
-	    if (movable instanceof Potion){
+	    if (movable instanceof Potion) {
 		Potion potion = (Potion) movable;
-		g.drawImage(potion.getFullHeart(),potion.getIntX(), potion.getIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
- 	    }
+		g.drawImage(potion.getFullHeart(), potion.getIntX(), potion.getIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
+	    }
 	}
     }
 
@@ -106,29 +105,29 @@ public class GameComponent extends JComponent implements FrameListener
 	drawPlayerLife(g);
     }
 
-    public void drawPlayerLife(Graphics g){
+    public void drawPlayerLife(Graphics g) {
 	int fullHearts = game.getPlayer().getHp() / 2;
 	int halfHearts = game.getPlayer().getHp() % 2;
 	int xCoord = 0;
 	int yCoord = 0;
 	int heartPos = 0;
 	int spaceBetweenHearts = 60;
-	while (heartPos < game.getPlayer().getMaxHp()/2){
+	while (heartPos < game.getPlayer().getMaxHp() / 2) {
 
-	    g.drawImage(game.getPlayer().emptyHeart, xCoord ,yCoord, null);
+	    g.drawImage(game.getPlayer().emptyHeart, xCoord, yCoord, null);
 	    heartPos++;
 	    xCoord += spaceBetweenHearts;
 	}
 	xCoord = 0;
 	heartPos = 0;
-	while(heartPos < game.getPlayer().getHp()){
-	    g.drawImage(game.getPlayer().halfHeart,xCoord,yCoord,null);
+	while (heartPos < game.getPlayer().getHp()) {
+	    g.drawImage(game.getPlayer().halfHeart, xCoord, yCoord, null);
 	    heartPos++;
-	    if (heartPos < game.getPlayer().getHp()){
-		g.drawImage(game.getPlayer().fullHeart, xCoord,yCoord,null);
+	    if (heartPos < game.getPlayer().getHp()) {
+		g.drawImage(game.getPlayer().fullHeart, xCoord, yCoord, null);
 	    }
 	    heartPos++;
-	    xCoord+=spaceBetweenHearts;
+	    xCoord += spaceBetweenHearts;
 
 	}
     }
@@ -149,36 +148,36 @@ public class GameComponent extends JComponent implements FrameListener
 	}
     }
 
-    private void paintOverlay(final Graphics g){
+    private void paintOverlay(final Graphics g) {
 
 	Graphics2D g2 = (Graphics2D) g;
 	//Draw one shape on left side of screen and rightside
 
-	 int frameWidth = (int) (tileWidth * 22);
-	 int frameHeight = tileHeight * 10;
+	int frameWidth = tileWidth * 22;
+	int frameHeight = tileHeight * 10;
 	int frameX = tileWidth * 4;
 	int frameY = (int) (getPreferredSize().height / 2.5);
-	Color color = new Color(0,0,0,210);
+	Color color = new Color(0, 0, 0, 210);
 	g2.setColor(color);
-	g2.fillRoundRect(frameX,frameY, frameWidth,frameHeight,35,35);
+	g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, 35, 35);
 
 	Decrees decree00 = new Decrees(1);
 	Decrees decree01 = new Decrees(2);
 
-	color = new Color(255,255,255);
+	color = new Color(255, 255, 255);
 	g2.setColor(color);
 	g2.setStroke(new BasicStroke(5));
-	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth- 10, frameHeight-10,25,25);
+	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth - 10, frameHeight - 10, 25, 25);
     }
 
     @Override protected void paintComponent(final Graphics g) {
 	super.paintComponent(g);
-	paintMapLayer(g,0); // Paint background
+	paintMapLayer(g, 0); // Paint background
 	paintEntities(g);
 	paintPlayer(g);
-	paintMapLayer(g,1); // Paint foreground
+	paintMapLayer(g, 1); // Paint foreground
 	paintGUI(g);
-	if (showSkills){
+	if (showSkills) {
 	    paintOverlay(g);
 	}
 	if (debug) {
@@ -202,14 +201,14 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void paintMapLayer(final Graphics g, final int layer) {
 	World world = game.getWorld();
-	if(layer >= world.getLayers()){
+	if (layer >= world.getLayers()) {
 	    throw new IllegalArgumentException("Can't draw the specified layer " + layer + " on map " + world.getName());
 	}
 
 	for (int y = 0; y < world.getRows(); y++) {
 	    for (int x = 0; x < world.getColumns(); x++) {
 		Tile tile = world.getTile(x, y, layer);
-		if(tile != null){
+		if (tile != null) {
 		    int tileX = x * tileWidth;
 		    int tileY = y * tileHeight;
 		    g.drawImage(tile.getImage(), tileX, tileY, tileWidth, tileHeight, null);
@@ -291,6 +290,7 @@ public class GameComponent extends JComponent implements FrameListener
 	    game.playerSwordAttack();
 	}
     }
+
     private class ShootAction extends AbstractAction
     {
 	public void actionPerformed(ActionEvent e) {
@@ -304,12 +304,14 @@ public class GameComponent extends JComponent implements FrameListener
 	    showSkills = !showSkills;
 	}
     }
+
     private class DebugAction extends AbstractAction
     {
 	@Override public void actionPerformed(final ActionEvent e) {
 	    debug = !debug;
 	}
     }
+
     private class StopAction extends AbstractAction
     {
 	private final Direction dir;
