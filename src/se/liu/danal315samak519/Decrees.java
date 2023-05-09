@@ -38,4 +38,8 @@ public class Decrees
     public int getType() {
 	return type;
     }
+
+    public String getEffect() {
+	return effect;
+    }
 }

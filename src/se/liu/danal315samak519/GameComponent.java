@@ -152,31 +152,23 @@ public class GameComponent extends JComponent implements FrameListener
     private void paintOverlay(final Graphics g){
 
 	Graphics2D g2 = (Graphics2D) g;
+	//Draw one shape on left side of screen and rightside
 
-	final int frameX = tileWidth * 2;
-	final int frameY = tileHeight;
-	final int frameWidth = tileWidth * 10;
-	final int frameHeight = tileHeight * 20;
+	 int frameWidth = (int) (tileWidth * 22);
+	 int frameHeight = tileHeight * 10;
+	int frameX = tileWidth * 4;
+	int frameY = (int) (getPreferredSize().height / 2.5);
 	Color color = new Color(0,0,0,210);
 	g2.setColor(color);
 	g2.fillRoundRect(frameX,frameY, frameWidth,frameHeight,35,35);
+
+	Decrees decree00 = new Decrees(1);
+	Decrees decree01 = new Decrees(2);
 
 	color = new Color(255,255,255);
 	g2.setColor(color);
 	g2.setStroke(new BasicStroke(5));
 	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth- 10, frameHeight-10,25,25);
-
-	ImageIcon icon = new ImageIcon(game.getPlayer().getCurrentSprite());
-	JLabel jlabel = new JLabel(icon);
-	jlabel.setLocation(frameX,frameY);
-	jlabel.addMouseListener(new MouseAdapter()
-	{
-	    @Override public void mouseClicked(final MouseEvent e) {
-		super.mouseClicked(e);
-		JOptionPane.showInputDialog("pogg");
-	    }
-	});
-	this.add(jlabel);
     }
 
     @Override protected void paintComponent(final Graphics g) {
