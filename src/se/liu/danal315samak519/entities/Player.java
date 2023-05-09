@@ -30,17 +30,21 @@ public class Player extends Character
 	storeHealthBars();
 	setDir(Direction.DOWN);
 	setFramesBasedOnDirection();
+	levelUp();
     }
 
     @Override public void levelUp() {
 	super.levelUp();
-	decrees.add(new Decrees(1));
+	decrees.add(new Decrees(2));
 	changeStats();
     }
 
     public void changeStats() { //Get effect apply effect profit
 	for (Decrees decree : decrees) {
-	    attackSpeed = (int) Math.ceil(attackSpeed / decree.getIncrease());
+	    if(decree.getType() == 2){
+		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
+	    }
+	    //attackSpeed = (int) Math.ceil(attackSpeed / decree.getIncrease());
 	}
 
     }
@@ -105,4 +109,5 @@ public class Player extends Character
 	    e.printStackTrace();
 	}
     }
+
 }
