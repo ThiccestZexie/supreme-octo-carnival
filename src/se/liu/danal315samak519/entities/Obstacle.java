@@ -8,35 +8,42 @@ import se.liu.danal315samak519.Direction;
 public class Obstacle extends Movable
 {
     private final int id;
-    private double endX, endY;
+    private double openX, openY;
+    private double closedX, closedY;
     private double speed = 8; // RANDOM MAGIC CONSTANT
 
-    public Obstacle(double x, double y, double endX, double endY, double width, double height, int id) {
-	setLocation(x, y);
+    public Obstacle(double closedX, double closedY, double openX, double openY, double width, double height, int id) {
+	setLocation(closedX, closedY);
 	setSize(width, height);
 	setHitBox();
-	this.endX = endX;
-	this.endY = endY;
+	this.closedX = closedX;
+	this.closedY = closedY;
+	this.openX = openX;
+	this.openY = openY;
 	this.id = id;
     }
 
-    public void activate() {
-	setVelocityTowardsEnd();
+    public void open() {
+	setVelocityTowards(openX, openY);
     }
 
-    public void deactivate() {
+    public void close() {
+	setVelocityTowards(closedX, closedY);
+    }
+
+    public void stopMoving() {
 	setVelocity(0, 0);
     }
 
     /**
      * Make obstacle glide towards end position
      */
-    public void setVelocityTowardsEnd() {
-	if (getX() == endX && getY() == endY) {
-	    setVelocity(0,0); // At end!
+    public void setVelocityTowards(final double targetX, final double targetY) {
+	if (getX() == targetX && getY() == targetY) {
+	    setVelocity(0, 0); // At end!
 	    return;
 	}
-	Direction towardsEnd = Direction.getDirectionBetweenPoints(getX(), getY(), endX, endY);
-	setVelocity(speed * towardsEnd.getX(), speed * towardsEnd.getY());
+	Direction towardsTarget = Direction.getDirectionBetweenPoints(getX(), getY(), targetX, targetY);
+	setVelocity(this.speed * towardsTarget.getX(), this.speed * towardsTarget.getY());
     }
 }
