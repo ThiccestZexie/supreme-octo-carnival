@@ -2,6 +2,9 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
 
+/**
+ * Rectangles that block other movables path. (e.g. gates at room entrances)
+ */
 public class Obstacle extends Movable
 {
     private final int id;

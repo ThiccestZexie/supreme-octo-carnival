@@ -39,21 +39,23 @@ public abstract class Enemy extends Character
 	    leftFrames[1] = imageLoader.getSubImage(offsetX + 32 - 2, offsetY + 32, spriteWidth, spriteHeight);
 
 	    upFrames = new BufferedImage[2];
-	    upFrames[0] = imageLoader.getSubImage(offsetX+(32 - 2) * 2, offsetY, spriteWidth, spriteHeight);
-	    upFrames[1] = imageLoader.getSubImage(offsetX+(32 - 2) * 2, offsetY+32, spriteWidth, spriteHeight);
+	    upFrames[0] = imageLoader.getSubImage(offsetX + (32 - 2) * 2, offsetY, spriteWidth, spriteHeight);
+	    upFrames[1] = imageLoader.getSubImage(offsetX + (32 - 2) * 2, offsetY + 32, spriteWidth, spriteHeight);
 
 	    rightFrames = new BufferedImage[2];
-	    rightFrames[0] = imageLoader.getSubImage(offsetX +(32 - 2) * 3, offsetY +32, spriteWidth, spriteHeight);
-	    rightFrames[1] = imageLoader.getSubImage(offsetX +(32 - 2) * 3, offsetY, spriteWidth, spriteHeight);
+	    rightFrames[0] = imageLoader.getSubImage(offsetX + (32 - 2) * 3, offsetY + 32, spriteWidth, spriteHeight);
+	    rightFrames[1] = imageLoader.getSubImage(offsetX + (32 - 2) * 3, offsetY, spriteWidth, spriteHeight);
 
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
     }
+
     //TODO make drops random and not guaranteed...
-    public Movable dropItem(){
+    public Movable dropItem() {
 	return new Potion(this.coord);
     }
+
     public Point2D.Double getVelocityTowardsPlayer() {
 	double x = player.getX() - this.getX();
 	double y = player.getY() - this.getY();
@@ -89,22 +91,22 @@ public abstract class Enemy extends Character
 		case UP:
 		    raycastRectangle.setSize(width, length);
 		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - raycastRectangle.getWidth() / 2.0),
-					    (int) (this.getY() - raycastRectangle.getHeight()));
+						 (int) (this.getY() - raycastRectangle.getHeight()));
 		    break;
 		case DOWN:
 		    raycastRectangle.setSize(width, length);
 		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - raycastRectangle.getWidth() / 2.0),
-					    (int) (this.getY() + (this.getHeight())));
+						 (int) (this.getY() + (this.getHeight())));
 		    break;
 		case LEFT:
 		    raycastRectangle.setSize(length, width);
 		    raycastRectangle.setLocation((int) (this.getX() - raycastRectangle.getWidth()),
-					    (int) ((this.getY() + (this.getHeight() / 2.0)) - (raycastRectangle.getHeight() / 2.0)));
+						 (int) ((this.getY() + (this.getHeight() / 2.0)) - (raycastRectangle.getHeight() / 2.0)));
 		    break;
 		case RIGHT:
 		    raycastRectangle.setSize(length, width);
 		    raycastRectangle.setLocation((int) (this.getX() + this.getWidth()),
-					    (int) ((this.getY() + (this.getHeight() / 2.0)) - (raycastRectangle.getHeight() / 2.0)));
+						 (int) ((this.getY() + (this.getHeight() / 2.0)) - (raycastRectangle.getHeight() / 2.0)));
 		    break;
 	    }
 
@@ -114,7 +116,8 @@ public abstract class Enemy extends Character
 	}
 	return false;
     }
-    public void chasePlayer(){
+
+    public void chasePlayer() {
 	if (canSeePlayer()) { // CHASe PLAYER!!
 	    Point2D velocity = getVelocityTowardsPlayer();
 	    setVelocity((int) velocity.getX(), (int) velocity.getY());

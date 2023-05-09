@@ -16,9 +16,9 @@ public class Potion extends Movable
 
     public Potion(final Point2D.Double coord) {
 	setLocation(coord);
-	setSize(25,25);
+	setSize(25, 25);
 	setHitBox();
-	this.color = Color.gray;
+	setColor(Color.GRAY);
 	this.setDir(Direction.DOWN);
 	this.storeImage();
     }
@@ -27,23 +27,23 @@ public class Potion extends Movable
 	return fullHeart;
     }
 
-    private void setUser(Player user){
+    private void setUser(Player user) {
 	this.user = user;
     }
 
-    public void pickUp(Character e){
-	if(this.hitBox.intersects(e.hitBox) && e instanceof Player){
+    public void pickUp(Character e) {
+	if (this.hitBox.intersects(e.hitBox) && e instanceof Player) {
 	    setUser((Player) e);
 	    user.heal(2);
 	    this.markAsGarbage();
 	}
     }
-    public void storeImage()  {
-	try{
+
+    public void storeImage() {
+	try {
 	    BufferedImage bufferedImage = ImageIO.read(new File("resources/images/hearts/heart_full.png"));
 	    fullHeart = bufferedImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
-	}
-	catch (IOException e){
+	} catch (IOException e) {
 	    e.printStackTrace();
 	}
 

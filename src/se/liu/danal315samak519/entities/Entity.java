@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * Objects that have location, size, color and hitbox.
+ */
 public abstract class Entity
 {
     protected Point2D.Double coord;
@@ -76,6 +79,10 @@ public abstract class Entity
 	return color;
     }
 
+    public void setColor(final Color color) {
+	this.color = color;
+    }
+
     public void setSize(double w, double h) {
 	this.width = w;
 	this.height = h;
@@ -104,5 +111,9 @@ public abstract class Entity
 
     public void markAsGarbage() {
 	this.isGarbage = true;
+    }
+
+    public boolean getIsGarbage() {
+	return isGarbage;
     }
 }

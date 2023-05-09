@@ -7,6 +7,9 @@ import se.liu.danal315samak519.weapons.Sword;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
+/**
+ * Movables that can attack, take damage and make decisions on how to move.
+ */
 public abstract class Character extends Movable
 {
     // CONSTANTS
@@ -31,6 +34,8 @@ public abstract class Character extends Movable
     protected BufferedImage[] rightFrames;
     protected BufferedImage attackFrame;
     private int ticksSinceWalkFrameChange;
+    private int projectileWidth;
+    private int projectileHeight;
 
 
     protected Character(final Point2D.Double coord) {
@@ -38,11 +43,29 @@ public abstract class Character extends Movable
 	setSize(50, 50);
 	setMaxSpeed(5);
 	setHitBox();
+	projectileWidth = 5;
+	projectileHeight = 5;
     }
 
     @Override public void setDir(final Direction dir) {
 	super.setDir(dir);
 	setFramesBasedOnDirection();
+    }
+
+    public void setProjectileWidth(final int projectileWidth) {
+	this.projectileWidth = projectileWidth;
+    }
+
+    public void setProjectileHeight(final int projectileHeight) {
+	this.projectileHeight = projectileHeight;
+    }
+
+    public int getProjectileWidth() {
+	return projectileWidth;
+    }
+
+    public int getProjectileHeight() {
+	return projectileHeight;
     }
 
     public void setFramesBasedOnDirection() {
@@ -94,7 +117,8 @@ public abstract class Character extends Movable
     }
 
     public Projectile getProjectile() {
-	return new Projectile(this.coord, this);
+	return new Projectile(this.coord, this, projectileHeight,
+			      projectileWidth);
     }
 
     public Sword getSword() {
@@ -115,7 +139,12 @@ public abstract class Character extends Movable
     }
 
     public void heal(int healAmount) {
-	this.hp += healAmount;
+	if(this.hp + healAmount > this.maxHP){
+	    this.hp = maxHP;
+	}
+	else{
+	    this.hp += healAmount;
+	}
     }
 
     public boolean getIfReadyToLevelUp() { // You start as level 1 so index 0 of exp req and the exp is exp needed for next level...
@@ -150,7 +179,7 @@ public abstract class Character extends Movable
 	    return; // Don't take damage!
 	}
 
-	if (getHp() > 0) {
+	if (getHp() > 1) {
 	    decrementHp();
 	} else {
 	    this.markAsGarbage(); // DEAD

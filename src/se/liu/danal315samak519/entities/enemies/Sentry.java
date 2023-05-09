@@ -5,12 +5,12 @@ import se.liu.danal315samak519.entities.Player;
 
 import java.awt.geom.Point2D;
 
-public class Blue extends Enemy
+public class Sentry extends Enemy
 {
-    public Blue(final Point2D.Double coord, final Player player) {
+    public Sentry(final Point2D.Double coord, final Player player) {
 	super(coord, player);
 	setStats(2, 1);
-	storeDirectionalFrames(120,0);
+	storeDirectionalFrames(120, 0);
 	setDir(Direction.DOWN);
     }
 

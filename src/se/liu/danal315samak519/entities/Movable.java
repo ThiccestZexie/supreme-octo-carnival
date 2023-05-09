@@ -5,7 +5,7 @@ import se.liu.danal315samak519.Direction;
 import java.awt.geom.Rectangle2D;
 
 /**
- *
+ * Entities that have velocity, and move according to velocity when ticking.
  */
 public class Movable extends Entity
 {
@@ -95,7 +95,4 @@ public class Movable extends Entity
 	setAppropiateDir();
     }
 
-    public boolean getIsGarbage() {
-	return isGarbage;
-    }
 }
