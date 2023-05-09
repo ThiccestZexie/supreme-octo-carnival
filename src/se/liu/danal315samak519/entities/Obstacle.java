@@ -2,6 +2,9 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
 
+/**
+ * Rectangles that block other movables path. (e.g. gates at room entrances)
+ */
 public class Obstacle extends Movable
 {
     private final int id;
@@ -24,12 +27,12 @@ public class Obstacle extends Movable
     /**
      * Make obstacle glide towards end position
      */
-    public void nudgeTowardsEnd(){
-	if(getX() == endX && getY() == endY){
+    public void nudgeTowardsEnd() {
+	if (getX() == endX && getY() == endY) {
 	    return; // Already at end location
 	}
 	Direction towardsEnd = Direction.getDirectionBetweenPoints(getX(), getY(), endX, endY);
 	double speed = 8;
-	this.nudge(speed*towardsEnd.getX(), speed*towardsEnd.getY());
+	this.nudge(speed * towardsEnd.getX(), speed * towardsEnd.getY());
     }
 }

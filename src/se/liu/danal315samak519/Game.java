@@ -5,7 +5,7 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Obstacle;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
-import se.liu.danal315samak519.entities.enemies.Blue;
+import se.liu.danal315samak519.entities.enemies.Sentry;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
@@ -204,7 +204,7 @@ public class Game
     }
 
     public void aiDecide(Enemy enemy) {
-	if (!(enemy instanceof Blue)) {
+	if (!(enemy instanceof Sentry)) {
 	    return;
 	}
 	if (enemy.checkIfPlayerIsInFront(500, 100)) {
@@ -288,7 +288,7 @@ public class Game
 
     public void addBlue(Point2D.Double coord)
     {
-	addMovable(new Blue(coord, player));
+	addMovable(new Sentry(coord, player));
     }
 
     public void addKnight(Point2D.Double coord)

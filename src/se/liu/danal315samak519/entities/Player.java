@@ -41,7 +41,7 @@ public class Player extends Character
 
     public void changeStats() { //Get effect apply effect profit
 	for (Decrees decree : decrees) {
-	    if(decree.getType() == 2){
+	    if (decree.getType() == 2) {
 		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
 	    }
 	    //attackSpeed = (int) Math.ceil(attackSpeed / decree.getIncrease());

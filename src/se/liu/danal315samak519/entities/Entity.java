@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * Objects that have location, size, color and hitbox.
+ */
 public abstract class Entity
 {
     protected Point2D.Double coord;

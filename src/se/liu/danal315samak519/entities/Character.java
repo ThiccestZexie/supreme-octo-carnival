@@ -7,6 +7,9 @@ import se.liu.danal315samak519.weapons.Sword;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
+/**
+ * Movables that can attack, take damage and make decisions on how to move.
+ */
 public abstract class Character extends Movable
 {
     // CONSTANTS
