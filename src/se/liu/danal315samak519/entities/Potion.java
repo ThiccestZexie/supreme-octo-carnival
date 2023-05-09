@@ -18,7 +18,7 @@ public class Potion extends Movable
 	setLocation(coord);
 	setSize(25,25);
 	setHitBox();
-	this.color = Color.gray;
+	setColor(Color.GRAY);
 	this.setDir(Direction.DOWN);
 	this.storeImage();
     }

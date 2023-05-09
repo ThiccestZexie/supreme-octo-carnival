@@ -22,7 +22,7 @@ public class Player extends Character
     public Player(final Point2D.Double coord)
     {
 	super(coord);
-	this.color = Color.GREEN; //TODO HARDCODED GREEN PLAYER
+	setColor(Color.GREEN);
 	setMaxSpeed(4);
 	setStats(6, 1);
 	storeLevelUpFrames();

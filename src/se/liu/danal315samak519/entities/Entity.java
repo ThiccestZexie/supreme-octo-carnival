@@ -76,6 +76,10 @@ public abstract class Entity
 	return color;
     }
 
+    public void setColor(final Color color) {
+	this.color = color;
+    }
+
     public void setSize(double w, double h) {
 	this.width = w;
 	this.height = h;
