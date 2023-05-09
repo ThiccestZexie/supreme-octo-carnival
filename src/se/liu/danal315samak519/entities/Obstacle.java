@@ -12,14 +12,14 @@ public class Obstacle extends Movable
     private double closedX, closedY;
     private double speed = 8; // RANDOM MAGIC CONSTANT
 
-    public Obstacle(double closedX, double closedY, double openX, double openY, double width, double height, int id) {
-	setLocation(closedX, closedY);
+    public Obstacle(double openX, double openY, double closedX, double closedY, double width, double height, int id) {
+	setLocation(openX, openY);
 	setSize(width, height);
 	setHitBox();
-	this.closedX = closedX;
-	this.closedY = closedY;
 	this.openX = openX;
 	this.openY = openY;
+	this.closedX = closedX;
+	this.closedY = closedY;
 	this.id = id;
     }
 

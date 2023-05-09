@@ -82,13 +82,13 @@ public class MapLoader
 	obstacles = new ArrayList<>();
 	for (Element object : objects) {
 	    int id = Integer.parseInt(object.attr("id"));
-	    double startX = Double.parseDouble(object.attr("x"));
-	    double startY = Double.parseDouble(object.attr("y"));
+	    double openX = Double.parseDouble(object.attr("x"));
+	    double openY = Double.parseDouble(object.attr("y"));
 	    double w = Double.parseDouble(object.attr("width"));
 	    double h = Double.parseDouble(object.attr("height"));
-	    double endX = getProperty(object, "endX");
-	    double endY = getProperty(object, "endY");
-	    obstacles.add(new Obstacle(startX, startY, endX, endY, w, h, id));
+	    double closedX = getProperty(object, "closedX");
+	    double closedY = getProperty(object, "closedY");
+	    obstacles.add(new Obstacle(openX, openY, closedX, closedY, w, h, id));
 	}
     }
     private double getProperty(Element object, String propertyName) throws IllegalArgumentException {

@@ -12,9 +12,10 @@ public class Room
     private final String fileName;
     private final int tileHeight;
     private final int tileWidth;
+    private final int rows, columns, layers;
     private List<Obstacle> obstacles;
     private Tile[][][] tiles; // columns, rows, layers
-    private final int rows, columns, layers;
+    private Rectangle insideRoomBounds;
 
     public Room(final String fileName) {
 	try {
@@ -26,10 +27,15 @@ public class Room
 	    this.tiles = mapLoader.getTiles();
 	    this.tileWidth = mapLoader.getTileWidth();
 	    this.tileHeight = mapLoader.getTileHeight();
+	    setInsideRoomBounds();
 	    this.obstacles = mapLoader.getObstacles();
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
+    }
+
+    private void setInsideRoomBounds() {
+	this.insideRoomBounds = new Rectangle(getTileWidth(), getTileHeight(), getWidth() - getTileWidth(), getHeight() - getTileHeight());
     }
 
     public Tile getTile(int x, int y, int l) {
@@ -39,8 +45,16 @@ public class Room
     public Tile getTile(Point point, int layer) {
 	return getTile(point.x, point.y, layer);
     }
-    public String getName(){
+
+    public String getName() {
 	return this.fileName;
+    }
+
+    /**
+     * Gets the area that Characters can inhabit in the room.
+     */
+    public Rectangle getInsideRoomBounds() {
+	return insideRoomBounds;
     }
 
 
@@ -48,16 +62,16 @@ public class Room
 	return this.rows;
     }
 
-    public List<Obstacle> getObstacles(){
+    public List<Obstacle> getObstacles() {
 	return this.obstacles;
     }
 
-    public int getCenterX(){
-	return getWidth()/2;
+    public int getCenterX() {
+	return getWidth() / 2;
     }
 
-    public int getCenterY(){
-	return getHeight()/2;
+    public int getCenterY() {
+	return getHeight() / 2;
     }
 
     public int getColumns() {
@@ -75,12 +89,13 @@ public class Room
     public int getTileHeight() {
 	return tileHeight;
     }
-    public int getHeight(){
-	return tileHeight*rows;
+
+    public int getHeight() {
+	return tileHeight * rows;
     }
 
-    public int getWidth(){
-	return tileWidth*columns;
+    public int getWidth() {
+	return tileWidth * columns;
     }
 
     /**
@@ -93,7 +108,7 @@ public class Room
 	for (int y = 0; y < getRows(); y++) {
 	    for (int x = 0; x < getColumns(); x++) {
 		Tile tile = getTile(x, y, foregroundLayer);
-		if(tile != null){
+		if (tile != null) {
 		    foregroundTileList.add(tile);
 		}
 	    }

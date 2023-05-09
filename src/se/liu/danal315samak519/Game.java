@@ -5,10 +5,10 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Obstacle;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
-import se.liu.danal315samak519.entities.enemies.Sentry;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
+import se.liu.danal315samak519.entities.enemies.Sentry;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
 import se.liu.danal315samak519.weapons.Weapon;
@@ -50,6 +50,13 @@ public class Game
     }
 
     /**
+     * Return true if player inside play area of room.
+     */
+    public boolean getIfPlayerInPlayArea() {
+	return getRoom().getInsideRoomBounds().contains(player.getCoord());
+    }
+
+    /**
      * Make the entire game state update removing / adding entities and handle collisions
      */
     public void tick()
@@ -57,7 +64,7 @@ public class Game
 	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
 	if (outOfBoundsDirection != null) {
 //	    changeToNextWorld();
-	    resetWorld();
+	    resetRoom();
 	    placePlayerAtEntrance(outOfBoundsDirection);
 	}
 	removeGarbage();
@@ -69,7 +76,7 @@ public class Game
 	    movable0.tick();
 	    handleWallCollision(movable0);
 	    if (movable0 instanceof Enemy) {
-		aiDecide((Enemy) movable0);
+		sentryDecide((Enemy) movable0);
 		setRoomIsCleared(false); // Found enemy! Not cleared.
 	    }
 	    // Second iteration of all movables, for handling
@@ -77,11 +84,16 @@ public class Game
 	    for (Movable movable1 : allMovables) {
 		handleMovableCollision(movable0, movable1);
 	    }
-	    if(movable0 instanceof Obstacle && getRoomIsCleared()){ // OPEN GATES IF NO MORE ENEMIES
-		((Obstacle) movable0).activate();
+
+	    if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
+		Obstacle obstacle = (Obstacle) movable0;
+		if (getIfPlayerInPlayArea() && !getIfRoomIsCleared()) {
+		    obstacle.close();
+		} else {
+		    obstacle.open();
+		}
 	    }
 	}
-
     }
 
     /**
@@ -126,8 +138,9 @@ public class Game
     /**
      * "Changes" the room to the same one, effectively resetting everything
      */
-    public void resetWorld() {
-	changeRoom(getRoom());
+    public void resetRoom() {
+//	changeRoom(getRoom());
+	changeRoom(new Room("map0.tmx"));
     }
 
     private void spawnObstacles() {
@@ -141,9 +154,9 @@ public class Game
 //	    int randomX = 200 + random.nextInt(400);
 //	    int randomY = 200 + random.nextInt(400);
 //	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-//	    this.addBlue(randomCoord);
+//	    this.addSentry(randomCoord);
 //	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 1; i++) {
 	    int randomX = 200 + random.nextInt(400);
 	    int randomY = 200 + random.nextInt(400);
 	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
@@ -167,7 +180,7 @@ public class Game
     }
 
     /**
-     * Makes sure the input movable can't pass through walls.
+     * Makes sure the input movable can't pass through foreground tiles.
      *
      * @param movable
      */
@@ -206,7 +219,7 @@ public class Game
 	return null; // Movable is in bounds
     }
 
-    public void aiDecide(Enemy enemy) {
+    public void sentryDecide(Enemy enemy) {
 	if (!(enemy instanceof Sentry)) {
 	    return;
 	}
@@ -239,7 +252,7 @@ public class Game
 	if (movable0 instanceof Obstacle && movable1 instanceof Character) {
 	    movable1.nudgeAwayFrom(movable0.getHitBox());
 	}
-	if(movable0 instanceof Enemy && movable1 instanceof Character){
+	if (movable0 instanceof Enemy && movable1 instanceof Character) {
 	    movable0.nudgeAwayFrom(movable1.getHitBox());
 	}
 	// Enemy-Player
@@ -267,7 +280,7 @@ public class Game
 	movables.removeIf(Movable::getIsGarbage);
     }
 
-    public boolean getRoomIsCleared() {
+    public boolean getIfRoomIsCleared() {
 	return roomIsCleared;
     }
 
@@ -295,7 +308,7 @@ public class Game
     }
 
 
-    public void addBlue(Point2D.Double coord)
+    public void addSentry(Point2D.Double coord)
     {
 	addMovable(new Sentry(coord, player));
     }
