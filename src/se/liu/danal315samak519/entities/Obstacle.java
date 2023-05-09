@@ -8,11 +8,11 @@ import se.liu.danal315samak519.Direction;
 public class Obstacle extends Movable
 {
     private final int id;
-    private double openX, openY;
-    private double closedX, closedY;
-    private double speed = 8; // RANDOM MAGIC CONSTANT
+    private float openX, openY;
+    private float closedX, closedY;
+    private float speed = 8; // RANDOM MAGIC CONSTANT
 
-    public Obstacle(double openX, double openY, double closedX, double closedY, double width, double height, int id) {
+    public Obstacle(float openX, float openY, float closedX, float closedY, float width, float height, int id) {
 	setLocation(openX, openY);
 	setSize(width, height);
 	setHitBox();
@@ -38,7 +38,7 @@ public class Obstacle extends Movable
     /**
      * Make obstacle glide towards end position
      */
-    public void setVelocityTowards(final double targetX, final double targetY) {
+    public void setVelocityTowards(final float targetX, final float targetY) {
 	if (getX() == targetX && getY() == targetY) {
 	    setVelocity(0, 0); // At end!
 	    return;

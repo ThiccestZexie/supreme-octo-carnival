@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
 public class Red extends Enemy
 {
 
-    public Red(final Point2D.Double coord, final Player player) {
+    public Red(final Point2D.Float coord, final Player player) {
 	super(coord, player);
 	setMaxSpeed(3);
 	setStats(3, 1);

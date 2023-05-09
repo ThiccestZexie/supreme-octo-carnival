@@ -4,7 +4,7 @@ public class Decrees
 {
     private int type;
     private int level;
-    private double increase;
+    private float increase;
     private String effect;
 
     public Decrees(final int type) {
@@ -14,24 +14,24 @@ public class Decrees
 	switch(type){
 	    case 0: // 50% faster
 		effect = "Increases attack speed";
-		this.increase = 1.5;
+		this.increase = 1.5f;
 		break;
 	    case 1: // one extra heart
 		effect = "Increases Health Points";
-		this.increase = 2;
+		this.increase = 2f;
 		break;
 	    case 2:// Larger Arrows
 		effect = "Increases arrow width";
-		this.increase = 2;
+		this.increase = 2f;
 		break;
 	    case 3: // Faster arrows
 		effect = "Faster arrow velocity";
-		this.increase = 2;
+		this.increase = 2f;
 		break;
 	}
     }
 
-    public double getIncrease() {
+    public float getIncrease() {
 	return increase;
     }
 

@@ -19,7 +19,7 @@ public class Player extends Character
 
     public LinkedList<Decrees> decrees = new LinkedList<>();
 
-    public Player(final Point2D.Double coord)
+    public Player(final Point2D.Float coord)
     {
 	super(coord);
 	setColor(Color.GREEN);

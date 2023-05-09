@@ -45,7 +45,7 @@ public class Game
      */
     public Game(Room room) {
 	random = new Random();
-	setPlayer(new Player(new Point2D.Double(room.getCenterX(), room.getCenterY())));
+	setPlayer(new Player(new Point2D.Float(room.getCenterX(), room.getCenterY())));
 	changeRoom(room);
     }
 
@@ -103,7 +103,7 @@ public class Game
      */
     private void placePlayerAtEntrance(final Direction outOfBoundsDirection) {
 	Direction entranceDirection = outOfBoundsDirection.getOpposite();
-	double margin = 10.0;
+	float margin = 10f;
 	switch (entranceDirection) {
 	    case UP -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), margin);
 	    case DOWN -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), this.getRoom().getHeight() - margin);
@@ -159,7 +159,7 @@ public class Game
 	for (int i = 0; i < 1; i++) {
 	    int randomX = 200 + random.nextInt(400);
 	    int randomY = 200 + random.nextInt(400);
-	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
+	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
 	    this.addRed(randomCoord);
 	}
 //	for (int i = 0; i < 1; i++) {
@@ -204,8 +204,8 @@ public class Game
      * @return
      */
     private Direction getOutOfBoundsDirection(Movable movable) {
-	double centerX = movable.getHitBox().getCenterX();
-	double centerY = movable.getHitBox().getCenterY();
+	float centerX = (float) movable.getHitBox().getCenterX();
+	float centerY = (float) movable.getHitBox().getCenterY();
 
 	if (centerX < 0) {
 	    return Direction.LEFT;
@@ -308,17 +308,17 @@ public class Game
     }
 
 
-    public void addSentry(Point2D.Double coord)
+    public void addSentry(Point2D.Float coord)
     {
 	addMovable(new Sentry(coord, player));
     }
 
-    public void addKnight(Point2D.Double coord)
+    public void addKnight(Point2D.Float coord)
     {
 	addMovable(new Knight(coord, player));
     }
 
-    public void addRed(Point2D.Double coord)
+    public void addRed(Point2D.Float coord)
     {
 	addMovable(new Red(coord, player));
     }

@@ -15,7 +15,7 @@ public abstract class Enemy extends Character
 {
     protected Player player;
 
-    protected Enemy(final Point2D.Double coord, final Player player)
+    protected Enemy(final Point2D.Float coord, final Player player)
     {
 	super(coord);
 	this.level = 1;
@@ -56,11 +56,11 @@ public abstract class Enemy extends Character
 	return new Potion(this.coord);
     }
 
-    public Point2D.Double getVelocityTowardsPlayer() {
-	double x = player.getX() - this.getX();
-	double y = player.getY() - this.getY();
-	double distance = getDistanceToPlayer();
-	Point2D.Double velocity = new Point2D.Double(maxSpeed * x / distance, maxSpeed * y / distance);
+    public Point2D.Float getVelocityTowardsPlayer() {
+	float x = player.getX() - this.getX();
+	float y = player.getY() - this.getY();
+	float distance = (float) getDistanceToPlayer();
+	Point2D.Float velocity = new Point2D.Float(maxSpeed * x / distance, maxSpeed * y / distance);
 	return velocity;
     }
 

@@ -7,7 +7,7 @@ import java.awt.geom.Point2D;
 
 public class Sentry extends Enemy
 {
-    public Sentry(final Point2D.Double coord, final Player player) {
+    public Sentry(final Point2D.Float coord, final Player player) {
 	super(coord, player);
 	setStats(2, 1);
 	storeDirectionalFrames(120, 0);

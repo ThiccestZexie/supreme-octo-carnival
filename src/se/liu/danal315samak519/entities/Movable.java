@@ -10,9 +10,9 @@ import java.awt.geom.Rectangle2D;
 public class Movable extends Entity
 {
     protected Direction dir;
-    protected double maxSpeed;
-    protected double velX;
-    protected double velY;
+    protected float maxSpeed;
+    protected float velX;
+    protected float velY;
 
     public Direction getDir() {
 	return dir;
@@ -27,37 +27,37 @@ public class Movable extends Entity
 	    return; // not intersecting!
 	}
 
-	Rectangle2D intersection = this.getHitBox().createIntersection(otherHitBox);
+	Rectangle2D.Float intersection = (Rectangle2D.Float) this.getHitBox().createIntersection(otherHitBox);
 	boolean isHorizontalCollision = intersection.getWidth() < intersection.getHeight();
 	if (isHorizontalCollision) { // Left-right collision
 	    if (intersection.getCenterX() < this.getHitBox().getCenterX()) { // Left collision
-		nudge(intersection.getWidth(), 0);
+		nudge(intersection.width, 0);
 	    } else { // Right collision
-		nudge(-intersection.getWidth(), 0);
+		nudge(-intersection.width, 0);
 	    }
 	} else { // Up-down collision
 	    if (intersection.getCenterY() < this.getHitBox().getCenterY()) { // Up collision
-		nudge(0, intersection.getHeight());
+		nudge(0, intersection.height);
 	    } else { // Down collision
-		nudge(0, -intersection.getHeight());
+		nudge(0, -intersection.height);
 	    }
 	}
     }
 
-    public double getMaxSpeed() {
+    public float getMaxSpeed() {
 	return maxSpeed;
     }
 
-    public void setMaxSpeed(final int speed) {
+    public void setMaxSpeed(final float speed) {
 	this.maxSpeed = speed;
     }
 
-    public void nudge(final double dx, final double dy) {
+    public void nudge(final float dx, final float dy) {
 	setLocation(getX() + dx, getY() + dy);
 	nudgeHitBox(dx, dy);
     }
 
-    public void setVelocity(final double vx, final double vy) {
+    public void setVelocity(final float vx, final float vy) {
 	setVelX(vx);
 	setVelY(vy);
     }
@@ -73,24 +73,24 @@ public class Movable extends Entity
 	nudge(velX, velY);
     }
 
-    private void nudgeHitBox(final double dx, final double dy) {
-	setLocationOfHitBox(hitBox.getX() + dx, hitBox.getY() + dy);
+    private void nudgeHitBox(final float dx, final float dy) {
+	setLocationOfHitBox(hitBox.x + dx, hitBox.y + dy);
     }
 
-    public double getVelX() {
+    public float getVelX() {
 	return velX;
     }
 
-    public void setVelX(final double vx) {
+    public void setVelX(final float vx) {
 	this.velX = vx;
 	setAppropiateDir();
     }
 
-    public double getVelY() {
+    public float getVelY() {
 	return velY;
     }
 
-    public void setVelY(final double vy) {
+    public void setVelY(final float vy) {
 	this.velY = vy;
 	setAppropiateDir();
     }

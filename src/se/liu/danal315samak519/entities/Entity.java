@@ -9,13 +9,14 @@ import java.awt.geom.Rectangle2D;
  */
 public abstract class Entity
 {
-    protected Point2D.Double coord;
-    protected double width, height;
+    protected Point2D.Float coord;
+    protected float width;
+    protected float height;
     protected Color color;
-    protected Rectangle2D hitBox;
+    protected Rectangle2D.Float hitBox;
     protected boolean isGarbage = false;
 
-    protected void setLocation(final Point2D.Double coord) {
+    protected void setLocation(final Point2D.Float coord) {
 	if (this.coord != null) {
 	    this.coord.setLocation(coord);
 	} else {
@@ -39,19 +40,19 @@ public abstract class Entity
 	return (int) getY();
     }
 
-    protected void setLocationOfHitBox(double x, double y) {
+    protected void setLocationOfHitBox(float x, float y) {
 	setHitBox(x, y, getWidth(), getHeight());
     }
 
-    protected void setLocationOfHitBox(Point2D point) {
-	setHitBox(point.getX(), point.getY(), getWidth(), getHeight());
+    protected void setLocationOfHitBox(Point2D.Float point) {
+	setHitBox(point.x, point.y, getWidth(), getHeight());
     }
 
-    protected void setHitBox(double x, double y, double w, double h) {
+    protected void setHitBox(float x, float y, float w, float h) {
 	if (hitBox != null) {
 	    this.hitBox.setRect(x, y, w, h);
 	} else {
-	    this.hitBox = new Rectangle2D.Double(x, y, w, h);
+	    this.hitBox = new Rectangle2D.Float(x, y, w, h);
 	}
     }
 
@@ -59,20 +60,20 @@ public abstract class Entity
 	setHitBox(getX(), getY(), getWidth(), getHeight());
     }
 
-    public Rectangle2D getHitBox() {
+    public Rectangle2D.Float getHitBox() {
 	return this.hitBox;
     }
 
-    public Point2D.Double getCoord() {
+    public Point2D.Float getCoord() {
 	return coord;
     }
 
-    public double getX() {
-	return coord.getX();
+    public float getX() {
+	return coord.x;
     }
 
-    public double getY() {
-	return coord.getY();
+    public float getY() {
+	return coord.y;
     }
 
     public Color getColor() {
@@ -83,30 +84,30 @@ public abstract class Entity
 	this.color = color;
     }
 
-    public void setSize(double w, double h) {
+    public void setSize(float w, float h) {
 	this.width = w;
 	this.height = h;
     }
 
-    public double getWidth() {
+    public float getWidth() {
 	return this.width;
     }
 
-    public double getHeight() {
+    public float getHeight() {
 	return this.height;
     }
 
-    public void setLocation(final double x, final double y) {
+    public void setLocation(final float x, final float y) {
 	if (coord != null) {
 	    coord.setLocation(x, y);
 	} else {
-	    coord = new Point2D.Double(x, y);
+	    coord = new Point2D.Float(x, y);
 	}
 	setHitBox();
     }
 
-    public void setCenterLocation(final double x, final double y) {
-	setLocation(x - this.getWidth() / 2.0, y - this.getHeight() / 2.0);
+    public void setCenterLocation(final float x, final float y) {
+	setLocation(x - this.getWidth() / 2.0f, y - this.getHeight() / 2.0f);
     }
 
     public void markAsGarbage() {

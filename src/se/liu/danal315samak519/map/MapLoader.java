@@ -82,16 +82,16 @@ public class MapLoader
 	obstacles = new ArrayList<>();
 	for (Element object : objects) {
 	    int id = Integer.parseInt(object.attr("id"));
-	    double openX = Double.parseDouble(object.attr("x"));
-	    double openY = Double.parseDouble(object.attr("y"));
-	    double w = Double.parseDouble(object.attr("width"));
-	    double h = Double.parseDouble(object.attr("height"));
-	    double closedX = getProperty(object, "closedX");
-	    double closedY = getProperty(object, "closedY");
+	    float openX = Float.parseFloat(object.attr("x"));
+	    float openY = Float.parseFloat(object.attr("y"));
+	    float w = Float.parseFloat(object.attr("width"));
+	    float h = Float.parseFloat(object.attr("height"));
+	    float closedX = getProperty(object, "closedX");
+	    float closedY = getProperty(object, "closedY");
 	    obstacles.add(new Obstacle(openX, openY, closedX, closedY, w, h, id));
 	}
     }
-    private double getProperty(Element object, String propertyName) throws IllegalArgumentException {
+    private float getProperty(Element object, String propertyName) throws IllegalArgumentException {
 	Element properties = object.selectFirst("properties");
 	if (properties == null) {
 	    throw new IllegalArgumentException("Object is missing custom properties (probably endX and endY).");
@@ -102,14 +102,10 @@ public class MapLoader
 	}
 	String valueStr = property.attr("value");
 	try {
-	    return Double.parseDouble(valueStr);
+	    return Float.parseFloat(valueStr);
 	} catch (NumberFormatException e) {
 	    throw new IllegalArgumentException("Invalid value for property " + propertyName + ": " + valueStr);
 	}
-    }
-
-    public static void main(String[] args) throws IOException {
-	MapLoader mapLoader = new MapLoader("map0.tmx");
     }
 
     private void setTile(final int value, int y, int x, int l) {

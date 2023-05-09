@@ -14,7 +14,7 @@ public class Potion extends Movable
     private Player user = null;
     private Image fullHeart;
 
-    public Potion(final Point2D.Double coord) {
+    public Potion(final Point2D.Float coord) {
 	setLocation(coord);
 	setSize(25, 25);
 	setHitBox();

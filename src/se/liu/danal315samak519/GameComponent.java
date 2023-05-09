@@ -274,7 +274,7 @@ public class GameComponent extends JComponent implements FrameListener
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	    double maxSpeed = game.getPlayer().getMaxSpeed();
+	    float maxSpeed = game.getPlayer().getMaxSpeed();
 	    switch (dir) {
 		case UP -> game.getPlayer().setVelY(-maxSpeed);
 		case DOWN -> game.getPlayer().setVelY(maxSpeed);

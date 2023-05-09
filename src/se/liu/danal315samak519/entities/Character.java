@@ -38,7 +38,7 @@ public abstract class Character extends Movable
     private int projectileHeight;
 
 
-    protected Character(final Point2D.Double coord) {
+    protected Character(final Point2D.Float coord) {
 	setLocation(coord);
 	setSize(50, 50);
 	setMaxSpeed(5);
