@@ -95,7 +95,4 @@ public class Movable extends Entity
 	setAppropiateDir();
     }
 
-    public boolean getIsGarbage() {
-	return isGarbage;
-    }
 }

@@ -17,7 +17,7 @@ public class GameComponent extends JComponent implements FrameListener
     public Game game;
     public int i = 0;
     public boolean didPlayerLevel = false;
-    int oldPlayerLevel;
+    private int oldPlayerLevel;
     private int tileWidth;
     private int tileHeight;
     private boolean debug = true;

@@ -109,4 +109,8 @@ public abstract class Entity
     public void markAsGarbage() {
 	this.isGarbage = true;
     }
+
+    public boolean getIsGarbage() {
+	return isGarbage;
+    }
 }
