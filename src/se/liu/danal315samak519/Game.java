@@ -54,7 +54,6 @@ public class Game
      */
     public void tick()
     {
-	System.out.println(player.ticksInvincible);
 	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
 	if (outOfBoundsDirection != null) {
 //	    changeToNextWorld();
