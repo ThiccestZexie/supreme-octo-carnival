@@ -14,7 +14,6 @@ import se.liu.danal315samak519.map.World;
 import se.liu.danal315samak519.weapons.Weapon;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
