@@ -38,11 +38,6 @@ public class Game
 	this(new Room("map0.tmx"));
     }
 
-    /**
-     * A game with argument room
-     *
-     * @param room
-     */
     public Game(Room room) {
 	random = new Random();
 	setPlayer(new Player(new Point2D.Float(room.getCenterX(), room.getCenterY())));
@@ -63,29 +58,27 @@ public class Game
     {
 	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
 	if (outOfBoundsDirection != null) {
-//	    changeToNextWorld();
+//	    changeToNextRoom();
 	    resetRoom();
 	    placePlayerAtEntrance(outOfBoundsDirection);
 	}
-	removeGarbage();
-	birthNewEntites();
+	birthPending();
+	handleGarbageOrDeaths();
 	setRoomIsCleared(true); // Assume room is cleared
 	// Iterate through all movables (incl. player) and do appropiate actions
 	List<Movable> allMovables = getMovablesInclPlayer();
 	for (Movable movable0 : allMovables) {
 	    movable0.tick();
 	    handleWallCollision(movable0);
-	    if (movable0 instanceof Enemy) {
-		sentryDecide((Enemy) movable0);
-		setRoomIsCleared(false); // Found enemy! Not cleared.
-	    }
 	    // Second iteration of all movables, for handling
 	    // combinations of movables (e.g. colliding with eachother)
 	    for (Movable movable1 : allMovables) {
 		handleMovableCollision(movable0, movable1);
 	    }
-
-	    if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
+	    if (movable0 instanceof Enemy) {
+		sentryDecide((Enemy) movable0);
+		setRoomIsCleared(false); // Found enemy! Not cleared.
+	    } else if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
 		Obstacle obstacle = (Obstacle) movable0;
 		if (getIfPlayerInPlayArea() && !getIfRoomIsCleared()) {
 		    obstacle.close();
@@ -103,12 +96,23 @@ public class Game
      */
     private void placePlayerAtEntrance(final Direction outOfBoundsDirection) {
 	Direction entranceDirection = outOfBoundsDirection.getOpposite();
-	float margin = 10f;
+	float margin = 10.0f;
 	switch (entranceDirection) {
 	    case UP -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), margin);
 	    case DOWN -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), this.getRoom().getHeight() - margin);
 	    case LEFT -> getPlayer().setCenterLocation(margin, this.getRoom().getCenterY());
 	    case RIGHT -> getPlayer().setCenterLocation(this.getRoom().getWidth() - margin, this.getRoom().getCenterY());
+	}
+    }
+
+    /**
+     * Checks if any enemy has died if so adds a drop from them
+     */
+    public void handleEnemyDrops() {
+	for (Movable movable : getMovables()) {
+	    if (movable instanceof Enemy && movable.getIsGarbage()) {
+		pushPending(((Enemy) movable).dropItem());
+	    }
 	}
     }
 
@@ -170,7 +174,7 @@ public class Game
 //	}
     }
 
-    private void changeToNextWorld() {
+    private void changeToNextRoom() {
 	currentWorldID++;
 	changeRoom(new Room("map" + currentWorldID + ".tmx"));
     }
@@ -235,7 +239,7 @@ public class Game
 	pendingMovables.push(movable);
     }
 
-    private void birthNewEntites() {
+    private void birthPending() {
 	while (!pendingMovables.isEmpty()) {
 	    addMovable(pendingMovables.pop());
 	}
@@ -276,7 +280,8 @@ public class Game
 	}
     }
 
-    private void removeGarbage() {
+    private void handleGarbageOrDeaths() {
+	handleEnemyDrops();
 	movables.removeIf(Movable::getIsGarbage);
     }
 

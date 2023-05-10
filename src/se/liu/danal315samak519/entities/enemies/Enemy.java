@@ -36,19 +36,19 @@ public abstract class Enemy extends Character
 
 	    ImageLoader imageLoader = new ImageLoader("enemies.png");
 
-	    downFrames = new BufferedImage[2];
+	    downFrames = new BufferedImage[3];
 	    downFrames[0] = imageLoader.getSubImage(offsetX, offsetY, spriteWidth, spriteHeight);
 	    downFrames[1] = imageLoader.getSubImage(offsetX, offsetY + spriteWidth * 2 - 2, spriteWidth, spriteHeight);
 
-	    leftFrames = new BufferedImage[2];
+	    leftFrames = new BufferedImage[3];
 	    leftFrames[0] = imageLoader.getSubImage(offsetX + 32 - 2, offsetY, spriteWidth, spriteHeight);
 	    leftFrames[1] = imageLoader.getSubImage(offsetX + 32 - 2, offsetY + 32, spriteWidth, spriteHeight);
 
-	    upFrames = new BufferedImage[2];
+	    upFrames = new BufferedImage[3];
 	    upFrames[0] = imageLoader.getSubImage(offsetX + (32 - 2) * 2, offsetY, spriteWidth, spriteHeight);
 	    upFrames[1] = imageLoader.getSubImage(offsetX + (32 - 2) * 2, offsetY + 32, spriteWidth, spriteHeight);
 
-	    rightFrames = new BufferedImage[2];
+	    rightFrames = new BufferedImage[3];
 	    rightFrames[0] = imageLoader.getSubImage(offsetX + (32 - 2) * 3, offsetY + 32, spriteWidth, spriteHeight);
 	    rightFrames[1] = imageLoader.getSubImage(offsetX + (32 - 2) * 3, offsetY, spriteWidth, spriteHeight);
 
@@ -125,8 +125,8 @@ public abstract class Enemy extends Character
 
     public void chasePlayer() {
 	if (canSeePlayer()) { // CHASe PLAYER!!
-	    Point2D velocity = getVelocityTowardsPlayer();
-	    setVelocity((int) velocity.getX(), (int) velocity.getY());
+	    Point2D.Float velocity = getVelocityTowardsPlayer();
+	    setVelocity(velocity.x, velocity.y);
 	} else { // Chill...
 	    setVelocity(0, 0);
 	}

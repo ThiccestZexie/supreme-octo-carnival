@@ -15,24 +15,11 @@ public class Viewer
     {
 	@Override public void actionPerformed(final ActionEvent e)
 	{
-	    checkForDeath();
 	    gameComponent.frameChanged();
 	    gameComponent.game.tick();
 	}
     };
 
-    public void checkForDeath(){
-	//Checks if a enemy has died if so adds a drop from them
-	for (Movable m: gameComponent.game.getMovables()) {
-	    if (m instanceof Enemy)
-	    {
-		Enemy e = (Enemy) m;
-		if (e.getIsGarbage()){
-		  gameComponent.game.getPendingMovables().add(e.dropItem());
-		}
-	    }
-	}
-    }
     public void show() {
 	// Initisalise frame
 	JFrame frame = new JFrame("Gamers");

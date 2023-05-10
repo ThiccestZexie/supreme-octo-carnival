@@ -192,9 +192,6 @@ public abstract class Character extends Movable
 	}
     }
 
-    /**
-     * Keep track of ticks since attacked, and set status to NORMAL if ready to attack again.
-     */
     private void tickAttackCooldown() {
 	if (ticksAttackCooldown > 0) {
 	    ticksAttackCooldown--;
@@ -219,7 +216,7 @@ public abstract class Character extends Movable
 		ticksSinceWalkFrameChange++;
 		if (ticksSinceWalkFrameChange > TICKS_PER_WALKFRAME) {
 		    walkCycleIndex++;
-		    walkCycleIndex %= currentFrames.length - 1;
+		    walkCycleIndex %= (currentFrames.length-1);
 		    ticksSinceWalkFrameChange = 0;
 		}
 	    }
