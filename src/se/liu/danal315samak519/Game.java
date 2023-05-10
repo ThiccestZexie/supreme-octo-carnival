@@ -154,24 +154,24 @@ public class Game
     }
 
     private void spawnEnemies() {
-//	for (int i = 0; i < 1; i++) {
-//	    int randomX = 200 + random.nextInt(400);
-//	    int randomY = 200 + random.nextInt(400);
-//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-//	    this.addSentry(randomCoord);
-//	}
+	for (int i = 0; i < 1; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
+	    this.addSentry(randomCoord);
+	}
 	for (int i = 0; i < 1; i++) {
 	    int randomX = 200 + random.nextInt(400);
 	    int randomY = 200 + random.nextInt(400);
 	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
 	    this.addRed(randomCoord);
 	}
-//	for (int i = 0; i < 1; i++) {
-//	    int randomX = 200 + random.nextInt(400);
-//	    int randomY = 200 + random.nextInt(400);
-//	    Point2D.Double randomCoord = new Point2D.Double(randomX, randomY);
-//	    this.addKnight(randomCoord);
-//	}
+	for (int i = 0; i < 1; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
+	    this.addKnight(randomCoord);
+	}
     }
 
     private void changeToNextRoom() {
@@ -252,7 +252,6 @@ public class Game
 	if (!movable0.getHitBox().intersects(movable1.getHitBox()) || movable0.equals(movable1)) {
 	    return; // No need to continue if no collision between movable0 and movable1, or if they are equal.
 	}
-
 	if (movable0 instanceof Obstacle && movable1 instanceof Character) {
 	    movable1.nudgeAwayFrom(movable0.getHitBox());
 	}
