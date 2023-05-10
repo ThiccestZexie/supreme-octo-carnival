@@ -23,7 +23,13 @@ public abstract class Enemy extends Character
 	setMaxSpeed(2);
     }
 
-    protected void storeDirectionalFrames(int offsetX, int offsetY) {
+    /**
+     * Takes in an offset and uses that to index the spritesheet from enemies.png.
+     * Stores the frames in the Enemy's frames variables.
+     * @param offsetX
+     * @param offsetY
+     */
+    protected void storeSpriteFrames(int offsetX, int offsetY) {
 	try {
 	    int spriteHeight = 16;
 	    int spriteWidth = 16;

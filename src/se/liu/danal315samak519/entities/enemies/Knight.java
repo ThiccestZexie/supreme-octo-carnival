@@ -12,7 +12,7 @@ public class Knight extends Enemy
 	super(coord, player);
 	setMaxSpeed(2);
 	setStats(5, 2);
-	storeDirectionalFrames(120, 180);
+	storeSpriteFrames(120, 180);
 	setDir(Direction.DOWN);
     }
 

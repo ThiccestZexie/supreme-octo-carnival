@@ -13,27 +13,27 @@ import java.awt.image.BufferedImage;
 public abstract class Character extends Movable
 {
     // CONSTANTS
-    protected static final int TICKS_PER_FRAME = 8;
+    protected static final int TICKS_PER_WALKFRAME = 8;
+    private static final int TICKS_PER_ATTACKFRAME = 4;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
     private static final int INVINCIBILITY_TICKS = 20;
 
     protected static int attackSpeed = 20;
     public int ticksAttackCooldown = 0;
+    public int ticksInvincible = 0;
+    protected int walkCycleIndex = 0;
     protected int exp = 0;
     protected int level;
     protected int maxHP;
     protected int hp;
-    protected int walkCycleIndex = 0;
-    public int ticksInvincible = 0;
-    protected boolean isShooting = false;
-    // Sprite
     protected BufferedImage[] currentFrames;
     protected BufferedImage[] downFrames;
     protected BufferedImage[] leftFrames;
     protected BufferedImage[] upFrames;
     protected BufferedImage[] rightFrames;
-    protected BufferedImage attackFrame;
-    private int ticksSinceWalkFrameChange;
+    protected BufferedImage[] attackFrames;
+    // Tick counters
+    private int ticksSinceWalkFrameChange = 0;
     private int projectileWidth;
     private int projectileHeight;
 
@@ -49,33 +49,39 @@ public abstract class Character extends Movable
 
     @Override public void setDir(final Direction dir) {
 	super.setDir(dir);
-	setFramesBasedOnDirection();
-    }
-
-    public void setProjectileWidth(final int projectileWidth) {
-	this.projectileWidth = projectileWidth;
-    }
-
-    public void setProjectileHeight(final int projectileHeight) {
-	this.projectileHeight = projectileHeight;
+	setCurrentFrames();
     }
 
     public int getProjectileWidth() {
 	return projectileWidth;
     }
 
+    public void setProjectileWidth(final int projectileWidth) {
+	this.projectileWidth = projectileWidth;
+    }
+
     public int getProjectileHeight() {
 	return projectileHeight;
     }
 
-    public void setFramesBasedOnDirection() {
+    public void setProjectileHeight(final int projectileHeight) {
+	this.projectileHeight = projectileHeight;
+    }
+
+    private boolean shouldShowAttackFrame() {
+	return this.ticksAttackCooldown > TICKS_PER_ATTACKFRAME;
+    }
+
+    /**
+     * Set which sprite to use based on direction and if attacking.
+     */
+    public void setCurrentFrames() {
 	this.currentFrames = switch (this.getDir()) {
 	    case UP -> upFrames;
 	    case DOWN -> downFrames;
 	    case LEFT -> leftFrames;
 	    case RIGHT -> rightFrames;
 	};
-
     }
 
     public int getHp() {
@@ -112,13 +118,8 @@ public abstract class Character extends Movable
 	ticksInvincible = INVINCIBILITY_TICKS;
     }
 
-    private void startAttackCooldownTimer() {
-	ticksAttackCooldown = attackSpeed;
-    }
-
     public Projectile getProjectile() {
-	return new Projectile(this.coord, this, projectileHeight,
-			      projectileWidth);
+	return new Projectile(this.coord, this, projectileHeight, projectileWidth);
     }
 
     public Sword getSword() {
@@ -139,10 +140,9 @@ public abstract class Character extends Movable
     }
 
     public void heal(int healAmount) {
-	if(this.hp + healAmount > this.maxHP){
+	if (this.hp + healAmount > this.maxHP) {
 	    this.hp = maxHP;
-	}
-	else{
+	} else {
 	    this.hp += healAmount;
 	}
     }
@@ -156,14 +156,6 @@ public abstract class Character extends Movable
 
     protected void decrementHp() {
 	hp--;
-    }
-
-    public void startShooting() {
-	isShooting = true;
-    }
-
-    public void stopShooting() {
-	isShooting = false;
     }
 
     public boolean getIsInvincible() {
@@ -191,7 +183,7 @@ public abstract class Character extends Movable
 	super.tick();
 	tickAttackCooldown();
 	tickInvincibility();
-	showNextStepInWalk();
+	showNextFrame();
     }
 
     private void tickInvincibility() {
@@ -209,19 +201,27 @@ public abstract class Character extends Movable
 	}
     }
 
+    private boolean getIfStandingStill(){
+	return velX == 0 && velY == 0;
+    }
+
     /**
-     * Increments currentSpriteFrameIndex IFF the character is walking. Resets to zero if player stops.
+     * Either show next walking- or attack frame, based on values.
      */
-    private void showNextStepInWalk() {
-	if (velX == 0 && velY == 0) {
-	    walkCycleIndex = 0;
-	    ticksSinceWalkFrameChange = 0;
-	} else {
-	    ticksSinceWalkFrameChange++;
-	    if (ticksSinceWalkFrameChange > TICKS_PER_FRAME) {
-		walkCycleIndex++;
-		walkCycleIndex %= 2;
+    private void showNextFrame() {
+	if (shouldShowAttackFrame()) { // ATTACK
+	    walkCycleIndex = 2; // 2 is where attack frame is located.
+	} else { // WALK
+	    if (getIfStandingStill()) { // Reset to standing
+		walkCycleIndex = 0;
 		ticksSinceWalkFrameChange = 0;
+	    } else {
+		ticksSinceWalkFrameChange++;
+		if (ticksSinceWalkFrameChange > TICKS_PER_WALKFRAME) {
+		    walkCycleIndex++;
+		    walkCycleIndex %= currentFrames.length - 1;
+		    ticksSinceWalkFrameChange = 0;
+		}
 	    }
 	}
     }

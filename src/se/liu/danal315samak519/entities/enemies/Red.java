@@ -12,7 +12,7 @@ public class Red extends Enemy
 	super(coord, player);
 	setMaxSpeed(3);
 	setStats(3, 1);
-	storeDirectionalFrames(0, 0);
+	storeSpriteFrames(0, 0);
 	setDir(Direction.DOWN);
     }
 

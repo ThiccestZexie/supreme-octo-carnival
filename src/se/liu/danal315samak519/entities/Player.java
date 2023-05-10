@@ -29,7 +29,7 @@ public class Player extends Character
 	storeSpriteFrames();
 	storeHealthBars();
 	setDir(Direction.DOWN);
-	setFramesBasedOnDirection();
+	setCurrentFrames();
 	levelUp();
     }
 
