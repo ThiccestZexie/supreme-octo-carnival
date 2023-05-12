@@ -91,7 +91,7 @@ public abstract class Character extends Movable
 	return hp;
     }
 
-    private void setHp(int hp) {
+    public void setHp(int hp) {
 	this.hp = hp;
     }
 
@@ -257,4 +257,5 @@ public abstract class Character extends Movable
     public void setProjectileVelocity(final int projectileVelocity) {
 	this.projectileVelocity = projectileVelocity;
     }
+
 }

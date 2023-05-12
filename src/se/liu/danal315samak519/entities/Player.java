@@ -47,6 +47,7 @@ public class Player extends Character
 		setMaxSpeed(maxSpeed * decree.getIncrease());
 	    } else if (decree.getType() == 1) {
 		setMaxHP((int) (getMaxHp() + decree.getIncrease()));
+		setHp((int) (getHp() + decree.getIncrease()));
 	    }
 	    else if (decree.getType() == 2) {
 		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
