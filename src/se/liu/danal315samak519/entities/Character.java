@@ -45,8 +45,8 @@ public abstract class Character extends Movable
 	setSize(50, 50);
 	setMaxSpeed(5);
 	setHitBox();
-	projectileWidth = 5;
-	projectileHeight = 5;
+	projectileWidth = 15;
+	projectileHeight = 15;
 	projectileVelocity = 4;
     }
 

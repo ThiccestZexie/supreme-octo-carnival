@@ -7,6 +7,7 @@ import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
+import se.liu.danal315samak519.weapons.Projectile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,6 +76,10 @@ public class GameComponent extends JComponent implements FrameListener
 	    if (movable instanceof Potion) {
 		Potion potion = (Potion) movable;
 		g.drawImage(potion.getFullHeart(), potion.getIntX(), potion.getIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
+	    }
+	    if(movable instanceof Projectile){
+		Projectile projectile = (Projectile) movable;
+		g.drawImage(projectile.getCurrentSprite(), projectile.getIntX(), projectile.getIntY(), projectile.getIntWidth(), projectile.getIntHeight(), null);
 	    }
 	}
     }

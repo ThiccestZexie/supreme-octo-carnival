@@ -35,6 +35,8 @@ public class Decrees
 	}
     }
 
+
+
     public static int getDecreeAmount() {
 	return DECREEAMMOUNT;
     }
