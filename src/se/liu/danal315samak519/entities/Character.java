@@ -37,6 +37,8 @@ public abstract class Character extends Movable
     private int projectileWidth;
     private int projectileHeight;
 
+    private int projectileVelocity;
+
 
     protected Character(final Point2D.Float coord) {
 	setLocation(coord);
@@ -45,6 +47,7 @@ public abstract class Character extends Movable
 	setHitBox();
 	projectileWidth = 5;
 	projectileHeight = 5;
+	projectileVelocity = 4;
     }
 
     @Override public void setDir(final Direction dir) {
@@ -119,7 +122,7 @@ public abstract class Character extends Movable
     }
 
     public Projectile getProjectile() {
-	return new Projectile(this.coord, this, projectileHeight, projectileWidth);
+	return new Projectile(this.coord, this, projectileHeight, projectileWidth, projectileVelocity);
     }
 
     public Sword getSword() {
@@ -241,5 +244,17 @@ public abstract class Character extends Movable
 
     public void becomeAttacking() {
 	this.ticksAttackCooldown = attackSpeed;
+    }
+
+    public void setMaxHP(final int maxHP) {
+	this.maxHP = maxHP;
+    }
+
+    public int getProjectileVelocity() {
+	return projectileVelocity;
+    }
+
+    public void setProjectileVelocity(final int projectileVelocity) {
+	this.projectileVelocity = projectileVelocity;
     }
 }

@@ -7,7 +7,7 @@ import java.awt.geom.Point2D;
 
 public class Projectile extends Weapon
 {
-    public Projectile(final Point2D.Float coord, final Character owner, final int projectileHeight, final int projectileWidth ) {
+    public Projectile(final Point2D.Float coord, final Character owner, final int projectileHeight, final int projectileWidth, final int projectileVel) {
 	super(coord, owner);
 	this.setLifeSpan(120);
 
@@ -32,10 +32,10 @@ public class Projectile extends Weapon
 
 	setDir(owner.getDir());
 	switch (this.dir) {
-	    case UP -> setVelY(-3);
-	    case DOWN -> setVelY(3);
-	    case LEFT -> setVelX(-3);
-	    case RIGHT -> setVelX(3);
+	    case UP -> setVelY(-projectileVel);
+	    case DOWN -> setVelY(projectileVel);
+	    case LEFT -> setVelX(-projectileVel);
+	    case RIGHT -> setVelX(projectileVel);
 	}
 	this.setHitBox();
 

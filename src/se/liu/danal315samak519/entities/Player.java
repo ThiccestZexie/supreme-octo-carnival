@@ -18,12 +18,15 @@ public class Player extends Character
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
 
     public LinkedList<Decrees> decrees = new LinkedList<>();
+    
+    public int maxSpeed;
 
     public Player(final Point2D.Float coord)
     {
 	super(coord);
+	maxSpeed = 4;
 	setColor(Color.GREEN);
-	setMaxSpeed(4);
+	setMaxSpeed(maxSpeed);
 	setStats(6, 1);
 	storeLevelUpFrames();
 	storeSpriteFrames();
@@ -35,23 +38,33 @@ public class Player extends Character
 
     @Override public void levelUp() {
 	super.levelUp();
-	decrees.add(new Decrees(2));
-	changeStats();
+
     }
 
-    public void changeStats() { //Get effect apply effect profit
+    public void changeStats() { //Have to manually know effect and apply effect
 	for (Decrees decree : decrees) {
-	    if (decree.getType() == 2) {
-		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
+	    if(decree.getType() == 0){
+		setMaxSpeed(maxSpeed * decree.getIncrease());
+	    } else if (decree.getType() == 1) {
+		setMaxHP((int) (getMaxHp() + decree.getIncrease()));
 	    }
-	    //attackSpeed = (int) Math.ceil(attackSpeed / decree.getIncrease());
+	    else if (decree.getType() == 2) {
+		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
+		decrees.remove(decree);
+	    } else if (decree.getType() == 3) {
+		this.setProjectileVelocity((int) (getProjectileVelocity() * decree.getIncrease()));
+	    }
+
+
 	}
 
     }
     public void addDecree(Decrees d){
 	this.decrees.add(d);
+	changeStats();
     }
-
+    
+    
     private void storeLevelUpFrames() {
 	try {
 	    // HARDCODED FOR EXACTLY 20 FRAMES

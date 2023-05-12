@@ -14,7 +14,7 @@ public class Decrees
 	this.level = 1; //temp
 	switch(type){
 	    case 0: // 50% faster
-		effect = "Increases attack speed";
+		effect = "Increases Movespeed";
 		this.increase = 1.5f;
 		break;
 	    case 1: // one extra heart
