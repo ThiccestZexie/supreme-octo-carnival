@@ -6,6 +6,7 @@ public class Decrees
     private int level;
     private float increase;
     private String effect;
+    private static final int DECREEAMMOUNT = 4;
 
     public Decrees(final int type) {
 	//Spread them out in different levels so its 13 faster then 26, then 40 or something like that
@@ -29,6 +30,10 @@ public class Decrees
 		this.increase = 2f;
 		break;
 	}
+    }
+
+    public static int getDecreeAmount() {
+	return DECREEAMMOUNT;
     }
 
     public float getIncrease() {

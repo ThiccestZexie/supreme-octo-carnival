@@ -13,11 +13,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
+import java.util.Random;
 
 public class GameComponent extends JComponent implements FrameListener
 {
     public Game game;
+
+    private Random random;
     public int i = 0;
     public boolean didPlayerLevel = false;
     private int oldPlayerLevel;
@@ -31,6 +33,7 @@ public class GameComponent extends JComponent implements FrameListener
     public GameComponent(Game game)
     {
 	this.game = game;
+	random = new Random();
 	this.tileWidth = game.getRoom().getTileWidth();
 	this.tileHeight = game.getRoom().getTileHeight();
 	setKeyBindings();
@@ -151,7 +154,7 @@ public class GameComponent extends JComponent implements FrameListener
 	}
     }
 
-    private void paintOverlay(final Graphics g) {
+    private void paintDecreeOverlay(final Graphics g) {
 
 	Graphics2D g2 = (Graphics2D) g;
 	//Draw one shape on left side of screen and rightside
@@ -162,8 +165,9 @@ public class GameComponent extends JComponent implements FrameListener
 	int frameY = (int) (getPreferredSize().height / 2.5);
 
 	//Sets decree types
-	Decrees decree00 = new Decrees(1);
-	Decrees decree01 = new Decrees(2);
+	Decrees decree00 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
+	Decrees decree01 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
+
 	// Draws background for decrees
 	Color color = new Color(0, 0, 0, 210);
 	g2.setColor(color);
@@ -174,26 +178,35 @@ public class GameComponent extends JComponent implements FrameListener
 	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth - 10, frameHeight - 10, 25, 25);
 
 	//Adds decrees as clickable objects
-	int decreeX = frameX + 50;
-	int decreeY = frameY + 20;
-	g.setColor(Color.RED);
-	g.fillRect(decreeX,  decreeY, 50, 50);
+	int decreeWidth = 100;
+	int decreeHeight = 100;
 
-	g.drawString(decree00.getEffect(), decreeX, decreeY - 30);
+	int decreeOneX = frameX + decreeWidth;
+	int decreeOneY = frameY + frameHeight/3;
+	int decreeTwoX = decreeOneX + frameWidth - decreeWidth*3; // need to have frameXY - 2 decreewidths...
+	int decreeTwoY = decreeOneY;
+
+	//decree 1
+	g.setColor(Color.RED);
+	g.fillRect(decreeOneX,  decreeOneY, decreeWidth, decreeHeight);
+	g.drawString(decree00.getEffect(), decreeOneX, decreeOneY - 30);
+
+	//decree 2
 	g.setColor(Color.BLUE);
-	g.fillRect(decreeX + 200, decreeY, 50, 50);
+	g.fillRect(decreeTwoX, decreeTwoY, decreeWidth, decreeHeight);
+	g.drawString(decree01.getEffect(), decreeTwoX, decreeTwoY - 30);
 	this.addMouseListener(new MouseAdapter()
 	{
 	    public void mouseClicked(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		if (x >= decreeX && x <= decreeX + 50 && y >= decreeY && y <= decreeY + 50) {
+		if (x >= decreeOneX && x <= decreeOneX + decreeWidth && y >= decreeOneY && y <= decreeOneY + decreeHeight) {
 		    // Code to execute when the red rectangle is clicked
 		    if(showSkills){
 			game.getPlayer().addDecree(decree00);
 			showSkills = false;
 		    }
-		} else if (x >= decreeX + 200 && x <=  decreeX + 250 && y >= decreeY && y <= decreeY + 50) {
+		} else if (x >= decreeTwoY && x <=  decreeTwoY + decreeWidth && y >= decreeTwoY && y <= decreeTwoX + decreeHeight) {
 		    // Code to execute when the blue rectangle is clicked
 		    if(showSkills){
 			game.getPlayer().addDecree(decree01);
@@ -213,7 +226,7 @@ public class GameComponent extends JComponent implements FrameListener
 	paintMapLayer(g, 1); // Paint foreground
 	paintGUI(g);
 	if (showSkills) {
-	    paintOverlay(g);
+	    paintDecreeOverlay(g);
 	}
 	if (debug) {
 	    paintDebug(g);
