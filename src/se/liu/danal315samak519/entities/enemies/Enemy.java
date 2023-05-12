@@ -15,13 +15,13 @@ public abstract class Enemy extends Character
 {
     protected Player player;
 
-    protected int collisionDamage;
+    protected int damage;
 
     protected Enemy(final Point2D.Float coord, final Player player)
     {
 	super(coord);
 	this.level = 1;
-	this.collisionDamage = 1;
+	this.damage = 1;
 	this.player = player;
 	setMaxSpeed(2);
     }
@@ -73,8 +73,8 @@ public abstract class Enemy extends Character
 	return velocity;
     }
 
-    public int getCollisionDamage() {
-	return collisionDamage;
+    public int getDamage() {
+	return damage;
     }
 
     private double getDistanceToPlayer() {

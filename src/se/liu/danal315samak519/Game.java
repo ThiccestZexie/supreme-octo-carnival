@@ -270,7 +270,7 @@ public class Game
 	}
 	// Enemy-Player
 	if (movable0 instanceof Enemy && movable1 instanceof Player) {
-	    ((Player) movable1).tryTakeDamage(((Enemy) movable0).getCollisionDamage());
+	    ((Player) movable1).tryTakeDamage(((Enemy) movable0).getDamage());
 	}
 	// Projectile-Character
 	if (movable0 instanceof Weapon && movable1 instanceof Character) {
