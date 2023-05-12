@@ -5,6 +5,7 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Obstacle;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
+import se.liu.danal315samak519.entities.enemies.Caster;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
@@ -172,8 +173,17 @@ public class Game
 	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
 	    this.addKnight(randomCoord);
 	}
+	for (int i = 0; i < 1; i++) {
+	    int randomX = 200 + random.nextInt(400);
+	    int randomY = 200 + random.nextInt(400);
+	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
+	    this.addCaster(randomCoord);
+	}
     }
-
+    public void addCaster(Point2D.Float coord)
+    {
+	addMovable(new Caster(coord, player));
+    }
     private void changeToNextRoom() {
 	currentWorldID++;
 	changeRoom(new Room("map" + currentWorldID + ".tmx"));
@@ -260,14 +270,14 @@ public class Game
 	}
 	// Enemy-Player
 	if (movable0 instanceof Enemy && movable1 instanceof Player) {
-	    ((Player) movable1).tryTakeDamage();
+	    ((Player) movable1).tryTakeDamage(((Enemy) movable0).getCollisionDamage());
 	}
 	// Projectile-Character
 	if (movable0 instanceof Weapon && movable1 instanceof Character) {
 	    Weapon weapon = (Weapon) movable0;
 	    Character character = (Character) movable1;
 	    if (!character.equals(weapon.getOwner())) {
-		character.tryTakeDamage();
+		character.tryTakeDamage(1);
 		weapon.markAsGarbage();
 	    }
 	}

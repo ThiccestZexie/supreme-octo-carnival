@@ -145,6 +145,7 @@ public class GameComponent extends JComponent implements FrameListener
     private void paintLevelUpAnimation(final Graphics g) {
 	if (oldPlayerLevel < game.getPlayer().getLevel()) {
 	    didPlayerLevel = true;
+	    showSkills = true;
 	}
 	this.oldPlayerLevel = game.getPlayer().getLevel();
 	if (this.i >= 19) {

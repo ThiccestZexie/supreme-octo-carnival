@@ -157,8 +157,8 @@ public abstract class Character extends Movable
 	return false;
     }
 
-    protected void decrementHp() {
-	hp--;
+    protected void decreaseHp(int damage) {
+	hp -= damage;
     }
 
     public boolean getIsInvincible() {
@@ -169,13 +169,13 @@ public abstract class Character extends Movable
 	return ticksAttackCooldown > 0;
     }
 
-    public void tryTakeDamage() {
+    public void tryTakeDamage(int damage) {
 	if (getIsInvincible()) {
 	    return; // Don't take damage!
 	}
 
-	if (getHp() > 1) {
-	    decrementHp();
+	if (getHp() > damage) {
+	    decreaseHp(damage);
 	} else {
 	    this.markAsGarbage(); // DEAD
 	}

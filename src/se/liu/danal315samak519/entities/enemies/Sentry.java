@@ -11,6 +11,7 @@ public class Sentry extends Enemy
 	super(coord, player);
 	setStats(2, 1);
 	storeSpriteFrames(120, 0);
+	setProjectileWidth(20);
 	setDir(Direction.DOWN);
     }
 
