@@ -11,6 +11,9 @@ import se.liu.danal315samak519.map.Tile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 
 public class GameComponent extends JComponent implements FrameListener
 {
@@ -157,17 +160,49 @@ public class GameComponent extends JComponent implements FrameListener
 	int frameHeight = tileHeight * 10;
 	int frameX = tileWidth * 4;
 	int frameY = (int) (getPreferredSize().height / 2.5);
+
+	//Sets decree types
+	Decrees decree00 = new Decrees(1);
+	Decrees decree01 = new Decrees(2);
+	// Draws background for decrees
 	Color color = new Color(0, 0, 0, 210);
 	g2.setColor(color);
 	g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, 35, 35);
-
-	Decrees decree00 = new Decrees(1);
-	Decrees decree01 = new Decrees(2);
-
 	color = new Color(255, 255, 255);
 	g2.setColor(color);
 	g2.setStroke(new BasicStroke(5));
 	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth - 10, frameHeight - 10, 25, 25);
+
+	//Adds decrees as clickable objects
+	int decreeX = frameX + 50;
+	int decreeY = frameY + 20;
+	g.setColor(Color.RED);
+	g.fillRect(decreeX,  decreeY, 50, 50);
+
+	g.drawString(decree00.getEffect(), decreeX, decreeY - 30);
+	g.setColor(Color.BLUE);
+	g.fillRect(decreeX + 200, decreeY, 50, 50);
+	this.addMouseListener(new MouseAdapter()
+	{
+	    public void mouseClicked(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		if (x >= decreeX && x <= decreeX + 50 && y >= decreeY && y <= decreeY + 50) {
+		    // Code to execute when the red rectangle is clicked
+		    if(showSkills){
+			game.getPlayer().addDecree(decree00);
+			showSkills = false;
+		    }
+		} else if (x >= decreeX + 200 && x <=  decreeX + 250 && y >= decreeY && y <= decreeY + 50) {
+		    // Code to execute when the blue rectangle is clicked
+		    if(showSkills){
+			game.getPlayer().addDecree(decree01);
+			showSkills = false;
+		    }
+
+		}
+	    }
+	});
     }
 
     @Override protected void paintComponent(final Graphics g) {

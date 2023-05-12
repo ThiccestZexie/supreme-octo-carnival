@@ -48,6 +48,9 @@ public class Player extends Character
 	}
 
     }
+    public void addDecree(Decrees d){
+	this.decrees.add(d);
+    }
 
     private void storeLevelUpFrames() {
 	try {
