@@ -29,6 +29,9 @@ public class Decrees
 		effect = "Faster arrow velocity";
 		this.increase = 2f;
 		break;
+	    case 4:
+		effect = "Full Heal!";
+		break;
 	}
     }
 

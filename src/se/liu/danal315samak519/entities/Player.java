@@ -41,28 +41,31 @@ public class Player extends Character
 
     }
 
-    public void changeStats() { //Have to manually know effect and apply effect
+    public void applyDecrees() { //Have to manually know effect and apply effect
 	for (Decrees decree : decrees) {
 	    if(decree.getType() == 0){
 		setMaxSpeed(maxSpeed * decree.getIncrease());
+
 	    } else if (decree.getType() == 1) {
 		setMaxHP((int) (getMaxHp() + decree.getIncrease()));
 		setHp((int) (getHp() + decree.getIncrease()));
 	    }
 	    else if (decree.getType() == 2) {
 		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
-		decrees.remove(decree);
+
 	    } else if (decree.getType() == 3) {
 		this.setProjectileVelocity((int) (getProjectileVelocity() * decree.getIncrease()));
+
+	    } else if (decree.getType() == 4) {
+		this.setHp(getMaxHp());
 	    }
-
-
+	    decrees.remove(decree);
 	}
 
     }
     public void addDecree(Decrees d){
 	this.decrees.add(d);
-	changeStats();
+	applyDecrees();
     }
     
     
