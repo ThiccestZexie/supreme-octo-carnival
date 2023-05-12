@@ -26,9 +26,11 @@ public class GameComponent extends JComponent implements FrameListener
     private int tileWidth;
     private int tileHeight;
     private boolean debug = true;
-
     private boolean showSkills = false;
+    private boolean randomizeOnce = true;
     private long lastFrameTime;
+
+    private Decrees decree00 = new Decrees(0),decree01 = new Decrees(0);
 
     public GameComponent(Game game)
     {
@@ -39,6 +41,7 @@ public class GameComponent extends JComponent implements FrameListener
 	setKeyBindings();
 	game.addFrameListener(this);
 	oldPlayerLevel = game.getPlayer().getLevel();
+
     }
 
     private void paintPlayer(final Graphics g) {
@@ -164,9 +167,14 @@ public class GameComponent extends JComponent implements FrameListener
 	int frameX = tileWidth * 4;
 	int frameY = (int) (getPreferredSize().height / 2.5);
 
+
 	//Sets decree types
-	Decrees decree00 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
-	Decrees decree01 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
+	if(randomizeOnce){
+	    decree00 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
+	    decree01 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
+	    randomizeOnce = false;
+	}
+
 
 	// Draws background for decrees
 	Color color = new Color(0, 0, 0, 210);
@@ -350,6 +358,7 @@ public class GameComponent extends JComponent implements FrameListener
     {
 	@Override public void actionPerformed(final ActionEvent e) {
 	    showSkills = !showSkills;
+	    randomizeOnce = true;
 	}
     }
 
