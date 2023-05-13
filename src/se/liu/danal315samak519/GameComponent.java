@@ -204,9 +204,10 @@ public class GameComponent extends JComponent implements FrameListener
 	g.setColor(Color.RED);
 	g.fillRect(decreeOneX,  decreeOneY, decreeWidth, decreeHeight);
 	String effect = decree00.getEffect();
+	g.setFont(new Font("Monospaced", Font.BOLD, 20));
 	FontMetrics fm = g.getFontMetrics();
 	int textWidth = fm.stringWidth(effect);
-	g.drawString(effect, decreeOneX + (decreeWidth -  textWidth)/2, decreeOneY - 30);
+	g.drawString(effect, decreeOneX + (decreeWidth -  textWidth)/2, decreeOneY - 20);
 
 	//decree 2
 	g.setColor(Color.BLUE);
@@ -214,7 +215,7 @@ public class GameComponent extends JComponent implements FrameListener
 	effect = decree01.getEffect();
 	fm = g.getFontMetrics();
 	textWidth = fm.stringWidth(effect);
-	g.drawString(effect, decreeTwoX + (decreeWidth -  textWidth)/2, decreeTwoY - 30);
+	g.drawString(effect, decreeTwoX + (decreeWidth -  textWidth)/2, decreeTwoY - 20);
 
 	this.addMouseListener(new MouseAdapter()
 	{

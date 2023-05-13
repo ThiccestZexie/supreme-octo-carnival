@@ -45,9 +45,9 @@ public abstract class Character extends Movable
 	setSize(50, 50);
 	setMaxSpeed(5);
 	setHitBox();
-	projectileWidth = 15;
-	projectileHeight = 15;
-	projectileVelocity = 4;
+	setProjectileVelocity(4);
+	setProjectileWidth(15);
+	setProjectileHeight(15);
     }
 
     @Override public void setDir(final Direction dir) {
