@@ -225,7 +225,6 @@ public class GameComponent extends JComponent implements FrameListener
 		if (x >= decreeOneX && x <= decreeOneX + decreeWidth && y >= decreeOneY && y <= decreeOneY + decreeHeight) {
 		    // Code to execute when the red rectangle is clicked
 		    if(showSkills){
-			System.out.println("hi");
 			game.getPlayer().addDecree(decree00);
 			showSkills = false;
 		    }
