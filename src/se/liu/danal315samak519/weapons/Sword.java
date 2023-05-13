@@ -10,7 +10,7 @@ public class Sword extends Weapon
 	super(coord, owner);
 	switch (owner.getDir()) {
 	    case UP:
-		setSize(10, 60);
+		setSize(10f, 60f);
 		setLocation((owner.getX() + (owner.getWidth() / 2.0f) - this.getWidth() / 2.0f), (owner.getY() - this.getHeight()));
 		break;
 	    case DOWN:
