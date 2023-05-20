@@ -1,7 +1,6 @@
 package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Decrees;
-import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.ImageLoader;
 
 import javax.imageio.ImageIO;
@@ -13,21 +12,24 @@ import java.io.IOException;
 import java.util.Deque;
 import java.util.LinkedList;
 
+/**
+ * The player character. The player can move around and shoot projectiles. The player can also level up and gain stats. The player can also
+ * pick up potions to heal. The player can also pick up decrees to gain buffs.
+ */
 public class Player extends Character
 {
     public BufferedImage[] levelUpFrames;
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
 
     public Deque<Decrees> decrees = new LinkedList<>();
-    
+
     public int maxSpeed;
 
     public Player(final Point2D.Float coord)
     {
 	super(coord);
-	maxSpeed = 4;
 	setColor(Color.GREEN);
-	setMaxSpeed(maxSpeed);
+	setMaxSpeed(4);
 	setStats(6, 1);
 	storeLevelUpFrames();
 	storeSpriteFrames();
@@ -38,14 +40,13 @@ public class Player extends Character
 
     public void applyDecrees() { //Have to manually know effect and apply effect
 	for (Decrees decree : decrees) {
-	    if(decree.getType() == 0){
+	    if (decree.getType() == 0) {
 		setMaxSpeed(maxSpeed * decree.getIncrease());
 
 	    } else if (decree.getType() == 1) {
 		setMaxHP((int) (getMaxHp() + decree.getIncrease()));
 		setHp((int) (getHp() + decree.getIncrease()));
-	    }
-	    else if (decree.getType() == 2) {
+	    } else if (decree.getType() == 2) {
 		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
 
 	    } else if (decree.getType() == 3) {
@@ -58,7 +59,8 @@ public class Player extends Character
 	}
 
     }
-    public void addDecree(Decrees d){
+
+    public void addDecree(Decrees d) {
 	this.decrees.add(d);
 	applyDecrees();
     }
@@ -67,7 +69,7 @@ public class Player extends Character
 	return this.ticksAttackCooldown > TICKS_PER_ATTACKFRAME;
     }
 
-    
+
     private void storeLevelUpFrames() {
 	try {
 	    // HARDCODED FOR EXACTLY 20 FRAMES

@@ -6,6 +6,7 @@ import java.awt.geom.Rectangle2D;
 
 /**
  * Rectangles that block other movables path. (e.g. gates at room entrances)
+ * Can be opened and closed.
  */
 public class Obstacle extends Movable
 {
@@ -37,8 +38,12 @@ public class Obstacle extends Movable
 	setVelocity(0, 0);
     }
 
+    /**
+     * Obstacles are not nudged away from other hitboxes
+     * @param otherHitBox
+     */
     @Override public void nudgeAwayFrom(final Rectangle2D otherHitBox) {
-	return; // Obstacles don't move away from other entities
+	// Do nothing
     }
 
     /**

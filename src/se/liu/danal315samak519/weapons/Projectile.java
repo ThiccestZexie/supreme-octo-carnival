@@ -7,6 +7,9 @@ import se.liu.danal315samak519.entities.Movable;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
+/**
+ * A projectile that is fired by a character.
+ */
 public class Projectile extends Weapon
 {
 

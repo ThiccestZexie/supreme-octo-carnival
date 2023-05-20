@@ -16,10 +16,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
 
+/**
+ * Handles all the painting to the screen. Also handles the keybindings.
+ */
 public class GameComponent extends JComponent implements FrameListener
 {
-    public Game game;
-
+    public Game game = new Game();
     private Random random;
     public int i = 0;
     public boolean didPlayerLevel = false;
@@ -33,9 +35,8 @@ public class GameComponent extends JComponent implements FrameListener
 
     private Decrees decree00 = new Decrees(0),decree01 = new Decrees(0);
 
-    public GameComponent(Game game)
+    public GameComponent()
     {
-	this.game = game;
 	random = new Random();
 	this.tileWidth = game.getRoom().getTileWidth();
 	this.tileHeight = game.getRoom().getTileHeight();

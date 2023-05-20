@@ -31,20 +31,25 @@ public abstract class Movable extends Entity
 	if (!this.getHitBox().intersects(otherHitBox)) {
 	    return; // No collision
 	}
+	// Get intersection
+	Rectangle2D intersection = this.getHitBox().createIntersection(otherHitBox);
+	// Convert to float
+	Rectangle2D.Float intersectionFloat = new Rectangle2D.Float((float) intersection.getX(), (float) intersection.getY(), (float) intersection.getWidth(), (float) intersection.getHeight());
+	// Determine if horizontal or vertical collision
+	boolean isHorizontalCollision = intersectionFloat.getWidth() < intersectionFloat.getHeight();
 
-	Rectangle2D.Float intersection = (Rectangle2D.Float) this.getHitBox().createIntersection(otherHitBox);
-	boolean isHorizontalCollision = intersection.getWidth() < intersection.getHeight();
+	// Nudge away from collision
 	if (isHorizontalCollision) { // Left-right collision
-	    if (intersection.getCenterX() < this.getHitBox().getCenterX()) { // Left collision
-		nudge(intersection.width, 0);
+	    if (intersectionFloat.getCenterX() < this.getHitBox().getCenterX()) { // Left collision
+		nudge(intersectionFloat.width, 0);
 	    } else { // Right collision
-		nudge(-intersection.width, 0);
+		nudge(-intersectionFloat.width, 0);
 	    }
 	} else { // Up-down collision
-	    if (intersection.getCenterY() < this.getHitBox().getCenterY()) { // Up collision
-		nudge(0, intersection.height);
+	    if (intersectionFloat.getCenterY() < this.getHitBox().getCenterY()) { // Up collision
+		nudge(0, intersectionFloat.height);
 	    } else { // Down collision
-		nudge(0, -intersection.height);
+		nudge(0, -intersectionFloat.height);
 	    }
 	}
     }

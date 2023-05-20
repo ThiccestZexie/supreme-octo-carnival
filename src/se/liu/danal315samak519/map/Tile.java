@@ -1,14 +1,21 @@
 package se.liu.danal315samak519.map;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
+/**
+ * A tile in the map.
+ */
 public class Tile
 {
     private Image image;
     private Point point;
     private Rectangle hitBox;
 
+    /**
+     * Creates a tile with an image and a point.
+     * @param image The image of the tile.
+     * @param point The point of the tile.
+     */
     public Tile(final Image image, final Point point) {
 	this.image = image;
 	this.point = point;

@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 /**
- * Movables that can attack, take damage and make decisions on how to move.
+ * A movable that can move and attack. Can be either the player or an enemy.
  */
 public abstract class Character extends Movable
 {

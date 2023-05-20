@@ -1,10 +1,12 @@
 package se.liu.danal315samak519.entities.enemies;
 
-import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.entities.Player;
 
 import java.awt.geom.Point2D;
 
+/**
+ * A caster enemy that shoots magic at the player.
+ */
 public class Caster extends Enemy
 {
 

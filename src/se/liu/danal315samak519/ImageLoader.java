@@ -5,11 +5,20 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Loads images from the resources/images folder.
+ * Allows for easy access manipulation the loaded image.
+ */
 public class ImageLoader
 {
     private BufferedImage image;
     private int width, height;
 
+    /**
+     * Loads an image from the resources/images folder.
+     * @param imageName The name of the image to load.
+     * @throws IOException If the image could not be loaded.
+     */
     public ImageLoader(final String imageName) throws IOException {
 	String imagePath = "resources/images/" + imageName;
 	this.image = ImageIO.read(new File(imagePath));

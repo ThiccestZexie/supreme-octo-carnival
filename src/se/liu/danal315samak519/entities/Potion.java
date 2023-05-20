@@ -8,6 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * A potion that heals the player.
+ */
 public class Potion extends Movable
 {
     private Player user = null;

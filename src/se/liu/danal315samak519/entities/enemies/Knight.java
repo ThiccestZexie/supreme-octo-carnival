@@ -5,6 +5,10 @@ import se.liu.danal315samak519.entities.Player;
 
 import java.awt.geom.Point2D;
 
+/**
+ * A knight enemy that chases the player.
+ * Is more powerful than the other enemies.
+ */
 public class Knight extends Enemy
 {
 

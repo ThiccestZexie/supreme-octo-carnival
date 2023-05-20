@@ -2,6 +2,9 @@ package se.liu.danal315samak519;
 
 import java.awt.geom.Point2D;
 
+/**
+ * Enum for directions. Used for movement and animation.
+ */
 public enum Direction
 {
     UP, DOWN, LEFT, RIGHT;
@@ -46,15 +49,13 @@ public enum Direction
 	float angleUpDown = (float) ((Math.PI - 2 * angleLeftRight) / 2.0);
 
 	if (-angleUpDown <= radians && radians <= angleUpDown) {
-	    return RIGHT;
+	    return Direction.RIGHT;
 	} else if (-angleUpDown - 2 * angleLeftRight <= radians && radians <= -angleUpDown) {
-	    return UP;
-//        } else if (Math.PI - angleUpDown <= radians && radians <= Math.PI + angleUpDown) {
-//           return LEFT;
+	    return Direction.UP;
 	} else if (angleUpDown <= radians && radians <= angleUpDown + 2 * angleLeftRight) {
-	    return DOWN;
+	    return Direction.DOWN;
 	}
-	return LEFT; // Idk why the angle sometimes isn't caught
+	return Direction.LEFT;
     }
 
     /**

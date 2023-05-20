@@ -4,6 +4,9 @@ import se.liu.danal315samak519.entities.Character;
 
 import java.awt.geom.Point2D;
 
+/**
+ * A sword that is swung by a character.
+ */
 public class Sword extends Weapon
 {
     public Sword(final Point2D.Float coord, final Character owner) {

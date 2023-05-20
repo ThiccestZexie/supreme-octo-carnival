@@ -153,31 +153,30 @@ public class Game
 	}
     }
 
+    /**
+     * Spawn 1-4 enemies in the room 1/4 chance for each type of enemy
+     */
     private void spawnEnemies() {
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + RANDOM.nextInt(400);
-	    int randomY = 200 + RANDOM.nextInt(400);
-	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
-	    this.addSentry(randomCoord);
+	int randomEnemyCount = 1 + RANDOM.nextInt(4);
+	for (int i = 0; i < randomEnemyCount; i++) {
+	    int enemyTypes = 4;
+	    int randomEnemyType = RANDOM.nextInt(enemyTypes);
+	    switch (randomEnemyType) {
+		case 0 -> addMovable(new Caster(getRandomCoord(), player));
+		case 1 -> addMovable(new Sentry(getRandomCoord(), player));
+		case 2 -> addMovable(new Red(getRandomCoord(), player));
+		case 3 -> addMovable(new Knight(getRandomCoord(), player));
+	    }
 	}
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + RANDOM.nextInt(400);
-	    int randomY = 200 + RANDOM.nextInt(400);
-	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
-	    this.addRed(randomCoord);
-	}
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + RANDOM.nextInt(400);
-	    int randomY = 200 + RANDOM.nextInt(400);
-	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
-	    this.addKnight(randomCoord);
-	}
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + RANDOM.nextInt(400);
-	    int randomY = 200 + RANDOM.nextInt(400);
-	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
-	    this.addCaster(randomCoord);
-	}
+    }
+
+    /**
+     * @return a random point within the room, but not too close to the edges
+     */
+    private Point2D.Float getRandomCoord() {
+	int margin = 150;
+	return new Point2D.Float(margin + RANDOM.nextInt(getRoom().getWidth() - 2 * margin),
+				 margin + RANDOM.nextInt(getRoom().getHeight() - 2 * margin));
     }
 
     public void addCaster(Point2D.Float coord)

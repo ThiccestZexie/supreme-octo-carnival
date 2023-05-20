@@ -1,5 +1,8 @@
 package se.liu.danal315samak519;
 
+/**
+ * Represent a powerup that can be acquired by the player.
+ */
 public class Decrees
 {
     private int type;

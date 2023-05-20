@@ -6,6 +6,9 @@ import se.liu.danal315samak519.entities.Movable;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
+/**
+ * Superclass to all weapons.
+ */
 public abstract class Weapon extends Movable
 {
     protected BufferedImage currentSprite;
@@ -17,7 +20,6 @@ public abstract class Weapon extends Movable
     protected int lifeSpan;
 
     protected Weapon(final Point2D.Float coord, final Character owner) {
-	//We have two choices when it comes to spawning the weapon first look at dir then spawn everything according to that...
 	this.owner = owner;
 	this.lifeSpan = 5;
     }

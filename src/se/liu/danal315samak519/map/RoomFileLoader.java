@@ -14,7 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapLoader
+/**
+ * Loads a map file and dispenses tile images as needed.
+ */
+public class RoomFileLoader
 {
     private static final String DATA_FOLDER = "resources/data/";
     private static final String IMAGES_FOLDER = "resources/images/";
@@ -28,12 +31,10 @@ public class MapLoader
 
     /**
      * Loads a map file and dispenses tile images as needed.
-     *
-     * @param mapFileName the name of the .tmx file containing the map data
-     *
-     * @throws IOException
+     * @param mapFileName The name of the map file to load.
+     * @throws IOException If the map file could not be loaded.
      */
-    public MapLoader(final String mapFileName) throws IOException {
+    public RoomFileLoader(final String mapFileName) throws IOException {
 	// Load XML file
 	String filePath = DATA_FOLDER + mapFileName;
 	File file = new File(filePath);
