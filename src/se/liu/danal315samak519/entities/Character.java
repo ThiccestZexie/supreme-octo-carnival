@@ -14,7 +14,7 @@ public abstract class Character extends Movable
 {
     // CONSTANTS
     protected static final int TICKS_PER_WALKFRAME = 8;
-    private static final int TICKS_PER_ATTACKFRAME = 4;
+    protected static final int TICKS_PER_ATTACKFRAME = 4;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
     private static final int INVINCIBILITY_TICKS = 20;
 
@@ -31,7 +31,6 @@ public abstract class Character extends Movable
     protected BufferedImage[] leftFrames;
     protected BufferedImage[] upFrames;
     protected BufferedImage[] rightFrames;
-    protected BufferedImage[] attackFrames;
     // Tick counters
     private int ticksSinceWalkFrameChange = 0;
     private int projectileWidth;
@@ -71,8 +70,8 @@ public abstract class Character extends Movable
 	this.projectileHeight = projectileHeight;
     }
 
-    private boolean shouldShowAttackFrame() {
-	return this.ticksAttackCooldown > TICKS_PER_ATTACKFRAME;
+    protected boolean shouldShowAttackFrame() {
+	return false;
     }
 
     /**

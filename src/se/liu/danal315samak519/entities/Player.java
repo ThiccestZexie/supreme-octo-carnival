@@ -67,7 +67,11 @@ public class Player extends Character
 	this.decrees.add(d);
 	applyDecrees();
     }
-    
+
+    @Override protected boolean shouldShowAttackFrame() {
+	return this.ticksAttackCooldown > TICKS_PER_ATTACKFRAME;
+    }
+
     
     private void storeLevelUpFrames() {
 	try {
