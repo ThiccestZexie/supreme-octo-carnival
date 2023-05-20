@@ -8,7 +8,7 @@ public class Sword extends Weapon
 {
     public Sword(final Point2D.Float coord, final Character owner) {
 	super(coord, owner);
-	switch (owner.getDir()) {
+	switch (owner.getDirection()) {
 	    case UP:
 		setSize(10f, 60f);
 		setLocation((owner.getX() + (owner.getWidth() / 2.0f) - this.getWidth() / 2.0f), (owner.getY() - this.getHeight()));

@@ -12,12 +12,11 @@ public class Sentry extends Enemy
 	setStats(2, 1);
 	storeSpriteFrames(120, 0);
 	setProjectileWidth(20);
-	setDir(Direction.DOWN);
     }
 
     @Override public void tick() {
 	super.tick();
-	setDir(facePlayer());
+	setDirection(facePlayer());
     }
 
     private Direction facePlayer() {

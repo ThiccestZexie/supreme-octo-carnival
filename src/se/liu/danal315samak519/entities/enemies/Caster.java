@@ -13,7 +13,6 @@ public class Caster extends Enemy
 	setMaxSpeed(1);
 	setStats(2, 2);
 	storeSpriteFrames(240, 60);
-	setDir(Direction.DOWN);
 	setProjectileVelocity(6);
 	setProjectileWidth(50);
 	setProjectileHeight(5);

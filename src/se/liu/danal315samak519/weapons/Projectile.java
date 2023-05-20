@@ -14,7 +14,7 @@ public class Projectile extends Weapon
 	super(coord, owner);
 	this.setLifeSpan(120);
 
-	switch (owner.getDir()) {
+	switch (owner.getDirection()) {
 	    case UP:
 		setSize(projectileWidth, projectileHeight);
 		setLocation((owner.getX() + (owner.getWidth() / 2.0f) - this.getWidth() / 2.0f), (owner.getY() - this.getHeight()));
@@ -33,8 +33,8 @@ public class Projectile extends Weapon
 		break;
 	}
 
-	setDir(owner.getDir());
-	switch (this.dir) {
+	setDirection(owner.getDirection());
+	switch (this.direction) {
 	    case UP -> setVelY(-projectileVel);
 	    case DOWN -> setVelY(projectileVel);
 	    case LEFT -> setVelX(-projectileVel);

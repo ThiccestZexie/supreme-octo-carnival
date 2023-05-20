@@ -1,6 +1,5 @@
 package se.liu.danal315samak519;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 
 public enum Direction

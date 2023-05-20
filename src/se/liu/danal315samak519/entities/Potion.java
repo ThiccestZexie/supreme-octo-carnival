@@ -1,6 +1,5 @@
 package se.liu.danal315samak519.entities;
 
-import se.liu.danal315samak519.Direction;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,19 +11,18 @@ import java.io.IOException;
 public class Potion extends Movable
 {
     private Player user = null;
-    private Image fullHeart;
+    private Image sprite;
 
     public Potion(final Point2D.Float coord) {
 	setLocation(coord);
 	setSize(25, 25);
 	setHitBox();
 	setColor(Color.GRAY);
-	this.setDir(Direction.DOWN);
-	this.storeImage();
+	storeFullHeartImage();
     }
 
-    public Image getFullHeart() {
-	return fullHeart;
+    public Image getSprite() {
+	return sprite;
     }
 
     private void setUser(Player user) {
@@ -39,10 +37,10 @@ public class Potion extends Movable
 	}
     }
 
-    public void storeImage() {
+    public void storeFullHeartImage() {
 	try {
-	    BufferedImage bufferedImage = ImageIO.read(new File("resources/images/hearts/heart_full.png"));
-	    fullHeart = bufferedImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+	    BufferedImage fullHeart = ImageIO.read(new File("resources/images/hearts/heart_full.png"));
+	    this.sprite = fullHeart.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}

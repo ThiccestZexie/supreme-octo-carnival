@@ -1,5 +1,6 @@
 package se.liu.danal315samak519.entities.enemies;
 
+import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.ImageLoader;
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
@@ -15,20 +16,18 @@ public abstract class Enemy extends Character
 {
     protected Player player;
 
-    protected int damage;
+    protected int damage = 1;
 
     protected Enemy(final Point2D.Float coord, final Player player)
     {
 	super(coord);
-	this.level = 1;
-	this.damage = 1;
 	this.player = player;
 	setMaxSpeed(2);
     }
 
     /**
-     * Takes in an offset and uses that to index the spritesheet from enemies.png.
-     * Stores the frames in the Enemy's frames variables.
+     * Takes in an offset and uses that to index the spritesheet from enemies.png. Stores the frames in the Enemy's frames variables.
+     *
      * @param offsetX
      * @param offsetY
      */
@@ -55,14 +54,24 @@ public abstract class Enemy extends Character
 	    rightFrames[0] = imageLoader.getSubImage(offsetX + (32 - 2) * 3, offsetY + 32, spriteWidth, spriteHeight);
 	    rightFrames[1] = imageLoader.getSubImage(offsetX + (32 - 2) * 3, offsetY, spriteWidth, spriteHeight);
 
+	    setCurrentFrames();
+
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
-    //TODO make drops random and not guaranteed...
+    /**
+     * Drop a potion 50% of the time
+     *
+     * @return a potion or null
+     */
     public Movable dropItem() {
-	return new Potion(this.coord);
+	boolean shouldDrop = getRandom().nextBoolean();
+	if (shouldDrop) {
+	    return new Potion(this.coord);
+	}
+	return null;
     }
 
     public Point2D.Float getVelocityTowardsPlayer() {
@@ -75,6 +84,10 @@ public abstract class Enemy extends Character
 
     public int getDamage() {
 	return damage;
+    }
+
+    protected void setDamage(int damage) {
+	this.damage = damage;
     }
 
     private double getDistanceToPlayer() {
@@ -100,7 +113,7 @@ public abstract class Enemy extends Character
     public boolean checkIfPlayerIsInFront(int length, int width) {
 	if (canAttack()) {
 	    Rectangle raycastRectangle = new Rectangle();
-	    switch (getDir()) {
+	    switch (getDirection()) {
 		case UP:
 		    raycastRectangle.setSize(width, length);
 		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - raycastRectangle.getWidth() / 2.0),

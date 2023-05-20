@@ -3,28 +3,33 @@ package se.liu.danal315samak519.entities;
 import se.liu.danal315samak519.Direction;
 
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 /**
  * Entities that have velocity, and move according to velocity when ticking.
  */
-public class Movable extends Entity
+public abstract class Movable extends Entity
 {
-    protected Direction dir;
+    protected Direction direction = Direction.DOWN;
     protected float maxSpeed;
     protected float velX;
     protected float velY;
 
-    public Direction getDir() {
-	return dir;
+    public Direction getDirection() {
+	return direction;
     }
 
-    public void setDir(final Direction dir) {
-	this.dir = dir;
+    public BufferedImage getCurrentSprite() {
+	return null;
+    }
+
+    public void setDirection(final Direction direction) {
+	this.direction = direction;
     }
 
     public void nudgeAwayFrom(Rectangle2D otherHitBox) {
 	if (!this.getHitBox().intersects(otherHitBox)) {
-	    return; // not intersecting!
+	    return; // No collision
 	}
 
 	Rectangle2D.Float intersection = (Rectangle2D.Float) this.getHitBox().createIntersection(otherHitBox);
@@ -65,7 +70,7 @@ public class Movable extends Entity
     private void setAppropiateDir() {
 	Direction newDirection = Direction.velocityToDirection(getVelX(), getVelY());
 	if (newDirection != null) {
-	    setDir(newDirection);
+	    setDirection(newDirection);
 	}
     }
 

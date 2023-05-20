@@ -180,10 +180,12 @@ public class Game
 	    this.addCaster(randomCoord);
 	}
     }
+
     public void addCaster(Point2D.Float coord)
     {
 	addMovable(new Caster(coord, player));
     }
+
     private void changeToNextRoom() {
 	currentWorldID++;
 	changeRoom(new Room("map" + currentWorldID + ".tmx"));
@@ -201,9 +203,6 @@ public class Game
     private void handleWallCollision(final Movable movable) {
 	if (getRoom().getLayers() < 2) {
 	    throw new RuntimeException("There is no foreground layer in loaded room! Can't check wall collisions.");
-	}
-	if (movable instanceof Obstacle) {
-	    return; // Don't handle wall collisions on obstacles!!
 	}
 	for (Tile tile : room.getForegroundTileList()) {
 	    movable.nudgeAwayFrom(tile.getHitBox());
@@ -246,7 +245,9 @@ public class Game
     }
 
     private void pushPending(Movable movable) {
-	pendingMovables.push(movable);
+	if (movable != null) {
+	    pendingMovables.push(movable);
+	}
     }
 
     private void birthPending() {

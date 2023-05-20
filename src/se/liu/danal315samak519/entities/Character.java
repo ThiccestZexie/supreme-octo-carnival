@@ -16,21 +16,20 @@ public abstract class Character extends Movable
     protected static final int TICKS_PER_WALKFRAME = 8;
     protected static final int TICKS_PER_ATTACKFRAME = 4;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
+    protected static final int ATTACK_COOLDOWN = 20;
     private static final int INVINCIBILITY_TICKS = 20;
-
-    protected static int attackSpeed = 20;
     public int ticksAttackCooldown = 0;
     public int ticksInvincible = 0;
     protected int walkCycleIndex = 0;
     protected int exp = 0;
-    protected int level;
+    protected int level = 1;
     protected int maxHP;
     protected int hp;
-    protected BufferedImage[] currentFrames;
-    protected BufferedImage[] downFrames;
-    protected BufferedImage[] leftFrames;
-    protected BufferedImage[] upFrames;
-    protected BufferedImage[] rightFrames;
+    protected BufferedImage[] currentFrames = null;
+    protected BufferedImage[] downFrames = null;
+    protected BufferedImage[] leftFrames = null;
+    protected BufferedImage[] upFrames = null;
+    protected BufferedImage[] rightFrames = null;
     // Tick counters
     private int ticksSinceWalkFrameChange = 0;
     private int projectileWidth;
@@ -49,8 +48,8 @@ public abstract class Character extends Movable
 	setProjectileHeight(15);
     }
 
-    @Override public void setDir(final Direction dir) {
-	super.setDir(dir);
+    @Override public void setDirection(final Direction direction) {
+	super.setDirection(direction);
 	setCurrentFrames();
     }
 
@@ -78,12 +77,16 @@ public abstract class Character extends Movable
      * Set which sprite to use based on direction and if attacking.
      */
     public void setCurrentFrames() {
-	this.currentFrames = switch (this.getDir()) {
+	this.currentFrames = switch (this.getDirection()) {
 	    case UP -> upFrames;
 	    case DOWN -> downFrames;
 	    case LEFT -> leftFrames;
 	    case RIGHT -> rightFrames;
+	    case null -> downFrames;
 	};
+    }
+    public void setCurrentFrame(BufferedImage frame){
+	this.currentFrames = new BufferedImage[]{frame};
     }
 
     public int getHp() {
@@ -200,7 +203,7 @@ public abstract class Character extends Movable
 	}
     }
 
-    private boolean getIfStandingStill(){
+    private boolean getIfStandingStill() {
 	return velX == 0 && velY == 0;
     }
 
@@ -218,14 +221,13 @@ public abstract class Character extends Movable
 		ticksSinceWalkFrameChange++;
 		if (ticksSinceWalkFrameChange > TICKS_PER_WALKFRAME) {
 		    walkCycleIndex++;
-		    walkCycleIndex %= (currentFrames.length-1);
+		    walkCycleIndex %= (currentFrames.length - 1);
 		    ticksSinceWalkFrameChange = 0;
 		}
 	    }
 	}
     }
-
-    public BufferedImage getCurrentSprite() {
+    @Override public BufferedImage getCurrentSprite() {
 	return getSpriteFrame(walkCycleIndex);
     }
 
@@ -242,7 +244,7 @@ public abstract class Character extends Movable
     }
 
     public void becomeAttacking() {
-	this.ticksAttackCooldown = attackSpeed;
+	this.ticksAttackCooldown = ATTACK_COOLDOWN;
     }
 
     public void setMaxHP(final int maxHP) {

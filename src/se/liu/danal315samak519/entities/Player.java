@@ -10,6 +10,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Deque;
 import java.util.LinkedList;
 
 public class Player extends Character
@@ -17,7 +18,7 @@ public class Player extends Character
     public BufferedImage[] levelUpFrames;
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
 
-    public LinkedList<Decrees> decrees = new LinkedList<>();
+    public Deque<Decrees> decrees = new LinkedList<>();
     
     public int maxSpeed;
 
@@ -31,14 +32,8 @@ public class Player extends Character
 	storeLevelUpFrames();
 	storeSpriteFrames();
 	storeHealthBars();
-	setDir(Direction.DOWN);
 	setCurrentFrames();
 	levelUp();
-    }
-
-    @Override public void levelUp() {
-	super.levelUp();
-
     }
 
     public void applyDecrees() { //Have to manually know effect and apply effect
@@ -115,6 +110,8 @@ public class Player extends Character
 	    rightFrames[0] = linkImageLoader.getSubImage(32 * 3, 32, spriteWidth, spriteHeight);
 	    rightFrames[1] = linkImageLoader.getSubImage(32 * 3, 0, spriteWidth, spriteHeight);
 	    rightFrames[2] = linkImageLoader.getSubImage(32 * 3, 32 * 2, spriteWidth, spriteHeight);
+
+	    setCurrentFrames();
 
 	} catch (IOException e) {
 	    throw new RuntimeException(e);

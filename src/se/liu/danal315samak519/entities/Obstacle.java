@@ -2,6 +2,8 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
 
+import java.awt.geom.Rectangle2D;
+
 /**
  * Rectangles that block other movables path. (e.g. gates at room entrances)
  */
@@ -35,12 +37,16 @@ public class Obstacle extends Movable
 	setVelocity(0, 0);
     }
 
+    @Override public void nudgeAwayFrom(final Rectangle2D otherHitBox) {
+	return; // Obstacles don't move away from other entities
+    }
+
     /**
      * Make obstacle glide towards end position
      */
     public void setVelocityTowards(final float targetX, final float targetY) {
-	if (getX() == targetX && getY() == targetY) {
-	    setVelocity(0, 0); // At end!
+	if (getCoord().distance(targetX, targetY) == 0){
+	    setVelocity(0, 0);
 	    return;
 	}
 	Direction towardsTarget = Direction.getDirectionBetweenPoints(getX(), getY(), targetX, targetY);

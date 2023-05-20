@@ -13,7 +13,6 @@ public class Red extends Enemy
 	setMaxSpeed(3);
 	setStats(3, 1);
 	storeSpriteFrames(0, 0);
-	setDir(Direction.DOWN);
     }
 
     @Override public void tick() {
