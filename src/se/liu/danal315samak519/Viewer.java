@@ -2,22 +2,17 @@ package se.liu.danal315samak519;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Initiates the game and starts the timer.
  */
 public class Viewer
 {
-    private static final int TARGET_FPS = 120;
+    private static final int TARGET_FPS = 60;
     private GameComponent gameComponent = new GameComponent();
-    private final Action doTimerTick = new AbstractAction()
-    {
-	@Override public void actionPerformed(final ActionEvent e)
-	{
-	    gameComponent.frameChanged();
-	    gameComponent.game.tick();
-	}
-    };
 
     /**
      * Creates new frame, shows it and starts the timer.
@@ -35,13 +30,17 @@ public class Viewer
 	startTimer();
     }
 
-    public void startTimer()
-    {
+    /**
+     * Starts the timer for game ticks.
+     */
+    public void startTimer() {
 	int millisDelay = 1000 / TARGET_FPS;
-	final Timer clockTimer = new Timer(millisDelay, doTimerTick);
-	clockTimer.setCoalesce(true);
-	clockTimer.start();
+	ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+	executorService.scheduleAtFixedRate(this::doTimerTick, 0, millisDelay, TimeUnit.MILLISECONDS);
     }
 
-
+    private void doTimerTick() {
+	gameComponent.frameChanged();
+	gameComponent.game.tick();
+    }
 }
