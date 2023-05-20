@@ -23,8 +23,8 @@ import java.util.Random;
 
 public class Game
 {
-    private final Random random;
-    public List<Movable> movables = new ArrayList<>();
+    private static final Random RANDOM = new Random();
+    private List<Movable> movables = new ArrayList<>();
     private LinkedList<Movable> pendingMovables = new LinkedList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
@@ -40,7 +40,6 @@ public class Game
     }
 
     public Game(Room room) {
-	random = new Random();
 	setPlayer(new Player(new Point2D.Float(room.getCenterX(), room.getCenterY())));
 	changeRoom(room);
     }
@@ -156,26 +155,26 @@ public class Game
 
     private void spawnEnemies() {
 	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
+	    int randomX = 200 + RANDOM.nextInt(400);
+	    int randomY = 200 + RANDOM.nextInt(400);
 	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
 	    this.addSentry(randomCoord);
 	}
 	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
+	    int randomX = 200 + RANDOM.nextInt(400);
+	    int randomY = 200 + RANDOM.nextInt(400);
 	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
 	    this.addRed(randomCoord);
 	}
 	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
+	    int randomX = 200 + RANDOM.nextInt(400);
+	    int randomY = 200 + RANDOM.nextInt(400);
 	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
 	    this.addKnight(randomCoord);
 	}
 	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
+	    int randomX = 200 + RANDOM.nextInt(400);
+	    int randomY = 200 + RANDOM.nextInt(400);
 	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
 	    this.addCaster(randomCoord);
 	}

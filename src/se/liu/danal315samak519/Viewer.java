@@ -27,9 +27,6 @@ public class Viewer
 
 	Game game = new Game();
 
-	Random random = new Random();
-
-
 	// Put game in gameComponent
 	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);
