@@ -34,7 +34,6 @@ public abstract class Character extends Movable
     private int ticksSinceWalkFrameChange = 0;
     private int projectileWidth;
     private int projectileHeight;
-
     private int projectileVelocity;
 
 

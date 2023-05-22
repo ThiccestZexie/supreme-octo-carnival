@@ -1,6 +1,5 @@
 package se.liu.danal315samak519.entities.enemies;
 
-import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.ImageLoader;
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
@@ -64,12 +63,20 @@ public abstract class Enemy extends Character
 	}
     }
 
+    @Override public void markAsGarbage() {
+	super.markAsGarbage();
+	Movable dropped = getDropped();
+	if (dropped != null) {
+	    pushPending(dropped);
+	}
+    }
+
     /**
      * Drop a potion 50% of the time
      *
      * @return a potion or null
      */
-    public Movable dropItem() {
+    private Movable getDropped() {
 	boolean shouldDrop = getRandom().nextBoolean();
 	if (shouldDrop) {
 	    return new Potion(this.coord);

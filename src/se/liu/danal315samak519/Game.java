@@ -56,36 +56,56 @@ public class Game
      */
     public void tick()
     {
-	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
-	if (outOfBoundsDirection != null) {
-//	    changeToNextRoom();
-	    resetRoom();
-	    placePlayerAtEntrance(outOfBoundsDirection);
-	}
+	handlePlayerOutOfBounds();
 	birthPending();
-	handleGarbageOrDeaths();
 	setRoomIsCleared(true); // Assume room is cleared
-	// Iterate through all movables (incl. player) and do appropiate actions
+
+	// Iterate through all movables, handle collisions and tick
 	List<Movable> allMovables = getMovablesInclPlayer();
 	for (Movable movable0 : allMovables) {
 	    movable0.tick();
+	    handleDeath(movable0);
 	    handleWallCollision(movable0);
-	    // Second iteration of all movables, for handling
-	    // combinations of movables (e.g. colliding with eachother)
+	    // Second iteration of all movables, for handling movable-movable collisions
 	    for (Movable movable1 : allMovables) {
 		handleMovableCollision(movable0, movable1);
 	    }
+	    while (movable0.hasPending()) {
+		pushPending(movable0.popPending());
+	    }
+	    // Bad abstraction, but it works
 	    if (movable0 instanceof Enemy) {
-		sentryDecide((Enemy) movable0);
 		setRoomIsCleared(false); // Found enemy! Not cleared.
 	    } else if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
 		Obstacle obstacle = (Obstacle) movable0;
-		if (getIfPlayerInPlayArea() && !getIfRoomIsCleared()) {
-		    obstacle.close();
-		} else {
+		// If room is cleared, open all gates
+		if (getIfRoomIsCleared() || !getIfPlayerInPlayArea()) {
 		    obstacle.open();
+		} else { // Else close all gates
+		    obstacle.close();
 		}
 	    }
+	}
+    }
+
+    /**
+     * Remove the movable if it is garbage, also adds its pending movables to the pending list
+     * @param movable
+     */
+    private void handleDeath(final Movable movable) {
+	if (movable.getIsGarbage()) {
+	    while (movable.hasPending()) {
+		pushPending(movable.popPending());
+	    }
+	    movables.remove(movable);
+	}
+    }
+
+    private void handlePlayerOutOfBounds() {
+	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
+	if (outOfBoundsDirection != null) {
+	    resetRoom();
+	    placePlayerAtEntrance(outOfBoundsDirection);
 	}
     }
 
@@ -102,17 +122,6 @@ public class Game
 	    case DOWN -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), this.getRoom().getHeight() - margin);
 	    case LEFT -> getPlayer().setCenterLocation(margin, this.getRoom().getCenterY());
 	    case RIGHT -> getPlayer().setCenterLocation(this.getRoom().getWidth() - margin, this.getRoom().getCenterY());
-	}
-    }
-
-    /**
-     * Checks if any enemy has died if so adds a drop from them
-     */
-    public void handleEnemyDrops() {
-	for (Movable movable : getMovables()) {
-	    if (movable instanceof Enemy && movable.getIsGarbage()) {
-		pushPending(((Enemy) movable).dropItem());
-	    }
 	}
     }
 
@@ -227,19 +236,7 @@ public class Game
 	} else if (centerY > getRoom().getHeight()) {
 	    return Direction.DOWN;
 	}
-	return null; // Movable is in bounds
-    }
-
-    public void sentryDecide(Enemy enemy) {
-	if (!(enemy instanceof Sentry)) {
-	    return;
-	}
-	if (enemy.checkIfPlayerIsInFront(500, 100)) {
-	    if (enemy.canAttack()) {
-		enemy.becomeAttacking();
-		pushPending(enemy.getProjectile());
-	    }
-	}
+	return null; // Movable is in bounds!
     }
 
     private void pushPending(Movable movable) {
@@ -255,7 +252,7 @@ public class Game
     }
 
     /**
-     * Handle collisions where two movables are involved
+     * Handle collisions where two movables are involved Unfortunately this is terrible abstraction
      */
     public void handleMovableCollision(final Movable movable0, final Movable movable1) {
 	if (!movable0.getHitBox().intersects(movable1.getHitBox()) || movable0.equals(movable1)) {
@@ -266,17 +263,16 @@ public class Game
 	}
 	if (movable0 instanceof Enemy && movable1 instanceof Character) {
 	    movable0.nudgeAwayFrom(movable1.getHitBox());
-	}
-	// Enemy-Player
-	if (movable0 instanceof Enemy && movable1 instanceof Player) {
-	    ((Player) movable1).tryTakeDamage(((Enemy) movable0).getDamage());
+	    if (movable1 instanceof Player) {
+		((Player) movable1).tryTakeDamage(((Enemy) movable0).getDamage());
+	    }
 	}
 	// Projectile-Character
 	if (movable0 instanceof Weapon && movable1 instanceof Character) {
 	    Weapon weapon = (Weapon) movable0;
 	    Character character = (Character) movable1;
 	    if (!character.equals(weapon.getOwner())) {
-		character.tryTakeDamage(1);
+		character.tryTakeDamage(1); // Hardcoded projectile damage of 1
 		weapon.markAsGarbage();
 	    }
 	}
@@ -286,11 +282,6 @@ public class Game
 	    Player player = (Player) movable1;
 	    potion.pickUp(player);
 	}
-    }
-
-    private void handleGarbageOrDeaths() {
-	handleEnemyDrops();
-	movables.removeIf(Movable::getIsGarbage);
     }
 
     public boolean getIfRoomIsCleared() {

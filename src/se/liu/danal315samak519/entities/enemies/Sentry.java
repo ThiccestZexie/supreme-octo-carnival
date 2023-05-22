@@ -20,10 +20,25 @@ public class Sentry extends Enemy
 
     @Override public void tick() {
 	super.tick();
-	setDirection(facePlayer());
+	setDirection(getDirectionTowardsPlayer());
+	if(checkIfPlayerIsInFront(500, 100) && canAttack()){
+	    this.becomeAttacking();
+	    shoot();
+	}
     }
 
-    private Direction facePlayer() {
+    /**
+     * Pushes a projectile to internal list of pending projectiles.
+     */
+    private void shoot() {
+	pushPending(getProjectile());
+    }
+
+    /**
+     * Returns the direction towards the player.
+     * @return
+     */
+    private Direction getDirectionTowardsPlayer() {
 	return Direction.getDirectionBetweenPoints(this.getCoord(), player.getCoord());
     }
 }
