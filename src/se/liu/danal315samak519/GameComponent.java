@@ -22,9 +22,9 @@ import java.util.Random;
 public class GameComponent extends JComponent implements FrameListener
 {
     public Game game = new Game();
-    private Random random;
     public int i = 0;
     public boolean didPlayerLevel = false;
+    private Random random;
     private int oldPlayerLevel;
     private int tileWidth;
     private int tileHeight;
@@ -33,7 +33,7 @@ public class GameComponent extends JComponent implements FrameListener
     private boolean randomizeOnce = true;
     private long lastFrameTime;
 
-    private Decrees decree00 = new Decrees(0),decree01 = new Decrees(0);
+    private Decrees decree00 = new Decrees(0), decree01 = new Decrees(0);
 
     public GameComponent()
     {
@@ -70,18 +70,19 @@ public class GameComponent extends JComponent implements FrameListener
 	    }
 	    if (movable instanceof Character) {
 		// PAINT SPRITE
-		g.drawImage(movable.getCurrentSprite(), movable.getIntX(), movable.getIntY(), movable.getIntWidth(),
-			    movable.getIntHeight(), null);
+		g.drawImage(movable.getCurrentSprite(), movable.getIntX(), movable.getIntY(), movable.getIntWidth(), movable.getIntHeight(),
+			    null);
 	    }
 	    if (movable instanceof Potion) {
 		Potion potion = (Potion) movable;
 		g.drawImage(potion.getSprite(), potion.getIntX(), potion.getIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
-	    }else{
+	    } else {
 
 	    }
-	    if(movable instanceof Projectile){
+	    if (movable instanceof Projectile) {
 		Projectile projectile = (Projectile) movable;
-		g.drawImage(projectile.getCurrentSprite(), projectile.getIntX(), projectile.getIntY(), projectile.getIntWidth(), projectile.getIntHeight(), null);
+		g.drawImage(projectile.getCurrentSprite(), projectile.getIntX(), projectile.getIntY(), projectile.getIntWidth(),
+			    projectile.getIntHeight(), null);
 	    }
 	}
     }
@@ -177,7 +178,7 @@ public class GameComponent extends JComponent implements FrameListener
 
 
 	//Sets decree types
-	if(randomizeOnce){
+	if (randomizeOnce) {
 	    decree00 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
 	    decree01 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
 	    randomizeOnce = false;
@@ -198,18 +199,18 @@ public class GameComponent extends JComponent implements FrameListener
 	int decreeHeight = 100;
 
 	int decreeOneX = frameX + decreeWidth;
-	int decreeOneY = frameY + frameHeight/3;
-	int decreeTwoX = decreeOneX + frameWidth - decreeWidth*3; // need to have frameXY - 2 decreewidths...
+	int decreeOneY = frameY + frameHeight / 3;
+	int decreeTwoX = decreeOneX + frameWidth - decreeWidth * 3; // need to have frameXY - 2 decreewidths...
 	int decreeTwoY = decreeOneY;
 
 	//decree 1
 	g.setColor(Color.RED);
-	g.fillRect(decreeOneX,  decreeOneY, decreeWidth, decreeHeight);
+	g.fillRect(decreeOneX, decreeOneY, decreeWidth, decreeHeight);
 	String effect = decree00.getEffect();
 	g.setFont(new Font("Monospaced", Font.BOLD, 20));
 	FontMetrics fm = g.getFontMetrics();
 	int textWidth = fm.stringWidth(effect);
-	g.drawString(effect, decreeOneX + (decreeWidth -  textWidth)/2, decreeOneY - 20);
+	g.drawString(effect, decreeOneX + (decreeWidth - textWidth) / 2, decreeOneY - 20);
 
 	//decree 2
 	g.setColor(Color.BLUE);
@@ -217,7 +218,7 @@ public class GameComponent extends JComponent implements FrameListener
 	effect = decree01.getEffect();
 	fm = g.getFontMetrics();
 	textWidth = fm.stringWidth(effect);
-	g.drawString(effect, decreeTwoX + (decreeWidth -  textWidth)/2, decreeTwoY - 20);
+	g.drawString(effect, decreeTwoX + (decreeWidth - textWidth) / 2, decreeTwoY - 20);
 
 	this.addMouseListener(new MouseAdapter()
 	{
@@ -226,13 +227,13 @@ public class GameComponent extends JComponent implements FrameListener
 		int y = e.getY();
 		if (x >= decreeOneX && x <= decreeOneX + decreeWidth && y >= decreeOneY && y <= decreeOneY + decreeHeight) {
 		    // Code to execute when the red rectangle is clicked
-		    if(showSkills){
+		    if (showSkills) {
 			game.getPlayer().addDecree(decree00);
 			showSkills = false;
 		    }
-		} else if (x >= decreeTwoX && x <=  decreeTwoX + decreeWidth && y >= decreeTwoY && y <= decreeTwoY+ decreeHeight) {
+		} else if (x >= decreeTwoX && x <= decreeTwoX + decreeWidth && y >= decreeTwoY && y <= decreeTwoY + decreeHeight) {
 		    // Code to execute when the blue rectangle is clicked
-		    if(showSkills){
+		    if (showSkills) {
 			game.getPlayer().addDecree(decree01);
 			showSkills = false;
 		    }
