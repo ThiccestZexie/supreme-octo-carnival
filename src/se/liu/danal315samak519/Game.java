@@ -31,6 +31,10 @@ public class Game
     private Room room = null;
     private int currentWorldID = 0;
     private boolean roomIsCleared;
+    /**
+     * When the game is inactive, the game is paused.
+     */
+    private boolean paused = false;
 
     /**
      * A game with assumed map0.tmx
@@ -40,8 +44,24 @@ public class Game
     }
 
     public Game(Room room) {
-	setPlayer(new Player(new Point2D.Float(room.getCenterX(), room.getCenterY())));
-	changeRoom(room);
+	this.room = room;
+	resetGame();
+    }
+
+    public void pause(){
+	paused = true;
+    }
+
+    public void unpause(){
+	paused = false;
+    }
+
+    /**
+     * Resets the game by setting player and room to default values
+     */
+    private void resetGame(){
+	setPlayer(new Player(new Point2D.Float(getRoom().getCenterX(), getRoom().getCenterY())));
+	resetRoom();
     }
 
     /**
@@ -56,6 +76,10 @@ public class Game
      */
     public void tick()
     {
+	if(isPaused()){
+	    return; // Do nothing if paused
+	}
+
 	handlePlayerOutOfBounds();
 	birthPending();
 	setRoomIsCleared(true); // Assume room is cleared
@@ -79,7 +103,7 @@ public class Game
 	    } else if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
 		Obstacle obstacle = (Obstacle) movable0;
 		// If room is cleared, open all gates
-		if (getIfRoomIsCleared() || !getIfPlayerInPlayArea()) {
+		if (getRoomIsCleared() || !getIfPlayerInPlayArea()) {
 		    obstacle.open();
 		} else { // Else close all gates
 		    obstacle.close();
@@ -90,14 +114,20 @@ public class Game
 
     /**
      * Remove the movable if it is garbage, also adds its pending movables to the pending list
+     * If the player is garbage, reset the game
      * @param movable
      */
     private void handleDeath(final Movable movable) {
 	if (movable.getIsGarbage()) {
-	    while (movable.hasPending()) {
-		pushPending(movable.popPending());
+	    if(movable instanceof Player){
+		pause();
+		resetGame();
+	    } else{
+		while (movable.hasPending()) {
+		    pushPending(movable.popPending());
+		}
+		movables.remove(movable);
 	    }
-	    movables.remove(movable);
 	}
     }
 
@@ -150,9 +180,9 @@ public class Game
 
     /**
      * "Changes" the room to the same one, effectively resetting everything
+     * Currently hardcoded to map0.tmx over and over.
      */
     public void resetRoom() {
-//	changeRoom(getRoom());
 	changeRoom(new Room("map0.tmx"));
     }
 
@@ -284,7 +314,7 @@ public class Game
 	}
     }
 
-    public boolean getIfRoomIsCleared() {
+    public boolean getRoomIsCleared() {
 	return roomIsCleared;
     }
 
@@ -359,6 +389,13 @@ public class Game
 	}
     }
 
+    public boolean isPaused() {
+	return paused;
+    }
+
+    public void togglePause() {
+	paused = !paused;
+    }
 }
 
 

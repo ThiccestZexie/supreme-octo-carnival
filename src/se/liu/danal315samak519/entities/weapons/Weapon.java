@@ -12,10 +12,6 @@ import java.awt.image.BufferedImage;
 public abstract class Weapon extends Movable
 {
     protected BufferedImage currentSprite;
-    protected BufferedImage upSprite;
-    protected BufferedImage leftSprite;
-    protected BufferedImage downSprite;
-    protected BufferedImage rightSprite;
     protected Character owner;
     protected int lifeSpan;
 
@@ -31,7 +27,6 @@ public abstract class Weapon extends Movable
     @Override public BufferedImage getCurrentSprite() {
 	return currentSprite;
     }
-
     @Override public void tick() {
 	super.tick();
 	lifeSpan--;

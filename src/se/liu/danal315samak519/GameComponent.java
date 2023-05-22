@@ -5,9 +5,9 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Enemy;
+import se.liu.danal315samak519.entities.weapons.Projectile;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
-import se.liu.danal315samak519.entities.weapons.Projectile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,6 +44,40 @@ public class GameComponent extends JComponent implements FrameListener
 	game.addFrameListener(this);
 	oldPlayerLevel = game.getPlayer().getLevel();
 
+    }
+
+    /**
+     * The main painting method, every other painting method is called from here.
+     */
+    @Override protected void paintComponent(final Graphics g) {
+	super.paintComponent(g);
+	paintMapLayer(g, 0); // Paint background
+	paintEntities(g);
+	paintPlayer(g);
+	paintMapLayer(g, 1); // Paint foreground
+	paintGUI(g);
+	if (game.isPaused()) {
+	    paintPauseMenu(g);
+	} else {
+	    if (showSkills) {
+		paintDecreeOverlay(g);
+	    }
+	    if (debug) {
+		paintDebug(g);
+	    }
+	}
+    }
+
+    /**
+     * Paint a semi-transparent black overlay, with text saying "Press any key to resume".
+     *
+     * @param g
+     */
+    private void paintPauseMenu(final Graphics g) {
+	g.setColor(new Color(0, 0, 0, 150));
+	g.fillRect(0, 0, getWidth(), getHeight());
+	g.setColor(Color.WHITE);
+	g.drawString("Press ESC to resume!", getWidth() / 2, getHeight() / 2);
     }
 
     private void paintPlayer(final Graphics g) {
@@ -119,10 +153,15 @@ public class GameComponent extends JComponent implements FrameListener
 	g.fillRect(5, 60, game.getPlayer().getExp() * expBarLength / game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1],
 		   30);
 	// Player hp bar
-	drawPlayerLife(g);
+	paintPlayerHP(g);
     }
 
-    public void drawPlayerLife(Graphics g) {
+    /**
+     * Paints the health of the player using heart sprites in the top left corner of the screen.
+     *
+     * @param g
+     */
+    public void paintPlayerHP(Graphics g) {
 	int fullHearts = game.getPlayer().getHp() / 2;
 	int halfHearts = game.getPlayer().getHp() % 2;
 	int xCoord = 0;
@@ -130,7 +169,6 @@ public class GameComponent extends JComponent implements FrameListener
 	int heartPos = 0;
 	int spaceBetweenHearts = 60;
 	while (heartPos < game.getPlayer().getMaxHp() / 2) {
-
 	    g.drawImage(game.getPlayer().emptyHeart, xCoord, yCoord, null);
 	    heartPos++;
 	    xCoord += spaceBetweenHearts;
@@ -145,7 +183,6 @@ public class GameComponent extends JComponent implements FrameListener
 	    }
 	    heartPos++;
 	    xCoord += spaceBetweenHearts;
-
 	}
     }
 
@@ -243,21 +280,6 @@ public class GameComponent extends JComponent implements FrameListener
 	});
     }
 
-    @Override protected void paintComponent(final Graphics g) {
-	super.paintComponent(g);
-	paintMapLayer(g, 0); // Paint background
-	paintEntities(g);
-	paintPlayer(g);
-	paintMapLayer(g, 1); // Paint foreground
-	paintGUI(g);
-	if (showSkills) {
-	    paintDecreeOverlay(g);
-	}
-	if (debug) {
-	    paintDebug(g);
-	}
-    }
-
     private int getFPS() {
 	long currentTime = System.nanoTime();
 	long elapsedNanos = currentTime - lastFrameTime;
@@ -313,9 +335,27 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void setKeyBindings()
     {
+	/**
+	 * If any key is pressed, the game is unpaused
+	 */
+	addNewKeyBinding("pressed", new AbstractAction()
+	{
+	    @Override public void actionPerformed(final ActionEvent e) {
+		game.unpause();
+	    }
+	});
 	//Primary Keys
 	addNewKeyBinding("SPACE", new AttackAction());
 	addNewKeyBinding("Z", new ShootAction());
+	// if ESCAPE is pressed, the game is paused
+	addNewKeyBinding("ESCAPE", new AbstractAction()
+	{
+	    @Override public void actionPerformed(final ActionEvent e) {
+		game.togglePause();
+	    }
+	});
+
+
 
 	// Pressing keys
 	addNewKeyBinding("pressed UP", new MoveAction(Direction.UP));
@@ -411,4 +451,24 @@ public class GameComponent extends JComponent implements FrameListener
 	}
     }
 
+    /**
+     * This class is used to pause the game when ESCAPE is pressed, and resume when any other key is pressed.
+     */
+    private class PauseAction extends AbstractAction
+    {
+	private boolean shouldPause;
+
+	private PauseAction(boolean shouldPause) {
+	    this.shouldPause = shouldPause;
+	}
+
+	public void actionPerformed(final ActionEvent e) {
+	    if (shouldPause) {
+		game.pause();
+	    } else {
+		game.unpause();
+	    }
+	}
+    }
 }
+
