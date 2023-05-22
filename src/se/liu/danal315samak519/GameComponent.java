@@ -7,7 +7,7 @@ import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
-import se.liu.danal315samak519.weapons.Projectile;
+import se.liu.danal315samak519.entities.weapons.Projectile;
 
 import javax.swing.*;
 import java.awt.*;

@@ -12,7 +12,7 @@ import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.entities.enemies.Sentry;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
-import se.liu.danal315samak519.weapons.Weapon;
+import se.liu.danal315samak519.entities.weapons.Weapon;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
