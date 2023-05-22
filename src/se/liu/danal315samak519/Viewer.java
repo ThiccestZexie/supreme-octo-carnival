@@ -19,7 +19,8 @@ public class Viewer
      */
     public void show() {
 	// Create frame
-	JFrame frame = new JFrame("Gamers");
+	JFrame frame = new JFrame("Rogue Runner");
+	frame.setIconImage(ImageLoader.loadImage("icon.png"));
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.add(gameComponent);
 

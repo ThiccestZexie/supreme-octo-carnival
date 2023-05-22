@@ -193,10 +193,13 @@ public class Game
     }
 
     /**
-     * Spawn 1-4 enemies in the room 1/4 chance for each type of enemy
+     * Spawn enemies in the room 1/4 chance for each type of enemy
      */
     private void spawnEnemies() {
-	int randomEnemyCount = 1 + RANDOM.nextInt(4);
+	int minEnemies = 1;
+	int maxEnemies = 2;
+
+	int randomEnemyCount = minEnemies + RANDOM.nextInt(maxEnemies - minEnemies + 1);
 	for (int i = 0; i < randomEnemyCount; i++) {
 	    int enemyTypes = 4;
 	    int randomEnemyType = RANDOM.nextInt(enemyTypes);
