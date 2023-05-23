@@ -15,7 +15,7 @@ public abstract class Character extends Movable
     // CONSTANTS
     protected static final int TICKS_PER_WALKFRAME = 8;
     protected static final int TICKS_PER_ATTACKFRAME = 4;
-    protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
+    protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //Can move to Player level.
     protected static final int ATTACK_COOLDOWN = 20;
     private static final int INVINCIBILITY_TICKS = 20;
     public int ticksAttackCooldown = 0;

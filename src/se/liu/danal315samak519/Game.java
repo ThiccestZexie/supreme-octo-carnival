@@ -365,6 +365,7 @@ public class Game
 	    player.becomeAttacking();
 	    addMovable(player.getSword());
 	}
+	notifyListeners();
     }
 
     public void playerShootArrow() {

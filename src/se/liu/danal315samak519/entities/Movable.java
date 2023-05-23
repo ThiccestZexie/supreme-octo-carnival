@@ -10,7 +10,7 @@ import java.util.LinkedList;
 /**
  * Entities that have velocity, and move according to velocity when ticking.
  */
-public abstract class Movable extends Entity
+public abstract class 	Movable extends Entity
 {
     protected Direction direction = Direction.DOWN;
     protected float maxSpeed;

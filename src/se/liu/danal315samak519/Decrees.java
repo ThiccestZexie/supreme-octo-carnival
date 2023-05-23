@@ -22,15 +22,15 @@ public class Decrees
 		break;
 	    case 1: // one extra heart
 		effect = "Increases Health Points";
-		this.increase = 2f;
+		this.increase = 2.0f;
 		break;
 	    case 2:// Larger Arrows
 		effect = "Increases arrow width";
-		this.increase = 2f;
+		this.increase = 2.0f;
 		break;
 	    case 3: // Faster arrows
 		effect = "Faster arrow velocity";
-		this.increase = 2f;
+		this.increase = 2.0f;
 		break;
 	    case 4:
 		effect = "Full Heal!";

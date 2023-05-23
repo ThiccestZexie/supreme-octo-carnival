@@ -23,13 +23,13 @@ public class Player extends Character
 
     public Deque<Decrees> decrees = new LinkedList<>();
 
-    public int maxSpeed;
+    public float maxSpeed;
 
     public Player(final Point2D.Float coord)
     {
 	super(coord);
 	setColor(Color.GREEN);
-	setMaxSpeed(4);
+	setMaxSpeed(5);
 	setStats(6, 1);
 	storeLevelUpFrames();
 	storeSpriteFrames();
@@ -42,7 +42,6 @@ public class Player extends Character
 	for (Decrees decree : decrees) {
 	    if (decree.getType() == 0) {
 		setMaxSpeed(maxSpeed * decree.getIncrease());
-
 	    } else if (decree.getType() == 1) {
 		setMaxHP((int) (getMaxHp() + decree.getIncrease()));
 		setHp((int) (getHp() + decree.getIncrease()));
