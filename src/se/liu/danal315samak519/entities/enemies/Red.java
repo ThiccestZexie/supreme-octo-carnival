@@ -5,6 +5,10 @@ import se.liu.danal315samak519.entities.Player;
 
 import java.awt.geom.Point2D;
 
+/**
+ * A red enemy that chases the player.
+ * The most basic enemy.
+ */
 public class Red extends Enemy
 {
 
@@ -13,7 +17,6 @@ public class Red extends Enemy
 	setMaxSpeed(3);
 	setStats(3, 1);
 	storeSpriteFrames(0, 0);
-	setDir(Direction.DOWN);
     }
 
     @Override public void tick() {

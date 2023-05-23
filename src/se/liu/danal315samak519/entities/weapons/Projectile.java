@@ -1,17 +1,23 @@
-package se.liu.danal315samak519.weapons;
+package se.liu.danal315samak519.entities.weapons;
 
+import se.liu.danal315samak519.ImageLoader;
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
 
 import java.awt.geom.Point2D;
+import java.io.IOException;
 
+/**
+ * A projectile that is fired by a character.
+ */
 public class Projectile extends Weapon
 {
-    public Projectile(final Point2D.Float coord, final Character owner, final int projectileHeight, final int projectileWidth ) {
+
+    public Projectile(final Point2D.Float coord, final Character owner, final int projectileHeight, final int projectileWidth, final int projectileVel) {
 	super(coord, owner);
 	this.setLifeSpan(120);
 
-	switch (owner.getDir()) {
+	switch (owner.getDirection()) {
 	    case UP:
 		setSize(projectileWidth, projectileHeight);
 		setLocation((owner.getX() + (owner.getWidth() / 2.0f) - this.getWidth() / 2.0f), (owner.getY() - this.getHeight()));
@@ -30,14 +36,15 @@ public class Projectile extends Weapon
 		break;
 	}
 
-	setDir(owner.getDir());
-	switch (this.dir) {
-	    case UP -> setVelY(-3);
-	    case DOWN -> setVelY(3);
-	    case LEFT -> setVelX(-3);
-	    case RIGHT -> setVelX(3);
+	setDirection(owner.getDirection());
+	switch (this.direction) {
+	    case UP -> setVelY(-projectileVel);
+	    case DOWN -> setVelY(projectileVel);
+	    case LEFT -> setVelX(-projectileVel);
+	    case RIGHT -> setVelX(projectileVel);
 	}
 	this.setHitBox();
+	storeImages();
 
     }
 
@@ -49,4 +56,18 @@ public class Projectile extends Weapon
 	}
 	return false;
     }
+
+    public void storeImages(){
+	try {
+	    int spriteHeight = 16;
+	    int spriteWidth = 16;
+
+	    ImageLoader enemiesLoader = new ImageLoader("enemies.png");
+
+	    currentSprite = enemiesLoader.getSubImage( 120,0,spriteWidth, spriteHeight);
+	}
+	catch (IOException e) {
+	    e.printStackTrace();
+    }
+}
 }

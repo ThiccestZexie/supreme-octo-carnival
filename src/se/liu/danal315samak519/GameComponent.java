@@ -5,34 +5,79 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Enemy;
+import se.liu.danal315samak519.entities.weapons.Projectile;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Random;
 
+/**
+ * Handles all the painting to the screen. Also handles the keybindings.
+ */
 public class GameComponent extends JComponent implements FrameListener
 {
-    public Game game;
+    public Game game = new Game();
     public int i = 0;
     public boolean didPlayerLevel = false;
+    private Random random;
     private int oldPlayerLevel;
     private int tileWidth;
     private int tileHeight;
     private boolean debug = true;
-
     private boolean showSkills = false;
+    private boolean randomizeOnce = true;
     private long lastFrameTime;
 
-    public GameComponent(Game game)
+    private Decrees decree00 = new Decrees(0), decree01 = new Decrees(0);
+
+    public GameComponent()
     {
-	this.game = game;
+	random = new Random();
 	this.tileWidth = game.getRoom().getTileWidth();
 	this.tileHeight = game.getRoom().getTileHeight();
 	setKeyBindings();
 	game.addFrameListener(this);
 	oldPlayerLevel = game.getPlayer().getLevel();
+
+    }
+
+    /**
+     * The main painting method, every other painting method is called from here.
+     */
+    @Override protected void paintComponent(final Graphics g) {
+	super.paintComponent(g);
+	paintMapLayer(g, 0); // Paint background
+	paintEntities(g);
+	paintPlayer(g);
+	paintMapLayer(g, 1); // Paint foreground
+	paintGUI(g);
+	if (game.isPaused()) {
+	    paintPauseMenu(g);
+	} else {
+	    if (showSkills) {
+		paintDecreeOverlay(g);
+	    }
+	    if (debug) {
+		paintDebug(g);
+	    }
+	}
+    }
+
+    /**
+     * Paint a semi-transparent black overlay, with text saying "Press any key to resume".
+     *
+     * @param g
+     */
+    private void paintPauseMenu(final Graphics g) {
+	g.setColor(new Color(0, 0, 0, 150));
+	g.fillRect(0, 0, getWidth(), getHeight());
+	g.setColor(Color.WHITE);
+	g.drawString("Press ESC to resume!", getWidth() / 2, getHeight() / 2);
     }
 
     private void paintPlayer(final Graphics g) {
@@ -58,14 +103,20 @@ public class GameComponent extends JComponent implements FrameListener
 		g.drawRect(movable.getIntX(), movable.getIntY(), movable.getIntWidth(), movable.getIntHeight());
 	    }
 	    if (movable instanceof Character) {
-		Character character = (Character) movable;
 		// PAINT SPRITE
-		g.drawImage(character.getCurrentSprite(), character.getIntX(), character.getIntY(), character.getIntWidth(),
-			    character.getIntHeight(), null);
+		g.drawImage(movable.getCurrentSprite(), movable.getIntX(), movable.getIntY(), movable.getIntWidth(), movable.getIntHeight(),
+			    null);
 	    }
 	    if (movable instanceof Potion) {
 		Potion potion = (Potion) movable;
-		g.drawImage(potion.getFullHeart(), potion.getIntX(), potion.getIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
+		g.drawImage(potion.getSprite(), potion.getIntX(), potion.getIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
+	    } else {
+
+	    }
+	    if (movable instanceof Projectile) {
+		Projectile projectile = (Projectile) movable;
+		g.drawImage(projectile.getCurrentSprite(), projectile.getIntX(), projectile.getIntY(), projectile.getIntWidth(),
+			    projectile.getIntHeight(), null);
 	    }
 	}
     }
@@ -102,10 +153,15 @@ public class GameComponent extends JComponent implements FrameListener
 	g.fillRect(5, 60, game.getPlayer().getExp() * expBarLength / game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1],
 		   30);
 	// Player hp bar
-	drawPlayerLife(g);
+	paintPlayerHP(g);
     }
 
-    public void drawPlayerLife(Graphics g) {
+    /**
+     * Paints the health of the player using heart sprites in the top left corner of the screen.
+     *
+     * @param g
+     */
+    public void paintPlayerHP(Graphics g) {
 	int fullHearts = game.getPlayer().getHp() / 2;
 	int halfHearts = game.getPlayer().getHp() % 2;
 	int xCoord = 0;
@@ -113,7 +169,6 @@ public class GameComponent extends JComponent implements FrameListener
 	int heartPos = 0;
 	int spaceBetweenHearts = 60;
 	while (heartPos < game.getPlayer().getMaxHp() / 2) {
-
 	    g.drawImage(game.getPlayer().emptyHeart, xCoord, yCoord, null);
 	    heartPos++;
 	    xCoord += spaceBetweenHearts;
@@ -128,7 +183,6 @@ public class GameComponent extends JComponent implements FrameListener
 	    }
 	    heartPos++;
 	    xCoord += spaceBetweenHearts;
-
 	}
     }
 
@@ -136,6 +190,7 @@ public class GameComponent extends JComponent implements FrameListener
     private void paintLevelUpAnimation(final Graphics g) {
 	if (oldPlayerLevel < game.getPlayer().getLevel()) {
 	    didPlayerLevel = true;
+	    showSkills = true;
 	}
 	this.oldPlayerLevel = game.getPlayer().getLevel();
 	if (this.i >= 19) {
@@ -148,7 +203,7 @@ public class GameComponent extends JComponent implements FrameListener
 	}
     }
 
-    private void paintOverlay(final Graphics g) {
+    private void paintDecreeOverlay(final Graphics g) {
 
 	Graphics2D g2 = (Graphics2D) g;
 	//Draw one shape on left side of screen and rightside
@@ -157,32 +212,72 @@ public class GameComponent extends JComponent implements FrameListener
 	int frameHeight = tileHeight * 10;
 	int frameX = tileWidth * 4;
 	int frameY = (int) (getPreferredSize().height / 2.5);
+
+
+	//Sets decree types
+	if (randomizeOnce) {
+	    decree00 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
+	    decree01 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
+	    randomizeOnce = false;
+	}
+
+
+	// Draws background for decrees
 	Color color = new Color(0, 0, 0, 210);
 	g2.setColor(color);
 	g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, 35, 35);
-
-	Decrees decree00 = new Decrees(1);
-	Decrees decree01 = new Decrees(2);
-
 	color = new Color(255, 255, 255);
 	g2.setColor(color);
 	g2.setStroke(new BasicStroke(5));
 	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth - 10, frameHeight - 10, 25, 25);
-    }
 
-    @Override protected void paintComponent(final Graphics g) {
-	super.paintComponent(g);
-	paintMapLayer(g, 0); // Paint background
-	paintEntities(g);
-	paintPlayer(g);
-	paintMapLayer(g, 1); // Paint foreground
-	paintGUI(g);
-	if (showSkills) {
-	    paintOverlay(g);
-	}
-	if (debug) {
-	    paintDebug(g);
-	}
+	//Adds decrees as clickable objects
+	int decreeWidth = 100;
+	int decreeHeight = 100;
+
+	int decreeOneX = frameX + decreeWidth;
+	int decreeOneY = frameY + frameHeight / 3;
+	int decreeTwoX = decreeOneX + frameWidth - decreeWidth * 3; // need to have frameXY - 2 decreewidths...
+	int decreeTwoY = decreeOneY;
+
+	//decree 1
+	g.setColor(Color.RED);
+	g.fillRect(decreeOneX, decreeOneY, decreeWidth, decreeHeight);
+	String effect = decree00.getEffect();
+	g.setFont(new Font("Monospaced", Font.BOLD, 20));
+	FontMetrics fm = g.getFontMetrics();
+	int textWidth = fm.stringWidth(effect);
+	g.drawString(effect, decreeOneX + (decreeWidth - textWidth) / 2, decreeOneY - 20);
+
+	//decree 2
+	g.setColor(Color.BLUE);
+	g.fillRect(decreeTwoX, decreeTwoY, decreeWidth, decreeHeight);
+	effect = decree01.getEffect();
+	fm = g.getFontMetrics();
+	textWidth = fm.stringWidth(effect);
+	g.drawString(effect, decreeTwoX + (decreeWidth - textWidth) / 2, decreeTwoY - 20);
+
+	this.addMouseListener(new MouseAdapter()
+	{
+	    public void mouseClicked(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		if (x >= decreeOneX && x <= decreeOneX + decreeWidth && y >= decreeOneY && y <= decreeOneY + decreeHeight) {
+		    // Code to execute when the red rectangle is clicked
+		    if (showSkills) {
+			game.getPlayer().addDecree(decree00);
+			showSkills = false;
+		    }
+		} else if (x >= decreeTwoX && x <= decreeTwoX + decreeWidth && y >= decreeTwoY && y <= decreeTwoY + decreeHeight) {
+		    // Code to execute when the blue rectangle is clicked
+		    if (showSkills) {
+			game.getPlayer().addDecree(decree01);
+			showSkills = false;
+		    }
+
+		}
+	    }
+	});
     }
 
     private int getFPS() {
@@ -240,9 +335,27 @@ public class GameComponent extends JComponent implements FrameListener
 
     private void setKeyBindings()
     {
+	/**
+	 * If any key is pressed, the game is unpaused
+	 */
+	addNewKeyBinding("pressed", new AbstractAction()
+	{
+	    @Override public void actionPerformed(final ActionEvent e) {
+		game.unpause();
+	    }
+	});
 	//Primary Keys
 	addNewKeyBinding("SPACE", new AttackAction());
 	addNewKeyBinding("Z", new ShootAction());
+	// if ESCAPE is pressed, the game is paused
+	addNewKeyBinding("ESCAPE", new AbstractAction()
+	{
+	    @Override public void actionPerformed(final ActionEvent e) {
+		game.togglePause();
+	    }
+	});
+
+
 
 	// Pressing keys
 	addNewKeyBinding("pressed UP", new MoveAction(Direction.UP));
@@ -302,6 +415,7 @@ public class GameComponent extends JComponent implements FrameListener
     {
 	@Override public void actionPerformed(final ActionEvent e) {
 	    showSkills = !showSkills;
+	    randomizeOnce = true;
 	}
     }
 
@@ -337,4 +451,24 @@ public class GameComponent extends JComponent implements FrameListener
 	}
     }
 
+    /**
+     * This class is used to pause the game when ESCAPE is pressed, and resume when any other key is pressed.
+     */
+    private class PauseAction extends AbstractAction
+    {
+	private boolean shouldPause;
+
+	private PauseAction(boolean shouldPause) {
+	    this.shouldPause = shouldPause;
+	}
+
+	public void actionPerformed(final ActionEvent e) {
+	    if (shouldPause) {
+		game.pause();
+	    } else {
+		game.unpause();
+	    }
+	}
+    }
 }
+

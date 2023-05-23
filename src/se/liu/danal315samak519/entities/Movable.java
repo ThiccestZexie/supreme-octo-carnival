@@ -3,43 +3,62 @@ package se.liu.danal315samak519.entities;
 import se.liu.danal315samak519.Direction;
 
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * Entities that have velocity, and move according to velocity when ticking.
  */
-public class Movable extends Entity
+public abstract class Movable extends Entity
 {
-    protected Direction dir;
+    protected Direction direction = Direction.DOWN;
     protected float maxSpeed;
     protected float velX;
     protected float velY;
 
-    public Direction getDir() {
-	return dir;
+    /**
+     * List of movables that THIS movable wants to add. Used for projectiles and loot
+     */
+    private Deque<Movable> pending = new LinkedList<>();
+
+    public Direction getDirection() {
+	return direction;
     }
 
-    public void setDir(final Direction dir) {
-	this.dir = dir;
+    public void setDirection(final Direction direction) {
+	this.direction = direction;
+    }
+
+    public BufferedImage getCurrentSprite() {
+	return null;
     }
 
     public void nudgeAwayFrom(Rectangle2D otherHitBox) {
 	if (!this.getHitBox().intersects(otherHitBox)) {
-	    return; // not intersecting!
+	    return; // No collision
 	}
+	// Get intersection
+	Rectangle2D intersection = this.getHitBox().createIntersection(otherHitBox);
+	// Convert to float
+	Rectangle2D.Float intersectionFloat =
+		new Rectangle2D.Float((float) intersection.getX(), (float) intersection.getY(), (float) intersection.getWidth(),
+				      (float) intersection.getHeight());
+	// Determine if horizontal or vertical collision
+	boolean isHorizontalCollision = intersectionFloat.getWidth() < intersectionFloat.getHeight();
 
-	Rectangle2D.Float intersection = (Rectangle2D.Float) this.getHitBox().createIntersection(otherHitBox);
-	boolean isHorizontalCollision = intersection.getWidth() < intersection.getHeight();
+	// Nudge away from collision
 	if (isHorizontalCollision) { // Left-right collision
-	    if (intersection.getCenterX() < this.getHitBox().getCenterX()) { // Left collision
-		nudge(intersection.width, 0);
+	    if (intersectionFloat.getCenterX() < this.getHitBox().getCenterX()) { // Left collision
+		nudge(intersectionFloat.width, 0);
 	    } else { // Right collision
-		nudge(-intersection.width, 0);
+		nudge(-intersectionFloat.width, 0);
 	    }
 	} else { // Up-down collision
-	    if (intersection.getCenterY() < this.getHitBox().getCenterY()) { // Up collision
-		nudge(0, intersection.height);
+	    if (intersectionFloat.getCenterY() < this.getHitBox().getCenterY()) { // Up collision
+		nudge(0, intersectionFloat.height);
 	    } else { // Down collision
-		nudge(0, -intersection.height);
+		nudge(0, -intersectionFloat.height);
 	    }
 	}
     }
@@ -62,13 +81,35 @@ public class Movable extends Entity
 	setVelY(vy);
     }
 
+    /**
+     * Sets direction according to velocity.
+     */
     private void setAppropiateDir() {
 	Direction newDirection = Direction.velocityToDirection(getVelX(), getVelY());
 	if (newDirection != null) {
-	    setDir(newDirection);
+	    setDirection(newDirection);
 	}
     }
 
+    /**
+     * Pops a movable from internal list of pending movables.
+     */
+    public Movable popPending() {
+	return pending.pop();
+    }
+
+    /**
+     * Pushes a movable to internal list of pending movables.
+     *
+     * @param movable
+     */
+    protected void pushPending(Movable movable) {
+	pending.push(movable);
+    }
+
+    /**
+     * Moves according to velocity.
+     */
     public void tick() {
 	nudge(velX, velY);
     }
@@ -95,4 +136,12 @@ public class Movable extends Entity
 	setAppropiateDir();
     }
 
+    /**
+     * Returns true if there are pending movables.
+     *
+     * @return
+     */
+    public boolean hasPending() {
+	return !pending.isEmpty();
+    }
 }

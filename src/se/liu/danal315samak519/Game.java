@@ -5,13 +5,14 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Obstacle;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
+import se.liu.danal315samak519.entities.enemies.Caster;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.entities.enemies.Sentry;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
-import se.liu.danal315samak519.weapons.Weapon;
+import se.liu.danal315samak519.entities.weapons.Weapon;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -22,14 +23,18 @@ import java.util.Random;
 
 public class Game
 {
-    private final Random random;
-    public List<Movable> movables = new ArrayList<>();
+    private static final Random RANDOM = new Random();
+    private List<Movable> movables = new ArrayList<>();
     private LinkedList<Movable> pendingMovables = new LinkedList<>();
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
     private Room room = null;
     private int currentWorldID = 0;
     private boolean roomIsCleared;
+    /**
+     * When the game is inactive, the game is paused.
+     */
+    private boolean paused = false;
 
     /**
      * A game with assumed map0.tmx
@@ -39,9 +44,24 @@ public class Game
     }
 
     public Game(Room room) {
-	random = new Random();
-	setPlayer(new Player(new Point2D.Float(room.getCenterX(), room.getCenterY())));
-	changeRoom(room);
+	this.room = room;
+	resetGame();
+    }
+
+    public void pause(){
+	paused = true;
+    }
+
+    public void unpause(){
+	paused = false;
+    }
+
+    /**
+     * Resets the game by setting player and room to default values
+     */
+    private void resetGame(){
+	setPlayer(new Player(new Point2D.Float(getRoom().getCenterX(), getRoom().getCenterY())));
+	resetRoom();
     }
 
     /**
@@ -56,36 +76,66 @@ public class Game
      */
     public void tick()
     {
-	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
-	if (outOfBoundsDirection != null) {
-//	    changeToNextRoom();
-	    resetRoom();
-	    placePlayerAtEntrance(outOfBoundsDirection);
+	if(isPaused()){
+	    return; // Do nothing if paused
 	}
+
+	handlePlayerOutOfBounds();
 	birthPending();
-	handleGarbageOrDeaths();
 	setRoomIsCleared(true); // Assume room is cleared
-	// Iterate through all movables (incl. player) and do appropiate actions
+
+	// Iterate through all movables, handle collisions and tick
 	List<Movable> allMovables = getMovablesInclPlayer();
 	for (Movable movable0 : allMovables) {
 	    movable0.tick();
+	    handleDeath(movable0);
 	    handleWallCollision(movable0);
-	    // Second iteration of all movables, for handling
-	    // combinations of movables (e.g. colliding with eachother)
+	    // Second iteration of all movables, for handling movable-movable collisions
 	    for (Movable movable1 : allMovables) {
 		handleMovableCollision(movable0, movable1);
 	    }
+	    while (movable0.hasPending()) {
+		pushPending(movable0.popPending());
+	    }
+	    // Bad abstraction, but it works
 	    if (movable0 instanceof Enemy) {
-		sentryDecide((Enemy) movable0);
 		setRoomIsCleared(false); // Found enemy! Not cleared.
 	    } else if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
 		Obstacle obstacle = (Obstacle) movable0;
-		if (getIfPlayerInPlayArea() && !getIfRoomIsCleared()) {
-		    obstacle.close();
-		} else {
+		// If room is cleared, open all gates
+		if (getRoomIsCleared() || !getIfPlayerInPlayArea()) {
 		    obstacle.open();
+		} else { // Else close all gates
+		    obstacle.close();
 		}
 	    }
+	}
+    }
+
+    /**
+     * Remove the movable if it is garbage, also adds its pending movables to the pending list
+     * If the player is garbage, reset the game
+     * @param movable
+     */
+    private void handleDeath(final Movable movable) {
+	if (movable.getIsGarbage()) {
+	    if(movable instanceof Player){
+		pause();
+		resetGame();
+	    } else{
+		while (movable.hasPending()) {
+		    pushPending(movable.popPending());
+		}
+		movables.remove(movable);
+	    }
+	}
+    }
+
+    private void handlePlayerOutOfBounds() {
+	Direction outOfBoundsDirection = getOutOfBoundsDirection(getPlayer());
+	if (outOfBoundsDirection != null) {
+	    resetRoom();
+	    placePlayerAtEntrance(outOfBoundsDirection);
 	}
     }
 
@@ -102,17 +152,6 @@ public class Game
 	    case DOWN -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), this.getRoom().getHeight() - margin);
 	    case LEFT -> getPlayer().setCenterLocation(margin, this.getRoom().getCenterY());
 	    case RIGHT -> getPlayer().setCenterLocation(this.getRoom().getWidth() - margin, this.getRoom().getCenterY());
-	}
-    }
-
-    /**
-     * Checks if any enemy has died if so adds a drop from them
-     */
-    public void handleEnemyDrops() {
-	for (Movable movable : getMovables()) {
-	    if (movable instanceof Enemy && movable.getIsGarbage()) {
-		pushPending(((Enemy) movable).dropItem());
-	    }
 	}
     }
 
@@ -141,9 +180,9 @@ public class Game
 
     /**
      * "Changes" the room to the same one, effectively resetting everything
+     * Currently hardcoded to map0.tmx over and over.
      */
     public void resetRoom() {
-//	changeRoom(getRoom());
 	changeRoom(new Room("map0.tmx"));
     }
 
@@ -153,25 +192,38 @@ public class Game
 	}
     }
 
+    /**
+     * Spawn enemies in the room 1/4 chance for each type of enemy
+     */
     private void spawnEnemies() {
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
-	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
-	    this.addSentry(randomCoord);
+	int minEnemies = 1;
+	int maxEnemies = 2;
+
+	int randomEnemyCount = minEnemies + RANDOM.nextInt(maxEnemies - minEnemies + 1);
+	for (int i = 0; i < randomEnemyCount; i++) {
+	    int enemyTypes = 4;
+	    int randomEnemyType = RANDOM.nextInt(enemyTypes);
+	    switch (randomEnemyType) {
+		case 0 -> addMovable(new Caster(getRandomCoord(), player));
+		case 1 -> addMovable(new Sentry(getRandomCoord(), player));
+		case 2 -> addMovable(new Red(getRandomCoord(), player));
+		case 3 -> addMovable(new Knight(getRandomCoord(), player));
+	    }
 	}
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
-	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
-	    this.addRed(randomCoord);
-	}
-	for (int i = 0; i < 1; i++) {
-	    int randomX = 200 + random.nextInt(400);
-	    int randomY = 200 + random.nextInt(400);
-	    Point2D.Float randomCoord = new Point2D.Float(randomX, randomY);
-	    this.addKnight(randomCoord);
-	}
+    }
+
+    /**
+     * @return a random point within the room, but not too close to the edges
+     */
+    private Point2D.Float getRandomCoord() {
+	int margin = 150;
+	return new Point2D.Float(margin + RANDOM.nextInt(getRoom().getWidth() - 2 * margin),
+				 margin + RANDOM.nextInt(getRoom().getHeight() - 2 * margin));
+    }
+
+    public void addCaster(Point2D.Float coord)
+    {
+	addMovable(new Caster(coord, player));
     }
 
     private void changeToNextRoom() {
@@ -191,9 +243,6 @@ public class Game
     private void handleWallCollision(final Movable movable) {
 	if (getRoom().getLayers() < 2) {
 	    throw new RuntimeException("There is no foreground layer in loaded room! Can't check wall collisions.");
-	}
-	if (movable instanceof Obstacle) {
-	    return; // Don't handle wall collisions on obstacles!!
 	}
 	for (Tile tile : room.getForegroundTileList()) {
 	    movable.nudgeAwayFrom(tile.getHitBox());
@@ -220,23 +269,13 @@ public class Game
 	} else if (centerY > getRoom().getHeight()) {
 	    return Direction.DOWN;
 	}
-	return null; // Movable is in bounds
-    }
-
-    public void sentryDecide(Enemy enemy) {
-	if (!(enemy instanceof Sentry)) {
-	    return;
-	}
-	if (enemy.checkIfPlayerIsInFront(500, 100)) {
-	    if (enemy.canAttack()) {
-		enemy.becomeAttacking();
-		pushPending(enemy.getProjectile());
-	    }
-	}
+	return null; // Movable is in bounds!
     }
 
     private void pushPending(Movable movable) {
-	pendingMovables.push(movable);
+	if (movable != null) {
+	    pendingMovables.push(movable);
+	}
     }
 
     private void birthPending() {
@@ -246,7 +285,7 @@ public class Game
     }
 
     /**
-     * Handle collisions where two movables are involved
+     * Handle collisions where two movables are involved Unfortunately this is terrible abstraction
      */
     public void handleMovableCollision(final Movable movable0, final Movable movable1) {
 	if (!movable0.getHitBox().intersects(movable1.getHitBox()) || movable0.equals(movable1)) {
@@ -257,17 +296,16 @@ public class Game
 	}
 	if (movable0 instanceof Enemy && movable1 instanceof Character) {
 	    movable0.nudgeAwayFrom(movable1.getHitBox());
-	}
-	// Enemy-Player
-	if (movable0 instanceof Enemy && movable1 instanceof Player) {
-	    ((Player) movable1).tryTakeDamage();
+	    if (movable1 instanceof Player) {
+		((Player) movable1).tryTakeDamage(((Enemy) movable0).getDamage());
+	    }
 	}
 	// Projectile-Character
 	if (movable0 instanceof Weapon && movable1 instanceof Character) {
 	    Weapon weapon = (Weapon) movable0;
 	    Character character = (Character) movable1;
 	    if (!character.equals(weapon.getOwner())) {
-		character.tryTakeDamage();
+		character.tryTakeDamage(1); // Hardcoded projectile damage of 1
 		weapon.markAsGarbage();
 	    }
 	}
@@ -279,12 +317,7 @@ public class Game
 	}
     }
 
-    private void handleGarbageOrDeaths() {
-	handleEnemyDrops();
-	movables.removeIf(Movable::getIsGarbage);
-    }
-
-    public boolean getIfRoomIsCleared() {
+    public boolean getRoomIsCleared() {
 	return roomIsCleared;
     }
 
@@ -359,6 +392,13 @@ public class Game
 	}
     }
 
+    public boolean isPaused() {
+	return paused;
+    }
+
+    public void togglePause() {
+	paused = !paused;
+    }
 }
 
 

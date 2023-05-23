@@ -1,7 +1,6 @@
 package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Decrees;
-import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.ImageLoader;
 
 import javax.imageio.ImageIO;
@@ -10,14 +9,21 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Deque;
 import java.util.LinkedList;
 
+/**
+ * The player character. The player can move around and shoot projectiles. The player can also level up and gain stats. The player can also
+ * pick up potions to heal. The player can also pick up decrees to gain buffs.
+ */
 public class Player extends Character
 {
     public BufferedImage[] levelUpFrames;
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
 
-    public LinkedList<Decrees> decrees = new LinkedList<>();
+    public Deque<Decrees> decrees = new LinkedList<>();
+
+    public int maxSpeed;
 
     public Player(final Point2D.Float coord)
     {
@@ -28,26 +34,41 @@ public class Player extends Character
 	storeLevelUpFrames();
 	storeSpriteFrames();
 	storeHealthBars();
-	setDir(Direction.DOWN);
 	setCurrentFrames();
 	levelUp();
     }
 
-    @Override public void levelUp() {
-	super.levelUp();
-	decrees.add(new Decrees(2));
-	changeStats();
-    }
-
-    public void changeStats() { //Get effect apply effect profit
+    public void applyDecrees() { //Have to manually know effect and apply effect
 	for (Decrees decree : decrees) {
-	    if (decree.getType() == 2) {
+	    if (decree.getType() == 0) {
+		setMaxSpeed(maxSpeed * decree.getIncrease());
+
+	    } else if (decree.getType() == 1) {
+		setMaxHP((int) (getMaxHp() + decree.getIncrease()));
+		setHp((int) (getHp() + decree.getIncrease()));
+	    } else if (decree.getType() == 2) {
 		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
+
+	    } else if (decree.getType() == 3) {
+		this.setProjectileVelocity((int) (getProjectileVelocity() * decree.getIncrease()));
+
+	    } else if (decree.getType() == 4) {
+		this.setHp(getMaxHp());
 	    }
-	    //attackSpeed = (int) Math.ceil(attackSpeed / decree.getIncrease());
+	    decrees.remove(decree);
 	}
 
     }
+
+    public void addDecree(Decrees d) {
+	this.decrees.add(d);
+	applyDecrees();
+    }
+
+    @Override protected boolean shouldShowAttackFrame() {
+	return this.ticksAttackCooldown > TICKS_PER_ATTACKFRAME;
+    }
+
 
     private void storeLevelUpFrames() {
 	try {
@@ -91,6 +112,8 @@ public class Player extends Character
 	    rightFrames[0] = linkImageLoader.getSubImage(32 * 3, 32, spriteWidth, spriteHeight);
 	    rightFrames[1] = linkImageLoader.getSubImage(32 * 3, 0, spriteWidth, spriteHeight);
 	    rightFrames[2] = linkImageLoader.getSubImage(32 * 3, 32 * 2, spriteWidth, spriteHeight);
+
+	    setCurrentFrames();
 
 	} catch (IOException e) {
 	    throw new RuntimeException(e);

@@ -3,6 +3,7 @@ package se.liu.danal315samak519.entities;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Random;
 
 /**
  * Objects that have location, size, color and hitbox.
@@ -15,6 +16,7 @@ public abstract class Entity
     protected Color color;
     protected Rectangle2D.Float hitBox;
     protected boolean isGarbage = false;
+    private Random random = new Random();
 
     protected void setLocation(final Point2D.Float coord) {
 	if (this.coord != null) {
@@ -22,6 +24,10 @@ public abstract class Entity
 	} else {
 	    this.coord = coord;
 	}
+    }
+
+    protected Random getRandom(){
+	return this.random;
     }
 
     public int getIntWidth() {

@@ -11,21 +11,25 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * Superclass to all enemies.
+ */
 public abstract class Enemy extends Character
 {
     protected Player player;
 
+    protected int damage = 1;
+
     protected Enemy(final Point2D.Float coord, final Player player)
     {
 	super(coord);
-	this.level = 1;
 	this.player = player;
 	setMaxSpeed(2);
     }
 
     /**
-     * Takes in an offset and uses that to index the spritesheet from enemies.png.
-     * Stores the frames in the Enemy's frames variables.
+     * Takes in an offset and uses that to index the spritesheet from enemies.png. Stores the frames in the Enemy's frames variables.
+     *
      * @param offsetX
      * @param offsetY
      */
@@ -52,14 +56,32 @@ public abstract class Enemy extends Character
 	    rightFrames[0] = imageLoader.getSubImage(offsetX + (32 - 2) * 3, offsetY + 32, spriteWidth, spriteHeight);
 	    rightFrames[1] = imageLoader.getSubImage(offsetX + (32 - 2) * 3, offsetY, spriteWidth, spriteHeight);
 
+	    setCurrentFrames();
+
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
-    //TODO make drops random and not guaranteed...
-    public Movable dropItem() {
-	return new Potion(this.coord);
+    @Override public void markAsGarbage() {
+	super.markAsGarbage();
+	Movable dropped = getDropped();
+	if (dropped != null) {
+	    pushPending(dropped);
+	}
+    }
+
+    /**
+     * Drop a potion 50% of the time
+     *
+     * @return a potion or null
+     */
+    private Movable getDropped() {
+	boolean shouldDrop = getRandom().nextBoolean();
+	if (shouldDrop) {
+	    return new Potion(this.coord);
+	}
+	return null;
     }
 
     public Point2D.Float getVelocityTowardsPlayer() {
@@ -68,6 +90,14 @@ public abstract class Enemy extends Character
 	float distance = (float) getDistanceToPlayer();
 	Point2D.Float velocity = new Point2D.Float(maxSpeed * x / distance, maxSpeed * y / distance);
 	return velocity;
+    }
+
+    public int getDamage() {
+	return damage;
+    }
+
+    protected void setDamage(int damage) {
+	this.damage = damage;
     }
 
     private double getDistanceToPlayer() {
@@ -93,7 +123,7 @@ public abstract class Enemy extends Character
     public boolean checkIfPlayerIsInFront(int length, int width) {
 	if (canAttack()) {
 	    Rectangle raycastRectangle = new Rectangle();
-	    switch (getDir()) {
+	    switch (getDirection()) {
 		case UP:
 		    raycastRectangle.setSize(width, length);
 		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - raycastRectangle.getWidth() / 2.0),

@@ -1,11 +1,15 @@
 package se.liu.danal315samak519;
 
+/**
+ * Represent a powerup that can be acquired by the player.
+ */
 public class Decrees
 {
     private int type;
     private int level;
     private float increase;
     private String effect;
+    private static final int DECREEAMMOUNT = 4;
 
     public Decrees(final int type) {
 	//Spread them out in different levels so its 13 faster then 26, then 40 or something like that
@@ -13,7 +17,7 @@ public class Decrees
 	this.level = 1; //temp
 	switch(type){
 	    case 0: // 50% faster
-		effect = "Increases attack speed";
+		effect = "Increases Movespeed";
 		this.increase = 1.5f;
 		break;
 	    case 1: // one extra heart
@@ -28,7 +32,16 @@ public class Decrees
 		effect = "Faster arrow velocity";
 		this.increase = 2f;
 		break;
+	    case 4:
+		effect = "Full Heal!";
+		break;
 	}
+    }
+
+
+
+    public static int getDecreeAmount() {
+	return DECREEAMMOUNT;
     }
 
     public float getIncrease() {

@@ -1,41 +1,40 @@
 package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
-import se.liu.danal315samak519.weapons.Projectile;
-import se.liu.danal315samak519.weapons.Sword;
+import se.liu.danal315samak519.entities.weapons.Projectile;
+import se.liu.danal315samak519.entities.weapons.Sword;
 
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 /**
- * Movables that can attack, take damage and make decisions on how to move.
+ * A movable that can move and attack. Can be either the player or an enemy.
  */
 public abstract class Character extends Movable
 {
     // CONSTANTS
     protected static final int TICKS_PER_WALKFRAME = 8;
-    private static final int TICKS_PER_ATTACKFRAME = 4;
+    protected static final int TICKS_PER_ATTACKFRAME = 4;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //from level "0" to level "10"
+    protected static final int ATTACK_COOLDOWN = 20;
     private static final int INVINCIBILITY_TICKS = 20;
-
-    protected static int attackSpeed = 20;
     public int ticksAttackCooldown = 0;
     public int ticksInvincible = 0;
     protected int walkCycleIndex = 0;
     protected int exp = 0;
-    protected int level;
+    protected int level = 1;
     protected int maxHP;
     protected int hp;
-    protected BufferedImage[] currentFrames;
-    protected BufferedImage[] downFrames;
-    protected BufferedImage[] leftFrames;
-    protected BufferedImage[] upFrames;
-    protected BufferedImage[] rightFrames;
-    protected BufferedImage[] attackFrames;
+    protected BufferedImage[] currentFrames = null;
+    protected BufferedImage[] downFrames = null;
+    protected BufferedImage[] leftFrames = null;
+    protected BufferedImage[] upFrames = null;
+    protected BufferedImage[] rightFrames = null;
     // Tick counters
     private int ticksSinceWalkFrameChange = 0;
     private int projectileWidth;
     private int projectileHeight;
+    private int projectileVelocity;
 
 
     protected Character(final Point2D.Float coord) {
@@ -43,12 +42,13 @@ public abstract class Character extends Movable
 	setSize(50, 50);
 	setMaxSpeed(5);
 	setHitBox();
-	projectileWidth = 5;
-	projectileHeight = 5;
+	setProjectileVelocity(4);
+	setProjectileWidth(15);
+	setProjectileHeight(15);
     }
 
-    @Override public void setDir(final Direction dir) {
-	super.setDir(dir);
+    @Override public void setDirection(final Direction direction) {
+	super.setDirection(direction);
 	setCurrentFrames();
     }
 
@@ -68,27 +68,31 @@ public abstract class Character extends Movable
 	this.projectileHeight = projectileHeight;
     }
 
-    private boolean shouldShowAttackFrame() {
-	return this.ticksAttackCooldown > TICKS_PER_ATTACKFRAME;
+    protected boolean shouldShowAttackFrame() {
+	return false;
     }
 
     /**
      * Set which sprite to use based on direction and if attacking.
      */
     public void setCurrentFrames() {
-	this.currentFrames = switch (this.getDir()) {
+	this.currentFrames = switch (this.getDirection()) {
 	    case UP -> upFrames;
 	    case DOWN -> downFrames;
 	    case LEFT -> leftFrames;
 	    case RIGHT -> rightFrames;
+	    case null -> downFrames;
 	};
+    }
+    public void setCurrentFrame(BufferedImage frame){
+	this.currentFrames = new BufferedImage[]{frame};
     }
 
     public int getHp() {
 	return hp;
     }
 
-    private void setHp(int hp) {
+    public void setHp(int hp) {
 	this.hp = hp;
     }
 
@@ -119,7 +123,7 @@ public abstract class Character extends Movable
     }
 
     public Projectile getProjectile() {
-	return new Projectile(this.coord, this, projectileHeight, projectileWidth);
+	return new Projectile(this.coord, this, projectileHeight, projectileWidth, projectileVelocity);
     }
 
     public Sword getSword() {
@@ -154,8 +158,8 @@ public abstract class Character extends Movable
 	return false;
     }
 
-    protected void decrementHp() {
-	hp--;
+    protected void decreaseHp(int damage) {
+	hp -= damage;
     }
 
     public boolean getIsInvincible() {
@@ -166,13 +170,13 @@ public abstract class Character extends Movable
 	return ticksAttackCooldown > 0;
     }
 
-    public void tryTakeDamage() {
+    public void tryTakeDamage(int damage) {
 	if (getIsInvincible()) {
 	    return; // Don't take damage!
 	}
 
-	if (getHp() > 1) {
-	    decrementHp();
+	if (getHp() > damage) {
+	    decreaseHp(damage);
 	} else {
 	    this.markAsGarbage(); // DEAD
 	}
@@ -198,7 +202,7 @@ public abstract class Character extends Movable
 	}
     }
 
-    private boolean getIfStandingStill(){
+    private boolean getIfStandingStill() {
 	return velX == 0 && velY == 0;
     }
 
@@ -216,14 +220,13 @@ public abstract class Character extends Movable
 		ticksSinceWalkFrameChange++;
 		if (ticksSinceWalkFrameChange > TICKS_PER_WALKFRAME) {
 		    walkCycleIndex++;
-		    walkCycleIndex %= (currentFrames.length-1);
+		    walkCycleIndex %= (currentFrames.length - 1);
 		    ticksSinceWalkFrameChange = 0;
 		}
 	    }
 	}
     }
-
-    public BufferedImage getCurrentSprite() {
+    @Override public BufferedImage getCurrentSprite() {
 	return getSpriteFrame(walkCycleIndex);
     }
 
@@ -240,6 +243,19 @@ public abstract class Character extends Movable
     }
 
     public void becomeAttacking() {
-	this.ticksAttackCooldown = attackSpeed;
+	this.ticksAttackCooldown = ATTACK_COOLDOWN;
     }
+
+    public void setMaxHP(final int maxHP) {
+	this.maxHP = maxHP;
+    }
+
+    public int getProjectileVelocity() {
+	return projectileVelocity;
+    }
+
+    public void setProjectileVelocity(final int projectileVelocity) {
+	this.projectileVelocity = projectileVelocity;
+    }
+
 }

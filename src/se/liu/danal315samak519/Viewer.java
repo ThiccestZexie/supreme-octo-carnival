@@ -1,53 +1,47 @@
 package se.liu.danal315samak519;
 
-import se.liu.danal315samak519.entities.Movable;
-import se.liu.danal315samak519.entities.enemies.Enemy;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+/**
+ * Initiates the game and starts the timer.
+ */
 public class Viewer
 {
-    private static final int TARGET_FPS = 120;
-    private GameComponent gameComponent;
-    private final Action doTimerTick = new AbstractAction()
-    {
-	@Override public void actionPerformed(final ActionEvent e)
-	{
-	    gameComponent.frameChanged();
-	    gameComponent.game.tick();
-	}
-    };
+    private static final int TARGET_FPS = 60;
+    private GameComponent gameComponent = new GameComponent();
 
+    /**
+     * Creates new frame, shows it and starts the timer.
+     */
     public void show() {
-	// Initisalise frame
-	JFrame frame = new JFrame("Gamers");
+	// Create frame
+	JFrame frame = new JFrame("Rogue Runner");
+	frame.setIconImage(ImageLoader.loadImage("icon.png"));
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-	Game game = new Game();
-
-	Random random = new Random();
-
-
-	// Put game in gameComponent
-	gameComponent = new GameComponent(game);
 	frame.add(gameComponent);
 
-	// Show it
+	// Show frame
 	frame.setVisible(true);
 	frame.pack();
 	frame.toFront(); // FORCE THE GAME TO START ON TOP OF OTHER WINDOWS
 	startTimer();
     }
 
-    public void startTimer()
-    {
+    /**
+     * Starts the timer for game ticks.
+     */
+    public void startTimer() {
 	int millisDelay = 1000 / TARGET_FPS;
-	final Timer clockTimer = new Timer(millisDelay, doTimerTick);
-	clockTimer.setCoalesce(true);
-	clockTimer.start();
+	ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+	executorService.scheduleAtFixedRate(this::doTimerTick, 0, millisDelay, TimeUnit.MILLISECONDS);
     }
 
-
+    private void doTimerTick() {
+	gameComponent.frameChanged();
+	gameComponent.game.tick();
+    }
 }

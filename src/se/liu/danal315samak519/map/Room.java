@@ -20,15 +20,15 @@ public class Room
     public Room(final String fileName) {
 	try {
 	    this.fileName = fileName;
-	    MapLoader mapLoader = new MapLoader(fileName);
-	    this.rows = mapLoader.getRows();
-	    this.columns = mapLoader.getColumns();
-	    this.layers = mapLoader.getNumLayers();
-	    this.tiles = mapLoader.getTiles();
-	    this.tileWidth = mapLoader.getTileWidth();
-	    this.tileHeight = mapLoader.getTileHeight();
+	    RoomFileLoader roomFileLoader = new RoomFileLoader(fileName);
+	    this.rows = roomFileLoader.getRows();
+	    this.columns = roomFileLoader.getColumns();
+	    this.layers = roomFileLoader.getNumLayers();
+	    this.tiles = roomFileLoader.getTiles();
+	    this.tileWidth = roomFileLoader.getTileWidth();
+	    this.tileHeight = roomFileLoader.getTileHeight();
 	    setInsideRoomBounds();
-	    this.obstacles = mapLoader.getObstacles();
+	    this.obstacles = roomFileLoader.getObstacles();
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
