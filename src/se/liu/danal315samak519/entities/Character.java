@@ -81,7 +81,6 @@ public abstract class Character extends Movable
 	    case DOWN -> downFrames;
 	    case LEFT -> leftFrames;
 	    case RIGHT -> rightFrames;
-	    case null -> downFrames;
 	};
     }
     public void setCurrentFrame(BufferedImage frame){
