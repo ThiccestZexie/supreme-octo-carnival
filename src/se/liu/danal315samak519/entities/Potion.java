@@ -14,8 +14,8 @@ import java.io.IOException;
 public class Potion extends Movable
 {
     private Player user = null;
-    private Image sprite;
-
+    private Image sprite = null;
+    private static final int HEALAMOUNT = 2;
     public Potion(final Point2D.Float coord) {
 	setLocation(coord);
 	setSize(25, 25);
@@ -35,7 +35,7 @@ public class Potion extends Movable
     public void pickUp(Player e) {
 	if (this.hitBox.intersects(e.hitBox)) {
 	    setUser(e);
-	    user.heal(2);
+	    user.heal(HEALAMOUNT);
 	    this.markAsGarbage();
 	}
     }
@@ -43,7 +43,8 @@ public class Potion extends Movable
     public void storeFullHeartImage() {
 	try {
 	    BufferedImage fullHeart = ImageIO.read(new File("resources/images/hearts/heart_full.png"));
-	    this.sprite = fullHeart.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+	    int droppedheartWidth = 50, droppheartHeight = 50;
+	    this.sprite = fullHeart.getScaledInstance(droppedheartWidth, droppheartHeight, Image.SCALE_DEFAULT);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}

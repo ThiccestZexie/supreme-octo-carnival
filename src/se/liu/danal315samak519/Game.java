@@ -240,9 +240,10 @@ public class Game
      *
      * @param movable
      */
-    private void handleWallCollision(final Movable movable) {
-	if (getRoom().getLayers() < 2) {
-	    throw new RuntimeException("There is no foreground layer in loaded room! Can't check wall collisions.");
+    private void handleWallCollision(final Movable movable){
+	int minLayerAmount = 2;
+	if (getRoom().getLayers() < minLayerAmount) {
+	     throw new IndexOutOfBoundsException("There is no foreground layer in loaded room! Can't check wall collisions.");
 	}
 	for (Tile tile : room.getForegroundTileList()) {
 	    movable.nudgeAwayFrom(tile.getHitBox());

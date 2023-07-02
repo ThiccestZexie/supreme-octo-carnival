@@ -21,7 +21,8 @@ public class Sentry extends Enemy
     @Override public void tick() {
 	super.tick();
 	setDirection(getDirectionTowardsPlayer());
-	if(checkIfPlayerIsInFront(500, 100) && canAttack()){
+	final int vissionLength = 500, vissionWidth = 100;
+	if(checkIfPlayerIsInFront(vissionLength, vissionWidth) && canAttack()){
 	    this.becomeAttacking();
 	    shoot();
 	}

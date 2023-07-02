@@ -9,7 +9,6 @@ import java.awt.geom.Point2D;
  */
 public class Caster extends Enemy
 {
-
     public Caster(final Point2D.Float coord, final Player player) {
 	super(coord, player);
 	setMaxSpeed(1);

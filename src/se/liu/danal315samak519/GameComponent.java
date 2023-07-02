@@ -74,10 +74,12 @@ public class GameComponent extends JComponent implements FrameListener
      * @param g
      */
     private void paintPauseMenu(final Graphics g) {
-	g.setColor(new Color(0, 0, 0, 150));
+	int r = 0, gr = 0,b = 0, a = 150;
+	Point screenCenter = new Point(getWidth()/2,getHeight()/2) ;
+	g.setColor(new Color(r, gr, b, a));
 	g.fillRect(0, 0, getWidth(), getHeight());
 	g.setColor(Color.WHITE);
-	g.drawString("Press ESC to resume!", getWidth() / 2, getHeight() / 2);
+	g.drawString("Press ESC to resume!", screenCenter.x, screenCenter.y);
     }
 
     private void paintPlayer(final Graphics g) {
@@ -110,8 +112,6 @@ public class GameComponent extends JComponent implements FrameListener
 	    if (movable instanceof Potion) {
 		Potion potion = (Potion) movable;
 		g.drawImage(potion.getSprite(), potion.getIntX(), potion.getIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
-	    } else {
-
 	    }
 	    if (movable instanceof Projectile) {
 		Projectile projectile = (Projectile) movable;
@@ -145,13 +145,14 @@ public class GameComponent extends JComponent implements FrameListener
 	    }
 	}
 	int expBarLength = 165;
-
+	int expX = 5, expY = 60, expHeight = 30;
+	int expRequirement = game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1];
 	// Paint EXP bar
 	g.setColor(Color.BLACK);
-	g.fillRect(5, 60, expBarLength, 30);
+	g.fillRect(expX, expY, expBarLength, expHeight);
 	g.setColor(Color.GREEN);
-	g.fillRect(5, 60, game.getPlayer().getExp() * expBarLength / game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1],
-		   30);
+	g.fillRect(expX, expY, game.getPlayer().getExp() * expBarLength / expRequirement,
+		   expHeight);
 	// Player hp bar
 	paintPlayerHP(g);
     }
@@ -216,17 +217,22 @@ public class GameComponent extends JComponent implements FrameListener
 
 	//Sets decree types
 	if (randomizeOnce) {
-	    decree00 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
-	    decree01 = new Decrees(random.nextInt(Decrees.getDecreeAmount()));
+	    decree00 = new Decrees(random.nextInt(Decrees.getDECREEAMMOUNT()));
+	    decree01 = new Decrees(random.nextInt(Decrees.getDECREEAMMOUNT()));
 	    randomizeOnce = false;
 	}
 
 
 	// Draws background for decrees
-	Color color = new Color(0, 0, 0, 210);
+	int r = 0, gr = 0, b = 0, a = 210;
+	int arcWidth = 35, arcHeight = 35;
+	Color color = new Color(r, gr, b, a);
 	g2.setColor(color);
-	g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, 35, 35);
-	color = new Color(255, 255, 255);
+	g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, arcWidth, arcHeight);
+	r = 255;
+	gr = 255;
+	b = 255;
+	color = new Color(r, gr, b);
 	g2.setColor(color);
 	g2.setStroke(new BasicStroke(5));
 	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth - 10, frameHeight - 10, 25, 25);
@@ -239,59 +245,41 @@ public class GameComponent extends JComponent implements FrameListener
 	int decreeOneY = frameY + frameHeight / 3;
 	int decreeTwoX = decreeOneX + frameWidth - decreeWidth * 3; // need to have frameXY - 2 decreewidths...
 	int decreeTwoY = decreeOneY;
-
+	int decreeFontSize = 20;
 	//decree 1
-	g.setColor(Color.RED);
-	g.fillRect(decreeOneX, decreeOneY, decreeWidth, decreeHeight);
+	g2.setColor(Color.RED);
+	g2.fillRect(decreeOneX, decreeOneY, decreeWidth, decreeHeight);
 	String effect = decree00.getEffect();
-	g.setFont(new Font("Monospaced", Font.BOLD, 20));
-	FontMetrics fm = g.getFontMetrics();
+	g2.setFont(new Font("Monospaced", Font.BOLD, decreeFontSize));
+	FontMetrics fm = g2.getFontMetrics();
 	int textWidth = fm.stringWidth(effect);
-	g.drawString(effect, decreeOneX + (decreeWidth - textWidth) / 2, decreeOneY - 20);
+	g2.drawString(effect, decreeOneX + (decreeWidth - textWidth) / 2, decreeOneY - decreeFontSize);
 
 	//decree 2
-	g.setColor(Color.BLUE);
-	g.fillRect(decreeTwoX, decreeTwoY, decreeWidth, decreeHeight);
+	g2.setColor(Color.BLUE);
+	g2.fillRect(decreeTwoX, decreeTwoY, decreeWidth, decreeHeight);
 	effect = decree01.getEffect();
-	fm = g.getFontMetrics();
+	fm = g2.getFontMetrics();
 	textWidth = fm.stringWidth(effect);
-	g.drawString(effect, decreeTwoX + (decreeWidth - textWidth) / 2, decreeTwoY - 20);
+	g2.drawString(effect, decreeTwoX + (decreeWidth - textWidth) / 2, decreeTwoY - decreeFontSize);
 
-	this.addMouseListener(new MouseAdapter()
-	{
-	    public void mouseClicked(MouseEvent e) {
-		int x = e.getX();
-		int y = e.getY();
-		if (x >= decreeOneX && x <= decreeOneX + decreeWidth && y >= decreeOneY && y <= decreeOneY + decreeHeight) {
-		    // Code to execute when the red rectangle is clicked
-		    if (showSkills) {
-			game.getPlayer().addDecree(decree00);
-			showSkills = false;
-		    }
-		} else if (x >= decreeTwoX && x <= decreeTwoX + decreeWidth && y >= decreeTwoY && y <= decreeTwoY + decreeHeight) {
-		    // Code to execute when the blue rectangle is clicked
-		    if (showSkills) {
-			game.getPlayer().addDecree(decree01);
-			showSkills = false;
-		    }
-
-		}
-	    }
-	});
+	this.addMouseListener(new MyMouseAdapter(decreeOneX, decreeWidth, decreeOneY, decreeHeight, decreeTwoX, decreeTwoY));
     }
 
     private int getFPS() {
+	double oneSecondInNano =  1_000_000_000.0;
 	long currentTime = System.nanoTime();
 	long elapsedNanos = currentTime - lastFrameTime;
 	lastFrameTime = currentTime;
-	double elapsedSeconds = elapsedNanos / 1_000_000_000.0;
+	double elapsedSeconds = elapsedNanos / oneSecondInNano;
 	double currentFPS = 1.0 / elapsedSeconds;
 
 	return (int) currentFPS;
     }
 
     private void paintDebug(final Graphics g) {
-	g.drawString(String.valueOf(getFPS()), 5, 15);
+	int x = 5, y = 15;
+	g.drawString(String.valueOf(getFPS()), x, y);
     }
 
     private void paintMapLayer(final Graphics g, final int layer) {
@@ -467,6 +455,46 @@ public class GameComponent extends JComponent implements FrameListener
 		game.pause();
 	    } else {
 		game.unpause();
+	    }
+	}
+    }
+
+    private class MyMouseAdapter extends MouseAdapter
+    {
+	private final int decreeOneX;
+	private final int decreeWidth;
+	private final int decreeOneY;
+	private final int decreeHeight;
+	private final int decreeTwoX;
+	private final int decreeTwoY;
+
+	private MyMouseAdapter(final int decreeOneX, final int decreeWidth, final int decreeOneY, final int decreeHeight,
+			      final int decreeTwoX, final int decreeTwoY)
+	{
+	    this.decreeOneX = decreeOneX;
+	    this.decreeWidth = decreeWidth;
+	    this.decreeOneY = decreeOneY;
+	    this.decreeHeight = decreeHeight;
+	    this.decreeTwoX = decreeTwoX;
+	    this.decreeTwoY = decreeTwoY;
+	}
+
+	public void mouseClicked(MouseEvent e) {
+	    int x = e.getX();
+	    int y = e.getY();
+	    if (x >= decreeOneX && x <= decreeOneX + decreeWidth && y >= decreeOneY && y <= decreeOneY + decreeHeight) {
+		// Code to execute when the red rectangle is clicked
+		if (showSkills) {
+		    game.getPlayer().addDecree(decree00);
+		    showSkills = false;
+		}
+	    } else if (x >= decreeTwoX && x <= decreeTwoX + decreeWidth && y >= decreeTwoY && y <= decreeTwoY + decreeHeight) {
+		// Code to execute when the blue rectangle is clicked
+		if (showSkills) {
+		    game.getPlayer().addDecree(decree01);
+		    showSkills = false;
+		}
+
 	    }
 	}
     }

@@ -6,15 +6,13 @@ package se.liu.danal315samak519;
 public class Decrees
 {
     private int type;
-    private int level;
     private float increase;
-    private String effect;
+    private String effect = null;
     private static final int DECREEAMMOUNT = 4;
 
     public Decrees(final int type) {
 	//Spread them out in different levels so its 13 faster then 26, then 40 or something like that
 	this.type = type;
-	this.level = 1; //temp
 	switch(type){
 	    case 0: // 50% faster
 		effect = "Increases Movespeed";
@@ -40,7 +38,7 @@ public class Decrees
 
 
 
-    public static int getDecreeAmount() {
+    public static int getDECREEAMMOUNT() {
 	return DECREEAMMOUNT;
     }
 

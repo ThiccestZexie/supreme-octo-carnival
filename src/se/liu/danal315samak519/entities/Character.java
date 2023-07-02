@@ -18,6 +18,9 @@ public abstract class Character extends Movable
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //Can move to Player level.
     protected static final int ATTACK_COOLDOWN = 20;
     private static final int INVINCIBILITY_TICKS = 20;
+    private static final int HEALTH_INCREASE_PER_LEVEL = 1;
+
+    private static final int ATTACK_FRAME = 2;
     public int ticksAttackCooldown = 0;
     public int ticksInvincible = 0;
     protected int walkCycleIndex = 0;
@@ -135,9 +138,11 @@ public abstract class Character extends Movable
 
     public void levelUp() {
 	while (getIfReadyToLevelUp()) {
-	    exp -= EXP_REQUIREMENTS[level - 1];
+	    int currExpRequirement = EXP_REQUIREMENTS[level - 1];
+
+	    exp -= currExpRequirement;
 	    level++;
-	    this.maxHP += 1;
+	    this.maxHP += HEALTH_INCREASE_PER_LEVEL;
 	    setHp(maxHP);
 	}
     }
@@ -210,7 +215,7 @@ public abstract class Character extends Movable
      */
     private void showNextFrame() {
 	if (shouldShowAttackFrame()) { // ATTACK
-	    walkCycleIndex = 2; // 2 is where attack frame is located.
+	    walkCycleIndex = ATTACK_FRAME; // 2 is where attack frame is located.
 	} else { // WALK
 	    if (getIfStandingStill()) { // Reset to standing
 		walkCycleIndex = 0;
