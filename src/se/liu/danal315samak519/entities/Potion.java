@@ -32,9 +32,9 @@ public class Potion extends Movable
 	this.user = user;
     }
 
-    public void pickUp(Character e) {
-	if (this.hitBox.intersects(e.hitBox) && e instanceof Player) {
-	    setUser((Player) e);
+    public void pickUp(Player e) {
+	if (this.hitBox.intersects(e.hitBox)) {
+	    setUser(e);
 	    user.heal(2);
 	    this.markAsGarbage();
 	}
