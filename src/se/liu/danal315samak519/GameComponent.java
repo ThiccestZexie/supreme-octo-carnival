@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
 
 /**
  * Handles all the painting to the screen. Also handles the keybindings.
@@ -22,24 +21,22 @@ import java.util.Random;
 public class GameComponent extends JComponent implements FrameListener
 {
     public Game game = new Game();
-    public int i = 0;
+    public int indexOfLevelUpFrame = 0;
     public boolean didPlayerLevel = false;
-    private Random random;
     private int oldPlayerLevel;
-    private int tileWidth;
-    private int tileHeight;
+    private Point tileSize = null;
     private boolean debug = true;
     private boolean showSkills = false;
     private boolean randomizeOnce = true;
     private long lastFrameTime;
 
-    private Decrees decree00 = new Decrees(0), decree01 = new Decrees(0);
+    private Decrees decree00 = new Decrees("Movement Increase"), decree01 = new Decrees("Movement Increase");
 
     public GameComponent()
     {
-	random = new Random();
-	this.tileWidth = game.getRoom().getTileWidth();
-	this.tileHeight = game.getRoom().getTileHeight();
+	int tileWidth = game.getRoom().getTileWidth();
+	int tileHeight = game.getRoom().getTileHeight();
+	tileSize = new Point(tileWidth, tileHeight);
 	setKeyBindings();
 	game.addFrameListener(this);
 	oldPlayerLevel = game.getPlayer().getLevel();
@@ -88,12 +85,12 @@ public class GameComponent extends JComponent implements FrameListener
 	if (debug) {
 	    // PAINT HITBOX
 	    g.setColor(player.getColor());
-	    g.drawRect(player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight());
+	    g.drawRect(player.getEntityIntX(), player.getEntityIntY(), player.getIntWidth(), player.getIntHeight());
 	}
 
 	paintLevelUpAnimation(g);
 	// PAINT SPRITE
-	g.drawImage(player.getCurrentSprite(), player.getIntX(), player.getIntY(), player.getIntWidth(), player.getIntHeight(), null);
+	g.drawImage(player.getCurrentSprite(), player.getEntityIntX(), player.getEntityIntY(), player.getIntWidth(), player.getIntHeight(), null);
 
     }
 
@@ -102,20 +99,20 @@ public class GameComponent extends JComponent implements FrameListener
 	    if (debug) {
 		// PAINT HITBOX
 		g.setColor(movable.getColor());
-		g.drawRect(movable.getIntX(), movable.getIntY(), movable.getIntWidth(), movable.getIntHeight());
+		g.drawRect(movable.getEntityIntX(), movable.getEntityIntY(), movable.getIntWidth(), movable.getIntHeight());
 	    }
 	    if (movable instanceof Character) {
 		// PAINT SPRITE
-		g.drawImage(movable.getCurrentSprite(), movable.getIntX(), movable.getIntY(), movable.getIntWidth(), movable.getIntHeight(),
+		g.drawImage(movable.getCurrentSprite(), movable.getEntityIntX(), movable.getEntityIntY(), movable.getIntWidth(), movable.getIntHeight(),
 			    null);
 	    }
 	    if (movable instanceof Potion) {
 		Potion potion = (Potion) movable;
-		g.drawImage(potion.getSprite(), potion.getIntX(), potion.getIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
+		g.drawImage(potion.getSprite(), potion.getEntityIntX(), potion.getEntityIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
 	    }
 	    if (movable instanceof Projectile) {
 		Projectile projectile = (Projectile) movable;
-		g.drawImage(projectile.getCurrentSprite(), projectile.getIntX(), projectile.getIntY(), projectile.getIntWidth(),
+		g.drawImage(projectile.getCurrentSprite(), projectile.getEntityIntX(), projectile.getEntityIntY(), projectile.getIntWidth(),
 			    projectile.getIntHeight(), null);
 	    }
 	}
@@ -130,8 +127,8 @@ public class GameComponent extends JComponent implements FrameListener
 		g.setColor(Color.BLACK);
 		int blackWidth = enemy.getMaxHp() * 60;
 		int blackHeight = 20;
-		int blackX = enemy.getIntX() - blackWidth / 2 + enemy.getIntWidth() / 2;
-		int blackY = enemy.getIntY() + enemy.getIntHeight() + 15;
+		int blackX = enemy.getEntityIntX() - blackWidth / 2 + enemy.getIntWidth() / 2;
+		int blackY = enemy.getEntityIntY() + enemy.getIntHeight() + 15;
 		g.fillRect(blackX, blackY, blackWidth, blackHeight); // Should be getInt maxHp
 
 		//Current health (RED)
@@ -140,7 +137,7 @@ public class GameComponent extends JComponent implements FrameListener
 		int redX = blackX;
 		int redY = blackY;
 		g.setColor(Color.RED);
-		g.fillRect(enemy.getIntX() - blackWidth / 2 + enemy.getIntWidth() / 2, enemy.getIntY() + enemy.getIntHeight() + 15,
+		g.fillRect(enemy.getEntityIntX() - blackWidth / 2 + enemy.getIntWidth() / 2, enemy.getEntityIntY() + enemy.getIntHeight() + 15,
 			   redWidth, redHeight);
 	    }
 	}
@@ -194,13 +191,13 @@ public class GameComponent extends JComponent implements FrameListener
 	    showSkills = true;
 	}
 	this.oldPlayerLevel = game.getPlayer().getLevel();
-	if (this.i >= 19) {
-	    this.i = 0;
+	if (this.indexOfLevelUpFrame >= 19) {
+	    this.indexOfLevelUpFrame = 0;
 	    didPlayerLevel = false;
 	} else if (didPlayerLevel) {
-	    Image currentFrame = game.getPlayer().levelUpFrames[this.i];
-	    g.drawImage(currentFrame, game.getPlayer().getIntX(), game.getPlayer().getIntY() - 30, null);
-	    this.i++;
+	    Image currentFrame = game.getPlayer().levelUpFrames[this.indexOfLevelUpFrame];
+	    g.drawImage(currentFrame, game.getPlayer().getEntityIntX(), game.getPlayer().getEntityIntY() - 30, null);
+	    this.indexOfLevelUpFrame++;
 	}
     }
 
@@ -209,16 +206,16 @@ public class GameComponent extends JComponent implements FrameListener
 	Graphics2D g2 = (Graphics2D) g;
 	//Draw one shape on left side of screen and rightside
 
-	int frameWidth = tileWidth * 22;
-	int frameHeight = tileHeight * 10;
-	int frameX = tileWidth * 4;
+	int frameWidth = tileSize.x * 22;
+	int frameHeight = tileSize.y * 10;
+	int frameX = tileSize.x * 4;
 	int frameY = (int) (getPreferredSize().height / 2.5);
 
 
 	//Sets decree types
 	if (randomizeOnce) {
-	    decree00 = new Decrees(random.nextInt(Decrees.getDECREEAMMOUNT()));
-	    decree01 = new Decrees(random.nextInt(Decrees.getDECREEAMMOUNT()));
+	    decree00 = new Decrees(decree00.getRandomDecree());
+	    decree01 = new Decrees(decree01.getRandomDecree());
 	    randomizeOnce = false;
 	}
 
@@ -292,9 +289,9 @@ public class GameComponent extends JComponent implements FrameListener
 	    for (int x = 0; x < room.getColumns(); x++) {
 		Tile tile = room.getTile(x, y, layer);
 		if (tile != null) {
-		    int tileX = x * tileWidth;
-		    int tileY = y * tileHeight;
-		    g.drawImage(tile.getImage(), tileX, tileY, tileWidth, tileHeight, null);
+		    int tileX = x * tileSize.x;
+		    int tileY = y * tileSize.y;
+		    g.drawImage(tile.getImage(), tileX, tileY, tileSize.x, tileSize.y, null);
 		}
 	    }
 	}

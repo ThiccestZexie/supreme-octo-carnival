@@ -3,7 +3,10 @@ package se.liu.danal315samak519.map;
 import se.liu.danal315samak519.entities.Obstacle;
 
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.module.FindException;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class Room
 	    setInsideRoomBounds();
 	    this.obstacles = roomFileLoader.getObstacles();
 	} catch (IOException e) {
-	    throw new RuntimeException(e);
+	    throw new FindException(e);
 	}
     }
 

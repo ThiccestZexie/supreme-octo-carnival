@@ -38,11 +38,11 @@ public abstract class Entity
 	return (int) getHeight();
     }
 
-    public int getIntX() {
+    public int getEntityIntX() {
 	return (int) getX();
     }
 
-    public int getIntY() {
+    public int getEntityIntY() {
 	return (int) getY();
     }
 

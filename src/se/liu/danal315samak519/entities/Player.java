@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Objects;
 
 /**
  * The player character. The player can move around and shoot projectiles. The player can also level up and gain stats. The player can also
@@ -38,18 +39,18 @@ public class Player extends Character
 
     public void applyDecrees() { //Have to manually know effect and apply effect
 	for (Decrees decree : decrees) {
-	    if (decree.getType() == 0) {
+	    if (Objects.equals(decree.getType(), decree.getEffectList().get(0))) {
 		setMaxSpeed(this.getMaxSpeed() * decree.getIncrease());
-	    } else if (decree.getType() == 1) {
+	    } else if (Objects.equals(decree.getType(), decree.getEffectList().get(1))) {
 		setMaxHP((int) (getMaxHp() + decree.getIncrease()));
 		setHp((int) (getHp() + decree.getIncrease()));
-	    } else if (decree.getType() == 2) {
+	    } else if (Objects.equals(decree.getType(), decree.getEffectList().get(2))) {
 		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
 
-	    } else if (decree.getType() == 3) {
+	    } else if (Objects.equals(decree.getType(), decree.getEffectList().get(3))) {
 		this.setProjectileVelocity((int) (getProjectileVelocity() * decree.getIncrease()));
 
-	    } else if (decree.getType() == 4) {
+	    } else if (Objects.equals(decree.getType(), decree.getEffectList().get(4))) {
 		this.setHp(getMaxHp());
 	    }
 	    decrees.remove(decree);

@@ -65,9 +65,6 @@ public enum Direction
      *
      * @return
      */
-    public static Direction roundAngleToDirection(float radians) {
-	return roundAngleToDirection(radians, 1, 1);
-    }
 
     public static Direction velocityToDirection(float velX, float velY) {
 	Point2D.Float start = new Point2D.Float(0, 0);
