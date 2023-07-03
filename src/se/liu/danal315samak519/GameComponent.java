@@ -108,23 +108,7 @@ public class GameComponent extends JComponent implements FrameListener
     private void paintGUI(final Graphics g) {
 
 	for (Movable movable : game.getMovables()) {
-	    if (movable instanceof Enemy) {
-		Enemy enemy = (Enemy) movable;
-		// Maxhealth (BLACK)
-		g.setColor(Color.BLACK);
-		final int blackWidth = enemy.getMaxHp() * 60;
-		final int blackHeight = 20;
-		final int blackX = enemy.getEntityIntX() - blackWidth / 2 + enemy.getIntWidth() / 2;
-		final int blackY = enemy.getEntityIntY() + enemy.getIntHeight() + 15;
-		g.fillRect(blackX, blackY, blackWidth, blackHeight); // Should be getInt maxHp
-
-		//Current health (RED)
-		final int redWidth = enemy.getHp() * 60;
-		final int redHeight = 20;
-		g.setColor(Color.RED);
-		g.fillRect(enemy.getEntityIntX() - blackWidth / 2 + enemy.getIntWidth() / 2, enemy.getEntityIntY() + enemy.getIntHeight() + 15,
-			   redWidth, redHeight);
-	    }
+	   movable.drawHealth(g);
 	}
 	final int expBarLength = 165;
 	final int expX = 5, expY = 60, expHeight = 30;

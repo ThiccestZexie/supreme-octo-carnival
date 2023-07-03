@@ -152,6 +152,23 @@ public abstract class Enemy extends Character
 	return false;
     }
 
+    @Override public void drawHealth(final Graphics g) {
+	super.drawHealth(g);
+	g.setColor(Color.BLACK);
+	final int blackWidth = this.getMaxHp() * 60;
+	final int blackHeight = 20;
+	final int blackX = this.getEntityIntX() - blackWidth / 2 + this.getIntWidth() / 2;
+	final int blackY = this.getEntityIntY() + this.getIntHeight() + 15;
+	g.fillRect(blackX, blackY, blackWidth, blackHeight); // Should be getInt maxHp
+
+	//Current health (RED)
+	final int redWidth = this.getHp() * 60;
+	final int redHeight = 20;
+	g.setColor(Color.RED);
+	g.fillRect(this.getEntityIntX() - blackWidth / 2 + this.getIntWidth() / 2, this.getEntityIntY() + this.getIntHeight() + 15,
+		   redWidth, redHeight);
+    }
+
     public void chasePlayer() {
 	if (canSeePlayer()) { // CHASe PLAYER!!
 	    Point2D.Float velocity = getVelocityTowardsPlayer();

@@ -121,7 +121,7 @@ public class Game
      */
     private void handleDeath(final Movable movable) {
 	if (movable.getIsGarbage()) {
-	    if(movable instanceof Player){
+	    if(isPlayerDead()){
 		pause();
 		resetGame();
 	    } else{
@@ -131,6 +131,9 @@ public class Game
 		movables.remove(movable);
 	    }
 	}
+    }
+    private boolean isPlayerDead(){
+	return player.getIsGarbage();
     }
 
     private void handlePlayerOutOfBounds() {

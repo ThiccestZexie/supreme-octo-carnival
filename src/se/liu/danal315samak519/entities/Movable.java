@@ -85,6 +85,9 @@ public abstract class 	Movable extends Entity
 	setVelX(vx);
 	setVelY(vy);
     }
+    public void drawHealth(final Graphics g){
+	return;
+    }
 
     /**
      * Sets direction according to velocity.
