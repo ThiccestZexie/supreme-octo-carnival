@@ -125,25 +125,23 @@ public class GameComponent extends JComponent implements FrameListener
 		Enemy enemy = (Enemy) movable;
 		// Maxhealth (BLACK)
 		g.setColor(Color.BLACK);
-		int blackWidth = enemy.getMaxHp() * 60;
-		int blackHeight = 20;
-		int blackX = enemy.getEntityIntX() - blackWidth / 2 + enemy.getIntWidth() / 2;
-		int blackY = enemy.getEntityIntY() + enemy.getIntHeight() + 15;
+		final int blackWidth = enemy.getMaxHp() * 60;
+		final int blackHeight = 20;
+		final int blackX = enemy.getEntityIntX() - blackWidth / 2 + enemy.getIntWidth() / 2;
+		final int blackY = enemy.getEntityIntY() + enemy.getIntHeight() + 15;
 		g.fillRect(blackX, blackY, blackWidth, blackHeight); // Should be getInt maxHp
 
 		//Current health (RED)
-		int redWidth = enemy.getHp() * 60;
-		int redHeight = 20;
-		int redX = blackX;
-		int redY = blackY;
+		final int redWidth = enemy.getHp() * 60;
+		final int redHeight = 20;
 		g.setColor(Color.RED);
 		g.fillRect(enemy.getEntityIntX() - blackWidth / 2 + enemy.getIntWidth() / 2, enemy.getEntityIntY() + enemy.getIntHeight() + 15,
 			   redWidth, redHeight);
 	    }
 	}
-	int expBarLength = 165;
-	int expX = 5, expY = 60, expHeight = 30;
-	int expRequirement = game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1];
+	final int expBarLength = 165;
+	final int expX = 5, expY = 60, expHeight = 30;
+	final int expRequirement = game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1];
 	// Paint EXP bar
 	g.setColor(Color.BLACK);
 	g.fillRect(expX, expY, expBarLength, expHeight);
@@ -160,12 +158,11 @@ public class GameComponent extends JComponent implements FrameListener
      * @param g
      */
     public void paintPlayerHP(Graphics g) {
-	int fullHearts = game.getPlayer().getHp() / 2;
-	int halfHearts = game.getPlayer().getHp() % 2;
+
 	int xCoord = 0;
 	int yCoord = 0;
 	int heartPos = 0;
-	int spaceBetweenHearts = 60;
+	final int spaceBetweenHearts = 60;
 	while (heartPos < game.getPlayer().getMaxHp() / 2) {
 	    g.drawImage(game.getPlayer().emptyHeart, xCoord, yCoord, null);
 	    heartPos++;

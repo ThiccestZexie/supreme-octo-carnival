@@ -25,10 +25,10 @@ public class Game
 {
     private static final Random RANDOM = new Random();
     private List<Movable> movables = new ArrayList<>();
-    private LinkedList<Movable> pendingMovables = new LinkedList<>();
+    private LinkedList<Movable> pendingMovables = new LinkedList<>(); // For push and pop functions.
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
-    private Room room = null;
+    private Room room;
     private int currentWorldID = 0;
     private boolean roomIsCleared;
     /**
@@ -146,7 +146,7 @@ public class Game
      */
     private void placePlayerAtEntrance(final Direction outOfBoundsDirection) {
 	Direction entranceDirection = outOfBoundsDirection.getOpposite();
-	float margin = 10.0f;
+	final float margin = 10.0f;
 	switch (entranceDirection) {
 	    case UP -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), margin);
 	    case DOWN -> getPlayer().setCenterLocation(this.getRoom().getCenterX(), this.getRoom().getHeight() - margin);

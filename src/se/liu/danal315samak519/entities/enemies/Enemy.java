@@ -59,7 +59,7 @@ public abstract class Enemy extends Character
 	    setCurrentFrames();
 
 	} catch (IOException e) {
-	    throw new RuntimeException(e);
+	   e.printStackTrace();
 	}
     }
 
@@ -120,27 +120,27 @@ public abstract class Enemy extends Character
 	return false;
     }
 
-    public boolean checkIfPlayerIsInFront(int length, int width) {
+    public boolean checkIfPlayerIsInFront(int fowardVision, int sideVision) {
 	if (canAttack()) {
 	    Rectangle raycastRectangle = new Rectangle();
 	    switch (getDirection()) {
 		case UP:
-		    raycastRectangle.setSize(width, length);
+		    raycastRectangle.setSize(sideVision, fowardVision);
 		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - raycastRectangle.getWidth() / 2.0),
 						 (int) (this.getY() - raycastRectangle.getHeight()));
 		    break;
 		case DOWN:
-		    raycastRectangle.setSize(width, length);
+		    raycastRectangle.setSize(sideVision, fowardVision);
 		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / 2.0) - raycastRectangle.getWidth() / 2.0),
 						 (int) (this.getY() + (this.getHeight())));
 		    break;
 		case LEFT:
-		    raycastRectangle.setSize(length, width);
+		    raycastRectangle.setSize(fowardVision,  sideVision );
 		    raycastRectangle.setLocation((int) (this.getX() - raycastRectangle.getWidth()),
 						 (int) ((this.getY() + (this.getHeight() / 2.0)) - (raycastRectangle.getHeight() / 2.0)));
 		    break;
 		case RIGHT:
-		    raycastRectangle.setSize(length, width);
+		    raycastRectangle.setSize(fowardVision, sideVision);
 		    raycastRectangle.setLocation((int) (this.getX() + this.getWidth()),
 						 (int) ((this.getY() + (this.getHeight() / 2.0)) - (raycastRectangle.getHeight() / 2.0)));
 		    break;

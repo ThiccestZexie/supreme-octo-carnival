@@ -11,7 +11,7 @@ import java.io.IOException;
 public class ImageLoader
 {
     private BufferedImage image;
-    private int width, height;
+    private final int width, height;
 
     /**
      * Loads an image from the resources/images folder.
