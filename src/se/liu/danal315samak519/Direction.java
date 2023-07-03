@@ -21,10 +21,6 @@ public enum Direction
 	return roundAngleToDirection(radians, width, height);
     }
 
-    public static Direction getDirectionBetweenPoints(Point2D.Float start, Point2D.Float end, float width, float height) {
-	return getDirectionBetweenPoints(start.x, start.y, end.x, end.y, width, height);
-    }
-
     public static Direction getDirectionBetweenPoints(Point2D.Float start, Point2D.Float end) {
 	return getDirectionBetweenPoints(start.x, start.y, end.x, end.y, 1, 1);
     }

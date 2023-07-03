@@ -40,18 +40,18 @@ public class Player extends Character
 
     public void applyDecrees() { //Have to manually know effect and apply effect
 	for (Decrees decree : decrees) {
-	    if (Objects.equals(decree.getType(), decree.getEffectList().get(0))) {
+	    if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(0))) {
 		setMaxSpeed(this.getMaxSpeed() * decree.getIncrease());
-	    } else if (Objects.equals(decree.getType(), decree.getEffectList().get(1))) {
+	    } else if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(1))) {
 		setMaxHP((int) (getMaxHp() + decree.getIncrease()));
 		setHp((int) (getHp() + decree.getIncrease()));
-	    } else if (Objects.equals(decree.getType(), decree.getEffectList().get(2))) {
+	    } else if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(2))) {
 		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
 
-	    } else if (Objects.equals(decree.getType(), decree.getEffectList().get(3))) {
+	    } else if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(3))) {
 		this.setProjectileVelocity((int) (getProjectileVelocity() * decree.getIncrease()));
 
-	    } else if (Objects.equals(decree.getType(), decree.getEffectList().get(4))) {
+	    } else if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(4))) {
 		this.setHp(getMaxHp());
 	    }
 	    decrees.remove(decree);
@@ -65,7 +65,7 @@ public class Player extends Character
     }
 
     @Override protected boolean shouldShowAttackFrame() {
-	return this.ticksAttackCooldown > TICKS_PER_ATTACKFRAME;
+	return this.getTicksAttackCooldown() > TICKS_PER_ATTACK_FRAME;
     }
 
 

@@ -16,10 +16,10 @@ import java.awt.event.MouseEvent;
  */
 public class GameComponent extends JComponent implements FrameListener
 {
-    public static final int ALPHA = 150;
-    public static final int LEVEL_UP_FRAMES = 19;
+    private static final int ALPHA = 150;
+    private static final int LEVEL_UP_FRAMES = 19;
     private static final int ABOVE_PLAYER_INCREMENT = 30;
-    public Game game = new Game();
+    private Game game = new Game();
     public int indexOfLevelUpFrame = 0;
     public boolean didPlayerLevel = false;
     private int oldPlayerLevel;
@@ -71,11 +71,15 @@ public class GameComponent extends JComponent implements FrameListener
      */
     private void paintPauseMenu(final Graphics g) {
 	int r = 0, gr = 0,b = 0, a = ALPHA;
-	Point screenCenter = new Point(getWidth()/2,getHeight()/2) ;
+	final Point screenCenter = new Point(getWidth()/2,getHeight()/2) ;
+
 	g.setColor(new Color(r, gr, b, a));
 	g.fillRect(0, 0, getWidth(), getHeight());
 	g.setColor(Color.WHITE);
 	g.drawString("Press ESC to resume!", screenCenter.x, screenCenter.y);
+    }
+    public Game getGame(){
+	return game;
     }
 
     private void paintPlayer(final Graphics g) {
@@ -133,7 +137,8 @@ public class GameComponent extends JComponent implements FrameListener
 	int yCoord = 0;
 	int heartPos = 0;
 	final int spaceBetweenHearts = 60;
-	while (heartPos < game.getPlayer().getMaxHp() / 2) {
+	final int emptyHearts =  game.getPlayer().getMaxHp() / 2;
+	while (heartPos < emptyHearts)  {
 	    g.drawImage(game.getPlayer().emptyHeart, xCoord, yCoord, null);
 	    heartPos++;
 	    xCoord += spaceBetweenHearts;
@@ -193,14 +198,15 @@ public class GameComponent extends JComponent implements FrameListener
 	Color color = new Color(r, gr, b, a);
 	g2.setColor(color);
 	g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, arcWidth, arcHeight);
-	color = Color.BLACK;
+	color = Color.WHITE;
+	final int strokeWidth = 5;
 	g2.setColor(color);
-	g2.setStroke(new BasicStroke(5));
-	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth - 10, frameHeight - 10, arcWidth, arcHeight);
+	g2.setStroke(new BasicStroke(strokeWidth));
+	g2.drawRoundRect(frameX, frameY, frameWidth, frameHeight, arcWidth, arcHeight);
 
 	//Adds decrees as clickable objects
-	int decreeWidth = 100;
-	int decreeHeight = 100;
+	final int decreeWidth = 100;
+	final int decreeHeight = 100;
 
 	int decreeOneX = frameX + decreeWidth;
 	int decreeOneY = frameY + frameHeight / 3;
@@ -214,7 +220,8 @@ public class GameComponent extends JComponent implements FrameListener
 	g2.setFont(new Font("Monospaced", Font.BOLD, decreeFontSize));
 	FontMetrics fm = g2.getFontMetrics();
 	int textWidth = fm.stringWidth(effect);
-	g2.drawString(effect, decreeOneX + (decreeWidth - textWidth) / 2, decreeOneY - decreeFontSize);
+	final Point stringPos = new Point(decreeOneX + (decreeWidth - textWidth) / 2, decreeOneY - decreeFontSize);
+	g2.drawString(effect, stringPos.x,stringPos.y );
 
 	//decree 2
 	g2.setColor(Color.BLUE);
@@ -222,7 +229,9 @@ public class GameComponent extends JComponent implements FrameListener
 	effect = decree01.getEffect();
 	fm = g2.getFontMetrics();
 	textWidth = fm.stringWidth(effect);
-	g2.drawString(effect, decreeTwoX + (decreeWidth - textWidth) / 2, decreeTwoY - decreeFontSize);
+
+	final Point stringPosTwo = new Point(decreeTwoX + (decreeWidth - textWidth) / 2, decreeTwoY - decreeFontSize);
+	g2.drawString(effect, stringPosTwo.x, stringPosTwo.y);
 
 	this.addMouseListener(new MyMouseAdapter(decreeOneX, decreeWidth, decreeOneY, decreeHeight, decreeTwoX, decreeTwoY));
     }

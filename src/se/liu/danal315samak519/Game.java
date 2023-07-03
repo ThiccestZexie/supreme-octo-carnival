@@ -25,11 +25,10 @@ import java.util.random.RandomGenerator;
 
 public class Game
 {
-    private static final RandomGenerator RANDOM = new Random();
-    public static final int MARGIN = 150;
+    private final RandomGenerator randomGenerator = new Random();
+    private static final int MARGIN = 150;
     private List<Movable> movables = new ArrayList<>();
 
-    private List<Enemy> enemyList = new ArrayList<>();
     private LinkedList<Movable> pendingMovables = new LinkedList<>(); // For push and pop functions.
     private Collection<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
@@ -56,6 +55,8 @@ public class Game
     public void pause(){
 	paused = true;
     }
+
+
 
     public void unpause(){
 	paused = false;
@@ -207,10 +208,10 @@ public class Game
 	int minEnemies = 1;
 	int maxEnemies = 2;
 
-	int randomEnemyCount = minEnemies + RANDOM.nextInt(maxEnemies - minEnemies + 1);
+	int randomEnemyCount = minEnemies + randomGenerator.nextInt(maxEnemies - minEnemies + 1);
 	for (int i = 0; i < randomEnemyCount; i++) {
 	    int enemyTypes = 4;
-	    int randomEnemyType = RANDOM.nextInt(enemyTypes);
+	    int randomEnemyType = randomGenerator.nextInt(enemyTypes);
 	    switch (randomEnemyType) {
 		case 0 -> addMovable(new Caster(getRandomCoord(), player));
 		case 1 -> addMovable(new Sentry(getRandomCoord(), player));
@@ -225,8 +226,8 @@ public class Game
      */
     private Point2D.Float getRandomCoord() {
 	int margin = MARGIN;
-	return new Point2D.Float(margin + RANDOM.nextInt(getRoom().getWidth() - 2 * margin),
-				 margin + RANDOM.nextInt(getRoom().getHeight() - 2 * margin));
+	return new Point2D.Float(margin + randomGenerator.nextInt(getRoom().getWidth() - 2 * margin),
+				 margin + randomGenerator.nextInt(getRoom().getHeight() - 2 * margin));
     }
 
     /**

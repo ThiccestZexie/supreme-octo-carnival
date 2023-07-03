@@ -13,8 +13,8 @@ import java.awt.image.BufferedImage;
 public abstract class Character extends Movable
 {
     // CONSTANTS
-    protected static final int TICKS_PER_WALKFRAME = 8;
-    protected static final int TICKS_PER_ATTACKFRAME = 4;
+    protected static final int TICKS_PER_WALK_FRAME = 8;
+    protected static final int TICKS_PER_ATTACK_FRAME = 4;
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //Can move to Player level.
     protected static final int ATTACK_COOLDOWN = 20;
     private static final int INVINCIBILITY_TICKS = 20;
@@ -25,8 +25,9 @@ public abstract class Character extends Movable
     private static final int PLAYER_HEIGHT = 50;
     private static final int PROJECTILE_WIDTH = 15;
     private static final int PROJECTILE_HEIGHT = 15;
-    public int ticksAttackCooldown = 0;
-    public int ticksInvincible = 0;
+    private int ticksAttackCooldown = 0;
+
+    private int ticksInvincible = 0;
     protected int walkCycleIndex = 0;
     protected int exp = 0;
     protected int level = 1;
@@ -123,6 +124,10 @@ public abstract class Character extends Movable
 
     public int getExp() {
 	return exp;
+    }
+
+    public int getTicksAttackCooldown(){
+	return ticksAttackCooldown;
     }
 
     protected void becomeInvincible() {
@@ -227,7 +232,7 @@ public abstract class Character extends Movable
 		ticksSinceWalkFrameChange = 0;
 	    } else {
 		ticksSinceWalkFrameChange++;
-		if (ticksSinceWalkFrameChange > TICKS_PER_WALKFRAME) {
+		if (ticksSinceWalkFrameChange > TICKS_PER_WALK_FRAME) {
 		    walkCycleIndex++;
 		    walkCycleIndex %= (currentFrames.length - 1);
 		    ticksSinceWalkFrameChange = 0;

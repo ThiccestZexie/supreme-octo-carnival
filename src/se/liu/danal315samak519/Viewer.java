@@ -41,6 +41,6 @@ public class Viewer
 
     private void doTimerTick() {
 	gameComponent.frameChanged();
-	gameComponent.game.tick();
+	gameComponent.getGame().tick();
     }
 }

@@ -13,10 +13,10 @@ public class Decrees
     private String type;
     private float increase;
     private String effect;
-    private List<String> effectList = Arrays.asList("Movement Increase","Health Increase","Arrow Size Increase","Faster Arrows",
-						    "Full Restore");
+    private List<String> decreeEffects = Arrays.asList("Movement Increase", "Health Increase", "Arrow Size Increase", "Faster Arrows",
+						       "Full Restore");
 
-    private static final int DECREE_AMMOUNT = 5;
+    private static final int DECREE_AMOUNT = 5;
 
     public Decrees(final String type) {
 	//Spread them out in different levels so its 13 faster then 26, then 40 or something like that
@@ -51,8 +51,8 @@ public class Decrees
 
 
     public String getRandomDecree(){
-	RandomGenerator rng = new Random();
-	return this.effectList.get(rng.nextInt(DECREE_AMMOUNT));
+	RandomGenerator randomDecreeGenerator = new Random();
+	return this.decreeEffects.get(randomDecreeGenerator.nextInt(DECREE_AMOUNT));
     }
 
     public float getIncrease() {
@@ -67,7 +67,7 @@ public class Decrees
 	return this.effect;
     }
 
-    public List<String> getEffectList() {
-	return effectList;
+    public List<String> getDecreeEffects() {
+	return decreeEffects;
     }
 }
