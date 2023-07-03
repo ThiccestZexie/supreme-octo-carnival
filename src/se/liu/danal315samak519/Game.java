@@ -25,6 +25,8 @@ public class Game
 {
     private static final Random RANDOM = new Random();
     private List<Movable> movables = new ArrayList<>();
+
+    private List<Enemy> enemyList = new ArrayList<>();
     private LinkedList<Movable> pendingMovables = new LinkedList<>(); // For push and pop functions.
     private List<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
@@ -221,20 +223,6 @@ public class Game
 				 margin + RANDOM.nextInt(getRoom().getHeight() - 2 * margin));
     }
 
-    public void addCaster(Point2D.Float coord)
-    {
-	addMovable(new Caster(coord, player));
-    }
-
-    private void changeToNextRoom() {
-	currentWorldID++;
-	changeRoom(new Room("map" + currentWorldID + ".tmx"));
-    }
-
-    public List<Movable> getPendingMovables() {
-	return pendingMovables;
-    }
-
     /**
      * Makes sure the input movable can't pass through foreground tiles.
      *
@@ -343,22 +331,6 @@ public class Game
 	for (FrameListener frameListener : frameListeners) {
 	    frameListener.frameChanged();
 	}
-    }
-
-
-    public void addSentry(Point2D.Float coord)
-    {
-	addMovable(new Sentry(coord, player));
-    }
-
-    public void addKnight(Point2D.Float coord)
-    {
-	addMovable(new Knight(coord, player));
-    }
-
-    public void addRed(Point2D.Float coord)
-    {
-	addMovable(new Red(coord, player));
     }
 
     public void playerSwordAttack() {

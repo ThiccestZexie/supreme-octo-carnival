@@ -101,20 +101,7 @@ public class GameComponent extends JComponent implements FrameListener
 		g.setColor(movable.getColor());
 		g.drawRect(movable.getEntityIntX(), movable.getEntityIntY(), movable.getIntWidth(), movable.getIntHeight());
 	    }
-	    if (movable instanceof Character) {
-		// PAINT SPRITE
-		g.drawImage(movable.getCurrentSprite(), movable.getEntityIntX(), movable.getEntityIntY(), movable.getIntWidth(), movable.getIntHeight(),
-			    null);
-	    }
-	    if (movable instanceof Potion) {
-		Potion potion = (Potion) movable;
-		g.drawImage(potion.getSprite(), potion.getEntityIntX(), potion.getEntityIntY(), potion.getIntWidth(), potion.getIntHeight(), null);
-	    }
-	    if (movable instanceof Projectile) {
-		Projectile projectile = (Projectile) movable;
-		g.drawImage(projectile.getCurrentSprite(), projectile.getEntityIntX(), projectile.getEntityIntY(), projectile.getIntWidth(),
-			    projectile.getIntHeight(), null);
-	    }
+	   movable.draw(g);
 	}
     }
 

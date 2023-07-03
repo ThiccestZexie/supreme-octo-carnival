@@ -17,7 +17,6 @@ import java.io.IOException;
 public abstract class Enemy extends Character
 {
     protected Player player;
-
     protected int damage = 1;
 
     protected Enemy(final Point2D.Float coord, final Player player)

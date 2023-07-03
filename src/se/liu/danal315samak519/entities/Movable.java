@@ -2,6 +2,7 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Deque;
@@ -16,6 +17,8 @@ public abstract class 	Movable extends Entity
     protected float maxSpeed;
     protected float velX;
     protected float velY;
+
+
 
     /**
      * List of movables that THIS movable wants to add. Used for projectiles and loot
@@ -62,7 +65,9 @@ public abstract class 	Movable extends Entity
 	    }
 	}
     }
-
+    public void draw(final Graphics g){
+	g.drawImage(this.getCurrentSprite(), this.getEntityIntX(), this.getEntityIntY(), this.getIntWidth(), this.getIntHeight(), null);
+    }
     public float getMaxSpeed() {
 	return maxSpeed;
     }
