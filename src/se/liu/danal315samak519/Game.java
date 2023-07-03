@@ -33,7 +33,6 @@ public class Game
     private Collection<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
     private Room room;
-    private int currentWorldID = 0;
     private boolean roomIsCleared;
     /**
      * When the game is inactive, the game is paused.

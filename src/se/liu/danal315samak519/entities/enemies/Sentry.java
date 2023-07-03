@@ -11,9 +11,6 @@ import java.awt.geom.Point2D;
  */
 public class Sentry extends Enemy
 {
-    private static final int PROJECTILE_WIDTH = 20;
-    private static final int IMAGE_OFFSET_X = 120;
-
     public Sentry(final Point2D.Float coord, final Player player) {
 	super(coord, player);
 	final int health = 2, level = 2;

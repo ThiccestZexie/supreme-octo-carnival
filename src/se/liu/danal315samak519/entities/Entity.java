@@ -50,9 +50,6 @@ public abstract class Entity
 	setHitBox(x, y, getWidth(), getHeight());
     }
 
-    protected void setLocationOfHitBox(Point2D.Float point) {
-	setHitBox(point.x, point.y, getWidth(), getHeight());
-    }
 
     protected void setHitBox(float x, float y, float w, float h) {
 	if (hitBox != null) {

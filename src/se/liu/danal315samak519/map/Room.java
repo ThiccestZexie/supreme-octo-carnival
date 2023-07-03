@@ -3,10 +3,8 @@ package se.liu.danal315samak519.map;
 import se.liu.danal315samak519.entities.Obstacle;
 
 import java.awt.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.module.FindException;
-import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,11 +43,7 @@ public class Room
 	return tiles[y][x][l];
     }
 
-    public Tile getTile(Point point, int layer) {
-	return getTile(point.x, point.y, layer);
-    }
-
-    public String getName() {
+    public String getFileName() {
 	return this.fileName;
     }
 

@@ -69,9 +69,6 @@ public abstract class Character extends Movable
 	this.projectileWidth = projectileWidth;
     }
 
-    public int getProjectileHeight() {
-	return projectileHeight;
-    }
 
     public void setProjectileHeight(final int projectileHeight) {
 	this.projectileHeight = projectileHeight;
@@ -91,9 +88,6 @@ public abstract class Character extends Movable
 	    case LEFT -> leftFrames;
 	    case RIGHT -> rightFrames;
 	};
-    }
-    public void setCurrentFrame(BufferedImage frame){
-	this.currentFrames = new BufferedImage[]{frame};
     }
 
     public int getHp() {
@@ -135,16 +129,13 @@ public abstract class Character extends Movable
     }
 
     public Projectile getProjectile() {
-	return new Projectile(this.coord, this, projectileHeight, projectileWidth, projectileVelocity);
+	return new Projectile(this, projectileHeight, projectileWidth, projectileVelocity);
     }
 
     public Sword getSword() {
-	return new Sword(this.coord, this);
+	return new Sword(this);
     }
 
-    public void incrementExp() { //Exp should depend on enemey level
-	exp++;
-    }
 
     public void levelUp() {
 	while (getIfReadyToLevelUp()) {
@@ -178,10 +169,6 @@ public abstract class Character extends Movable
 
     public boolean getIsInvincible() {
 	return ticksInvincible > 0;
-    }
-
-    public boolean getHasAttackCooldown() {
-	return ticksAttackCooldown > 0;
     }
 
     public void tryTakeDamage(int damage) {
@@ -248,9 +235,6 @@ public abstract class Character extends Movable
 	return currentFrames[index];
     }
 
-    public void setCurrentFrames(final BufferedImage[] frames) {
-	this.currentFrames = frames;
-    }
 
     public boolean canAttack() {
 	return this.ticksAttackCooldown < 1;

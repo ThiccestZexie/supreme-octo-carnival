@@ -13,7 +13,7 @@ public class Obstacle extends Movable
     private float openX, openY;
     private float closedX, closedY;
 
-    public Obstacle(float openX, float openY, float closedX, float closedY, float width, float height, int id) {
+    public Obstacle(float openX, float openY, float closedX, float closedY, float width, float height) {
 	this.openX = openX;
 	this.openY = openY;
 	this.closedX = closedX;
@@ -31,9 +31,6 @@ public class Obstacle extends Movable
 	setVelocityTowards(closedX, closedY);
     }
 
-    public void stopMoving() {
-	setVelocity(0, 0);
-    }
 
     /**
      * Obstacles are not nudged away from other hitboxes
@@ -53,7 +50,7 @@ public class Obstacle extends Movable
 	}
 	Direction towardsTarget = Direction.getDirectionBetweenPoints(getX(), getY(), targetX, targetY);
 	// RANDOM MAGIC CONSTANT
-	float speed = 8;
+	final float speed = 8;
 	setVelocity(speed * towardsTarget.getX(), speed * towardsTarget.getY());
     }
 }

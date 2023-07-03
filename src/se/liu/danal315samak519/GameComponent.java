@@ -23,7 +23,7 @@ public class GameComponent extends JComponent implements FrameListener
     public int indexOfLevelUpFrame = 0;
     public boolean didPlayerLevel = false;
     private int oldPlayerLevel;
-    private Point tileSize = null;
+    private Point tileSize;
     private boolean debug = true;
     private boolean showSkills = false;
     private boolean randomizeOnce = true;
@@ -255,7 +255,7 @@ public class GameComponent extends JComponent implements FrameListener
     private void paintMapLayer(final Graphics g, final int layer) {
 	Room room = game.getRoom();
 	if (layer >= room.getLayers()) {
-	    throw new IllegalArgumentException("Can't draw the specified layer " + layer + " on map " + room.getName());
+	    throw new IllegalArgumentException("Can't draw the specified layer " + layer + " on map " + room.getFileName());
 	}
 
 	for (int y = 0; y < room.getRows(); y++) {
@@ -415,10 +415,6 @@ public class GameComponent extends JComponent implements FrameListener
     private class PauseAction extends AbstractAction
     {
 	private boolean shouldPause;
-
-	private PauseAction(boolean shouldPause) {
-	    this.shouldPause = shouldPause;
-	}
 
 	public void actionPerformed(final ActionEvent e) {
 	    if (shouldPause) {

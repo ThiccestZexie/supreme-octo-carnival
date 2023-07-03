@@ -8,7 +8,6 @@ import java.awt.*;
 public class Tile
 {
     private Image image;
-    private Point point;
     private Rectangle hitBox;
 
     /**
@@ -18,7 +17,6 @@ public class Tile
      */
     public Tile(final Image image, final Point point) {
 	this.image = image;
-	this.point = point;
 	this.hitBox = new Rectangle(point, getSize());
     }
 
@@ -46,11 +44,5 @@ public class Tile
 	    return 0;
 	}
 	return image.getHeight(null);
-    }
-    public int getX(){
-	return point.x;
-    }
-    public int getY(){
-	return point.y;
     }
 }

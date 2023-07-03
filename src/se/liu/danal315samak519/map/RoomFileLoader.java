@@ -20,9 +20,8 @@ import java.util.List;
 public class RoomFileLoader
 {
     private static final String DATA_FOLDER = "resources/data/";
-    private static final String IMAGES_FOLDER = "resources/images/";
     private final int numLayers;
-    private int[] tilesetGIDs;
+    private int[] tileSetGIDs;
     private Tile[][][] tiles;
     private List<Obstacle> obstacles;
     private int rows, columns;
@@ -51,11 +50,11 @@ public class RoomFileLoader
 	// Handle multiple tilesets
 	Elements tileSetElements = doc.select("tileset");
 	int numTileSets = tileSetElements.size();
-	tilesetGIDs = new int[numTileSets];
+	tileSetGIDs = new int[numTileSets];
 	tileSetLoaders = new ImageLoader[numTileSets];
 	for (int i = 0; i < numTileSets; i++) {
 	    Element element = tileSetElements.get(i);
-	    tilesetGIDs[i] = Integer.parseInt(element.attr("firstgid"));
+	    tileSetGIDs[i] = Integer.parseInt(element.attr("firstgid"));
 	    // Parse image
 	    String tilesetName = element.attr("source");
 	    String imageName = findTilesetsImage(tilesetName);
@@ -82,14 +81,13 @@ public class RoomFileLoader
 	Elements objects = doc.select("objectgroup[id=4] object");
 	obstacles = new ArrayList<>();
 	for (Element object : objects) {
-	    int id = Integer.parseInt(object.attr("id"));
 	    float openX = Float.parseFloat(object.attr("x"));
 	    float openY = Float.parseFloat(object.attr("y"));
 	    float w = Float.parseFloat(object.attr("width"));
 	    float h = Float.parseFloat(object.attr("height"));
 	    float closedX = getProperty(object, "closedX");
 	    float closedY = getProperty(object, "closedY");
-	    obstacles.add(new Obstacle(openX, openY, closedX, closedY, w, h, id));
+	    obstacles.add(new Obstacle(openX, openY, closedX, closedY, w, h));
 	}
     }
     private float getProperty(Element object, String propertyName) throws IllegalArgumentException {
@@ -104,7 +102,7 @@ public class RoomFileLoader
 	String valueStr = property.attr("value");
 	try {
 	    return Float.parseFloat(valueStr);
-	} catch (NumberFormatException e) {
+	} catch (NumberFormatException ignored) {
 	    throw new IllegalArgumentException("Invalid value for property " + propertyName + ": " + valueStr);
 	}
     }
@@ -150,7 +148,7 @@ public class RoomFileLoader
 	    return null;
 	}
 	int index = getTileSetOfValue(value);
-	int firstGID = tilesetGIDs[index];
+	int firstGID = tileSetGIDs[index];
 	ImageLoader imageLoader = tileSetLoaders[index];
 	int tilesetColumns = imageLoader.getWidth() / getTileWidth();
 	int tilesetRows = imageLoader.getHeight() / getTileHeight();
@@ -163,8 +161,8 @@ public class RoomFileLoader
 
     private int getTileSetOfValue(int value) {
 	int index = -1;
-	for (int i = 0; i < tilesetGIDs.length; i++) {
-	    if (tilesetGIDs[i] > value) {
+	for (int i = 0; i < tileSetGIDs.length; i++) {
+	    if (tileSetGIDs[i] > value) {
 		break;
 	    }
 	    index = i;

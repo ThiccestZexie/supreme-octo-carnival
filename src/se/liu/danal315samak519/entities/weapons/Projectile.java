@@ -2,9 +2,6 @@ package se.liu.danal315samak519.entities.weapons;
 
 import se.liu.danal315samak519.ImageLoader;
 import se.liu.danal315samak519.entities.Character;
-import se.liu.danal315samak519.entities.Movable;
-
-import java.awt.geom.Point2D;
 import java.io.IOException;
 
 /**
@@ -13,8 +10,8 @@ import java.io.IOException;
 public class Projectile extends Weapon
 {
 
-    public Projectile(final Point2D.Float coord, final Character owner, final int projectileHeight, final int projectileWidth, final int projectileVel) {
-	super(coord, owner);
+    public Projectile(final Character owner, final int projectileHeight, final int projectileWidth, final int projectileVel) {
+	super(owner);
 	this.setLifeSpan(120);
 
 	switch (owner.getDirection()) {
@@ -48,23 +45,15 @@ public class Projectile extends Weapon
 
     }
 
-    public boolean hitEntity(Movable target) {
-
-	if (this.hitBox.intersects(target.getHitBox())) {
-	    this.isGarbage = true;
-	    return true;
-	}
-	return false;
-    }
 
     public void storeImages(){
 	try {
-	    int spriteHeight = 16;
-	    int spriteWidth = 16;
-
+	    final int spriteHeight = 16;
+	    final int spriteWidth = 16;
+	    final int imageOffSetX = 120;
 	    ImageLoader enemiesLoader = new ImageLoader("enemies.png");
 
-	    currentSprite = enemiesLoader.getSubImage( 120,0,spriteWidth, spriteHeight);
+	    currentSprite = enemiesLoader.getSubImage( imageOffSetX,0,spriteWidth, spriteHeight);
 	}
 	catch (IOException e) {
 	    e.printStackTrace();

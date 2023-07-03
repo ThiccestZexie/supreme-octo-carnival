@@ -2,8 +2,6 @@ package se.liu.danal315samak519.entities.weapons;
 
 import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
-
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -11,11 +9,11 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Weapon extends Movable
 {
-    protected BufferedImage currentSprite;
+    protected BufferedImage currentSprite = null;
     protected Character owner;
     protected int lifeSpan;
 
-    protected Weapon(final Point2D.Float coord, final Character owner) {
+    protected Weapon(final Character owner) {
 	this.owner = owner;
 	this.lifeSpan = 5;
     }
@@ -37,10 +35,6 @@ public abstract class Weapon extends Movable
 
     public void followOwner() {
 	setVelocity(owner.getVelX(), owner.getVelY());
-    }
-
-    public int getLifeSpan() {
-	return lifeSpan;
     }
 
     public void setLifeSpan(final int lifeSpan) {
