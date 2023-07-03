@@ -43,10 +43,10 @@ public enum Direction
      * @return
      */
     public static Direction roundAngleToDirection(float radians, float width, float height) {
-	float a = width / 2.0f;
-	float b = height / 2.0f;
+	final float a = width / 2.0f;
+	final float b = height / 2.0f;
 	float angleLeftRight = (float) Math.atan2(b, a);
-	float angleUpDown = (float) ((Math.PI - 2 * angleLeftRight) / 2.0);
+	final float angleUpDown = (float) ((Math.PI - 2 * angleLeftRight) / 2.0);
 
 	if (-angleUpDown <= radians && radians <= angleUpDown) {
 	    return Direction.RIGHT;

@@ -3,6 +3,7 @@ package se.liu.danal315samak519;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 /**
  * Represent a powerup that can be acquired by the player.
@@ -11,34 +12,38 @@ public class Decrees
 {
     private String type;
     private float increase;
-    private String effect = null;
+    private String effect;
     private List<String> effectList = Arrays.asList("Movement Increase","Health Increase","Arrow Size Increase","Faster Arrows",
 						    "Full Restore");
 
-    private static final int DECREE_AMMOUNT = 4;
+    private static final int DECREE_AMMOUNT = 5;
 
     public Decrees(final String type) {
 	//Spread them out in different levels so its 13 faster then 26, then 40 or something like that
 	this.type = type;
 	switch(type){
 	    case "Movement Increase": // 50% faster
-		effect = "Increases Movespeed";
-		this.increase = 1.5f;
+		this.effect = "Increases Movespeed";
+		final float speedIncrease = 1.5f;
+		this.increase = speedIncrease;
 		break;
 	    case "Health Increase": // one extra heart
-		effect = "Increases Health Points";
-		this.increase = 2.0f;
+		this.effect = "Increases Health Points";
+		final float healthIncrease = 2.0f;
+		this.increase = healthIncrease;
 		break;
 	    case "Arrow Size Increase":// Larger Arrows
-		effect = "Increases arrow width";
-		this.increase = 2.0f;
+		this.effect = "Increases arrow width";
+		final float arrowWidthIncrease = 2.0f;
+		this.increase = arrowWidthIncrease;
 		break;
 	    case "Faster Arows": // Faster arrows
-		effect = "Faster arrow velocity";
-		this.increase = 2.0f;
+		this.effect = "Faster arrow velocity";
+		final float arrowVelocityIncrease = 2.0f;
+		this.increase = arrowVelocityIncrease;
 		break;
-	    case "Full Restore":
-		effect = "Full Heal!";
+	    default:
+		this.effect = "Full Heal!";
 		break;
 	}
     }
@@ -46,7 +51,7 @@ public class Decrees
 
 
     public String getRandomDecree(){
-	Random rng = new Random();
+	RandomGenerator rng = new Random();
 	return this.effectList.get(rng.nextInt(DECREE_AMMOUNT));
     }
 
@@ -59,7 +64,7 @@ public class Decrees
     }
 
     public String getEffect() {
-	return effect;
+	return this.effect;
     }
 
     public List<String> getEffectList() {

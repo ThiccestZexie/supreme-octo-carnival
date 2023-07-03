@@ -10,11 +10,11 @@ import java.util.Random;
  */
 public abstract class Entity
 {
-    protected Point2D.Float coord;
+    protected Point2D.Float coord = null;
     protected float width;
     protected float height;
-    protected Color color;
-    protected Rectangle2D.Float hitBox;
+    protected Color color = null;
+    protected Rectangle2D.Float hitBox = null;
     protected boolean isGarbage = false;
     private Random random = new Random();
 
@@ -113,7 +113,9 @@ public abstract class Entity
     }
 
     public void setCenterLocation(final float x, final float y) {
-	setLocation(x - this.getWidth() / 2.0f, y - this.getHeight() / 2.0f);
+	final float xCoord = x - this.getWidth() / 2.0f;
+	final float yCoord = y - this.getHeight() / 2.0f;
+	setLocation(xCoord,yCoord );
     }
 
     public void markAsGarbage() {

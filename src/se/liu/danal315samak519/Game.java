@@ -16,19 +16,22 @@ import se.liu.danal315samak519.entities.weapons.Weapon;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 
 public class Game
 {
-    private static final Random RANDOM = new Random();
+    private static final RandomGenerator RANDOM = new Random();
+    public static final int MARGIN = 150;
     private List<Movable> movables = new ArrayList<>();
 
     private List<Enemy> enemyList = new ArrayList<>();
     private LinkedList<Movable> pendingMovables = new LinkedList<>(); // For push and pop functions.
-    private List<FrameListener> frameListeners = new ArrayList<>();
+    private Collection<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
     private Room room;
     private int currentWorldID = 0;
@@ -169,7 +172,7 @@ public class Game
 	return list;
     }
 
-    public void changeRoom(Room room) {
+    private void changeRoom(Room room) {
 	// Clear previous movables (if necessary)
 	if (getMovables() != null) {
 	    for (Movable movable : getMovables()) {
@@ -187,7 +190,7 @@ public class Game
      * "Changes" the room to the same one, effectively resetting everything
      * Currently hardcoded to map0.tmx over and over.
      */
-    public void resetRoom() {
+    private void resetRoom() {
 	changeRoom(new Room("map0.tmx"));
     }
 
@@ -221,7 +224,7 @@ public class Game
      * @return a random point within the room, but not too close to the edges
      */
     private Point2D.Float getRandomCoord() {
-	int margin = 150;
+	int margin = MARGIN;
 	return new Point2D.Float(margin + RANDOM.nextInt(getRoom().getWidth() - 2 * margin),
 				 margin + RANDOM.nextInt(getRoom().getHeight() - 2 * margin));
     }
@@ -279,7 +282,7 @@ public class Game
     /**
      * Handle collisions where two movables are involved Unfortunately this is terrible abstraction
      */
-    public void handleMovableCollision(final Movable movable0, final Movable movable1) {
+    private void handleMovableCollision(final Movable movable0, final Movable movable1) {
 	if (!movable0.getHitBox().intersects(movable1.getHitBox()) || movable0.equals(movable1)) {
 	    return; // No need to continue if no collision between movable0 and movable1, or if they are equal.
 	}
@@ -309,7 +312,7 @@ public class Game
 	}
     }
 
-    public boolean getRoomIsCleared() {
+    private boolean getRoomIsCleared() {
 	return roomIsCleared;
     }
 
@@ -321,7 +324,7 @@ public class Game
 	return this.player;
     }
 
-    public void setPlayer(final Player player) {
+    private void setPlayer(final Player player) {
 	this.player = player;
     }
 
@@ -330,7 +333,7 @@ public class Game
 	frameListeners.add(fl);
     }
 
-    public void notifyListeners() {
+    private void notifyListeners() {
 	for (FrameListener frameListener : frameListeners) {
 	    frameListener.frameChanged();
 	}
@@ -363,7 +366,7 @@ public class Game
 	this.room = room;
     }
 
-    public void addMovable(final Movable movable) {
+    private void addMovable(final Movable movable) {
 	if (movable != null) { // Don't add null objects
 	    movables.add(movable);
 	}

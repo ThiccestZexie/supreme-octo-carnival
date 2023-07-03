@@ -1,11 +1,7 @@
 package se.liu.danal315samak519;
 
-import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Player;
-import se.liu.danal315samak519.entities.Potion;
-import se.liu.danal315samak519.entities.enemies.Enemy;
-import se.liu.danal315samak519.entities.weapons.Projectile;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
 
@@ -20,6 +16,9 @@ import java.awt.event.MouseEvent;
  */
 public class GameComponent extends JComponent implements FrameListener
 {
+    public static final int ALPHA = 150;
+    public static final int LEVEL_UP_FRAMES = 19;
+    private static final int ABOVE_PLAYER_INCREMENT = 30;
     public Game game = new Game();
     public int indexOfLevelUpFrame = 0;
     public boolean didPlayerLevel = false;
@@ -71,7 +70,7 @@ public class GameComponent extends JComponent implements FrameListener
      * @param g
      */
     private void paintPauseMenu(final Graphics g) {
-	int r = 0, gr = 0,b = 0, a = 150;
+	int r = 0, gr = 0,b = 0, a = ALPHA;
 	Point screenCenter = new Point(getWidth()/2,getHeight()/2) ;
 	g.setColor(new Color(r, gr, b, a));
 	g.fillRect(0, 0, getWidth(), getHeight());
@@ -111,7 +110,7 @@ public class GameComponent extends JComponent implements FrameListener
 	   movable.drawHealth(g);
 	}
 	final int expBarLength = 165;
-	final int expX = 5, expY = 60, expHeight = 30;
+	final int expX = 5, expY = 60, expHeight = ABOVE_PLAYER_INCREMENT;
 	final int expRequirement = game.getPlayer().getExpRequirements()[game.getPlayer().getLevel() - 1];
 	// Paint EXP bar
 	g.setColor(Color.BLACK);
@@ -128,7 +127,7 @@ public class GameComponent extends JComponent implements FrameListener
      *
      * @param g
      */
-    public void paintPlayerHP(Graphics g) {
+    private void paintPlayerHP(Graphics g) {
 
 	int xCoord = 0;
 	int yCoord = 0;
@@ -159,12 +158,12 @@ public class GameComponent extends JComponent implements FrameListener
 	    showSkills = true;
 	}
 	this.oldPlayerLevel = game.getPlayer().getLevel();
-	if (this.indexOfLevelUpFrame >= 19) {
+	if (this.indexOfLevelUpFrame >= LEVEL_UP_FRAMES) {
 	    this.indexOfLevelUpFrame = 0;
 	    didPlayerLevel = false;
 	} else if (didPlayerLevel) {
 	    Image currentFrame = game.getPlayer().levelUpFrames[this.indexOfLevelUpFrame];
-	    g.drawImage(currentFrame, game.getPlayer().getEntityIntX(), game.getPlayer().getEntityIntY() - 30, null);
+	    g.drawImage(currentFrame, game.getPlayer().getEntityIntX(), game.getPlayer().getEntityIntY() - ABOVE_PLAYER_INCREMENT, null);
 	    this.indexOfLevelUpFrame++;
 	}
     }
@@ -174,10 +173,10 @@ public class GameComponent extends JComponent implements FrameListener
 	Graphics2D g2 = (Graphics2D) g;
 	//Draw one shape on left side of screen and rightside
 
-	int frameWidth = tileSize.x * 22;
-	int frameHeight = tileSize.y * 10;
-	int frameX = tileSize.x * 4;
-	int frameY = (int) (getPreferredSize().height / 2.5);
+	final int frameWidth = tileSize.x * 22;
+	final int frameHeight = tileSize.y * 10;
+	final int frameX = tileSize.x * 4;
+	final int frameY = (int) (getPreferredSize().height / 2.5);
 
 
 	//Sets decree types
@@ -189,18 +188,15 @@ public class GameComponent extends JComponent implements FrameListener
 
 
 	// Draws background for decrees
-	int r = 0, gr = 0, b = 0, a = 210;
-	int arcWidth = 35, arcHeight = 35;
+	final int r = 0, gr = 0, b = 0, a = 210;
+	final int arcWidth = 25, arcHeight = 25;
 	Color color = new Color(r, gr, b, a);
 	g2.setColor(color);
 	g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, arcWidth, arcHeight);
-	r = 255;
-	gr = 255;
-	b = 255;
-	color = new Color(r, gr, b);
+	color = Color.BLACK;
 	g2.setColor(color);
 	g2.setStroke(new BasicStroke(5));
-	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth - 10, frameHeight - 10, 25, 25);
+	g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth - 10, frameHeight - 10, arcWidth, arcHeight);
 
 	//Adds decrees as clickable objects
 	int decreeWidth = 100;
@@ -210,7 +206,7 @@ public class GameComponent extends JComponent implements FrameListener
 	int decreeOneY = frameY + frameHeight / 3;
 	int decreeTwoX = decreeOneX + frameWidth - decreeWidth * 3; // need to have frameXY - 2 decreewidths...
 	int decreeTwoY = decreeOneY;
-	int decreeFontSize = 20;
+	final int decreeFontSize = 20;
 	//decree 1
 	g2.setColor(Color.RED);
 	g2.fillRect(decreeOneX, decreeOneY, decreeWidth, decreeHeight);
@@ -232,7 +228,7 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private int getFPS() {
-	double oneSecondInNano =  1_000_000_000.0;
+	final double oneSecondInNano =  1_000_000_000.0;
 	long currentTime = System.nanoTime();
 	long elapsedNanos = currentTime - lastFrameTime;
 	lastFrameTime = currentTime;
@@ -243,7 +239,7 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private void paintDebug(final Graphics g) {
-	int x = 5, y = 15;
+	final int x = 5, y = 15;
 	g.drawString(String.valueOf(getFPS()), x, y);
     }
 
@@ -281,7 +277,7 @@ public class GameComponent extends JComponent implements FrameListener
      * @param keyStrokeString the keystroke as a string (for example "pressed SPACE")
      * @param action          which AbstractAction to be performed when the keystroke is used
      */
-    private void addNewKeyBinding(String keyStrokeString, AbstractAction action) {
+    private void addNewKeyBinding(String keyStrokeString, Action action) {
 	this.getInputMap().put(KeyStroke.getKeyStroke(keyStrokeString), keyStrokeString);
 	this.getActionMap().put(keyStrokeString, action);
     }

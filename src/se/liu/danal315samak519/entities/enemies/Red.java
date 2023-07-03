@@ -1,6 +1,5 @@
 package se.liu.danal315samak519.entities.enemies;
 
-import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.entities.Player;
 
 import java.awt.geom.Point2D;

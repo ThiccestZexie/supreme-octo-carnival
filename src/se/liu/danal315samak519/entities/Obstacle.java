@@ -10,17 +10,14 @@ import java.awt.geom.Rectangle2D;
  */
 public class Obstacle extends Movable
 {
-    private final int id;
     private float openX, openY;
     private float closedX, closedY;
-    private float speed = 8; // RANDOM MAGIC CONSTANT
 
     public Obstacle(float openX, float openY, float closedX, float closedY, float width, float height, int id) {
 	this.openX = openX;
 	this.openY = openY;
 	this.closedX = closedX;
 	this.closedY = closedY;
-	this.id = id;
 	setLocation(openX, openY);
 	setSize(width, height);
 	setHitBox();
@@ -55,6 +52,8 @@ public class Obstacle extends Movable
 	    return;
 	}
 	Direction towardsTarget = Direction.getDirectionBetweenPoints(getX(), getY(), targetX, targetY);
-	setVelocity(this.speed * towardsTarget.getX(), this.speed * towardsTarget.getY());
+	// RANDOM MAGIC CONSTANT
+	float speed = 8;
+	setVelocity(speed * towardsTarget.getX(), speed * towardsTarget.getY());
     }
 }

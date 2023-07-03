@@ -21,6 +21,10 @@ public abstract class Character extends Movable
     private static final int HEALTH_INCREASE_PER_LEVEL = 1;
 
     private static final int ATTACK_FRAME = 2;
+    private static final int PLAYER_WIDTH = 50;
+    private static final int PLAYER_HEIGHT = 50;
+    private static final int PROJECTILE_WIDTH = 15;
+    private static final int PROJECTILE_HEIGHT = 15;
     public int ticksAttackCooldown = 0;
     public int ticksInvincible = 0;
     protected int walkCycleIndex = 0;
@@ -41,13 +45,14 @@ public abstract class Character extends Movable
 
 
     protected Character(final Point2D.Float coord) {
+
 	setLocation(coord);
-	setSize(50, 50);
+	setSize(PLAYER_WIDTH, PLAYER_HEIGHT);
 	setMaxSpeed(5);
 	setHitBox();
 	setProjectileVelocity(4);
-	setProjectileWidth(15);
-	setProjectileHeight(15);
+	setProjectileWidth(PROJECTILE_WIDTH);
+	setProjectileHeight(PROJECTILE_HEIGHT);
     }
 
     @Override public void setDirection(final Direction direction) {

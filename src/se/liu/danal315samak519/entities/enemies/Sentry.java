@@ -11,11 +11,14 @@ import java.awt.geom.Point2D;
  */
 public class Sentry extends Enemy
 {
+    private static final int PROJECTILE_WIDTH = 20;
+    private static final int IMAGE_OFFSET_X = 120;
+
     public Sentry(final Point2D.Float coord, final Player player) {
 	super(coord, player);
 	setStats(2, 1);
-	storeSpriteFrames(120, 0);
-	setProjectileWidth(20);
+	storeSpriteFrames(IMAGE_OFFSET_X, 0);
+	setProjectileWidth(PROJECTILE_WIDTH);
     }
 
     @Override public void tick() {

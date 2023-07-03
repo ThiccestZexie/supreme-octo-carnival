@@ -3,11 +3,9 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.ImageLoader;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -19,8 +17,9 @@ public class Potion extends Movable
     private BufferedImage currentSprite = null;
     private static final int HEALAMOUNT = 2;
     public Potion(final Point2D.Float coord) {
+	final Dimension potionSize = new Dimension(25,25);
 	setLocation(coord);
-	setSize(25, 25);
+	setSize(potionSize.width,  potionSize.height);
 	setHitBox();
 	setColor(Color.GRAY);
 	storeFullHeartImage();
@@ -46,7 +45,6 @@ public class Potion extends Movable
     public void storeFullHeartImage() {
 	try {
 	    ImageLoader imageLoader = new ImageLoader("hearts/heart_full.png");
-	    int droppedheartWidth = 50, droppheartHeight = 50;
 	    this.currentSprite = imageLoader.getImage();
 	} catch (IOException e) {
 	    e.printStackTrace();
