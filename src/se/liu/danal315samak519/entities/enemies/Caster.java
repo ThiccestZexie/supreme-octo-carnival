@@ -10,18 +10,20 @@ import java.awt.geom.Point2D;
 public class Caster extends Enemy
 {
 
-    private static final int IMAGE_OFFSET_X = 240;
-    private static final int IMAGE_OFFSET_Y = 60;
-    private static final int PROJECTILE_WIDTH = 50;
 
     public Caster(final Point2D.Float coord, final Player player) {
 	super(coord, player);
-	setMaxSpeed(1);
-	setStats(2, 2);
-	storeSpriteFrames(IMAGE_OFFSET_X, IMAGE_OFFSET_Y);
-	setProjectileVelocity(6);
-	setProjectileWidth(PROJECTILE_WIDTH);
-	setProjectileHeight(5);
+	final int speed = 1, health = 2, level = 2;
+	final int projectileWidth = 50, projectileHeight = 5, projectileVelocity = 6;
+	final int imageOffsetY = 60, imageOffsetX = 240;
+
+	setMaxSpeed(speed);
+	setStats(health, level);
+
+	storeSpriteFrames(imageOffsetX, imageOffsetY);
+	setProjectileVelocity(projectileVelocity);
+	setProjectileWidth(projectileWidth);
+	setProjectileHeight(projectileHeight);
     }
 
 

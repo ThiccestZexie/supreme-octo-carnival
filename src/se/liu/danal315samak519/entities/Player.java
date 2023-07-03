@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -22,15 +23,17 @@ public class Player extends Character
     private static final int SUB_IMAGE_SIZE = 32;
     public BufferedImage[] levelUpFrames = null;
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
-
     public Deque<Decrees> decrees = new LinkedList<>();
 
     public Player(final Point2D.Float coord)
     {
 	super(coord);
 	setColor(Color.GREEN);
-	setMaxSpeed(5);
-	setStats(6, 1);
+	final int startingSpeed = 5;
+	setMaxSpeed(startingSpeed);
+	final int startingHealth = 6;
+	final int startingLevel = 1;
+	setStats(startingHealth, startingLevel);
 	storeLevelUpFrames();
 	storeSpriteFrames();
 	storeHealthBars();
@@ -38,7 +41,7 @@ public class Player extends Character
 	levelUp();
     }
 
-    public void applyDecrees() { //Have to manually know effect and apply effect
+    public void applyDecrees() {
 	for (Decrees decree : decrees) {
 	    if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(0))) {
 		setMaxSpeed(this.getMaxSpeed() * decree.getIncrease());
@@ -73,9 +76,11 @@ public class Player extends Character
 	try {
 	    // HARDCODED FOR EXACTLY 20 FRAMES
 	    final int amountOfFrames = 20;
+	    final int loopsForTen = amountOfFrames/10;
+	    final int loopsforones = amountOfFrames/2;
 	    levelUpFrames = new BufferedImage[amountOfFrames];
-	    for (int tens = 0; tens < 2; tens++) {
-		for (int ones = 0; ones < 10; ones++) {
+	    for (int tens = 0; tens < loopsForTen; tens++) {
+		for (int ones = 0; ones < loopsforones; ones++) {
 		    ImageLoader levelUpFrameLoader = new ImageLoader("/levelUP/level_up" + tens + ones + ".png");
 		    levelUpFrames[10 * tens + ones] = levelUpFrameLoader.getImage();
 		}
@@ -95,24 +100,17 @@ public class Player extends Character
 	    ImageLoader linkImageLoader = new ImageLoader("link.png");
 
 	    downFrames = new BufferedImage[totalFrames];
-	    downFrames[0] = linkImageLoader.getSubImage(0, 0, spriteWidth, spriteHeight);
-	    downFrames[1] = linkImageLoader.getSubImage(0, SUB_IMAGE_SIZE, spriteWidth, spriteHeight);
-	    downFrames[2] = linkImageLoader.getSubImage(0, SUB_IMAGE_SIZE * 2, spriteWidth, spriteHeight);
-
 	    leftFrames = new BufferedImage[totalFrames];
-	    leftFrames[0] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE, 0, spriteWidth, spriteHeight);
-	    leftFrames[1] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE, SUB_IMAGE_SIZE, spriteWidth, spriteHeight);
-	    leftFrames[2] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE, SUB_IMAGE_SIZE * 2, spriteWidth, spriteHeight);
-
 	    upFrames = new BufferedImage[totalFrames];
-	    upFrames[0] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE * 2, 0, spriteWidth, spriteHeight);
-	    upFrames[1] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE * 2, SUB_IMAGE_SIZE, spriteWidth, spriteHeight);
-	    upFrames[2] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE * 2, SUB_IMAGE_SIZE * 2, spriteWidth, spriteHeight);
-
 	    rightFrames = new BufferedImage[totalFrames];
-	    rightFrames[0] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE * 3, SUB_IMAGE_SIZE, spriteWidth, spriteHeight);
-	    rightFrames[1] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE * 3, 0, spriteWidth, spriteHeight);
-	    rightFrames[2] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE * 3, SUB_IMAGE_SIZE * 2, spriteWidth, spriteHeight);
+
+	    for (int i = 0; i < totalFrames; i++) {
+		downFrames[i] = linkImageLoader.getSubImage(0, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
+		leftFrames[i] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
+		upFrames[i] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE* 2, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
+		rightFrames[i] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE*3, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
+	    }
+
 
 	    setCurrentFrames();
 
@@ -124,7 +122,6 @@ public class Player extends Character
     public void storeHealthBars() {
 	try {
 	    final int heartWidth = 50, heartHeight = 50;
-
 	    BufferedImage bufferedImage = ImageIO.read(new File("resources/images/hearts/heart_full.png"));
 	    fullHeart = bufferedImage.getScaledInstance(heartWidth, heartHeight, Image.SCALE_DEFAULT);
 	    bufferedImage = ImageIO.read(new File("resources/images/hearts/heart_half.png"));

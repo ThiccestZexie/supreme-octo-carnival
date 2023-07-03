@@ -13,8 +13,9 @@ public class Red extends Enemy
 
     public Red(final Point2D.Float coord, final Player player) {
 	super(coord, player);
-	setMaxSpeed(3);
-	setStats(3, 1);
+	final int speed = 3, health = 3, level = 1;
+	setMaxSpeed(speed);
+	setStats(health, level);
 	storeSpriteFrames(0, 0);
     }
 

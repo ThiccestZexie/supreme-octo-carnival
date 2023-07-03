@@ -16,16 +16,19 @@ public class Sentry extends Enemy
 
     public Sentry(final Point2D.Float coord, final Player player) {
 	super(coord, player);
-	setStats(2, 1);
-	storeSpriteFrames(IMAGE_OFFSET_X, 0);
-	setProjectileWidth(PROJECTILE_WIDTH);
+	final int health = 2, level = 2;
+	final int projectileWidth = 50;
+	final int imageOffsetX = 120;
+	setStats(health, level);
+	storeSpriteFrames(imageOffsetX, 0);
+	setProjectileWidth(projectileWidth);
     }
 
     @Override public void tick() {
 	super.tick();
 	setDirection(getDirectionTowardsPlayer());
-	final int fowardVision = 500, sideVission = 100;
-	if(checkIfPlayerIsInFront(fowardVision, sideVission) && canAttack()){
+	final int fowardVision = 500, sideVision = 100;
+	if(checkIfPlayerIsInFront(fowardVision, sideVision) && canAttack()){
 	    this.becomeAttacking();
 	    shoot();
 	}

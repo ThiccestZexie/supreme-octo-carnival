@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public abstract class Enemy extends Character
 {
-    private static final int SPRITE_OFFSET = 32;
+    private static final int SPRITE_OFF_SET = 32;
     protected Player player;
     protected int damage = 1;
 
@@ -37,24 +37,25 @@ public abstract class Enemy extends Character
 	try {
 	    final int spriteHeight = 16;
 	    final int spriteWidth = 16;
-
+	    final int totalFrames = 2;
 	    ImageLoader imageLoader = new ImageLoader("enemies.png");
 
-	    downFrames = new BufferedImage[3];
-	    downFrames[0] = imageLoader.getSubImage(offsetX, offsetY, spriteWidth, spriteHeight);
-	    downFrames[1] = imageLoader.getSubImage(offsetX, offsetY + spriteWidth * 2 - 2, spriteWidth, spriteHeight);
+	    downFrames = new BufferedImage[totalFrames];
+	    for (int i = 0; i < totalFrames; i++) {
+		downFrames[i] = imageLoader.getSubImage(offsetX, offsetY + spriteWidth * (i*2), spriteWidth, spriteHeight);
+	    }
 
-	    leftFrames = new BufferedImage[3];
-	    leftFrames[0] = imageLoader.getSubImage(offsetX + SPRITE_OFFSET - 2, offsetY, spriteWidth, spriteHeight);
-	    leftFrames[1] = imageLoader.getSubImage(offsetX + SPRITE_OFFSET - 2, offsetY + SPRITE_OFFSET, spriteWidth, spriteHeight);
 
-	    upFrames = new BufferedImage[3];
-	    upFrames[0] = imageLoader.getSubImage(offsetX + (SPRITE_OFFSET - 2) * 2, offsetY, spriteWidth, spriteHeight);
-	    upFrames[1] = imageLoader.getSubImage(offsetX + (SPRITE_OFFSET - 2) * 2, offsetY + SPRITE_OFFSET, spriteWidth, spriteHeight);
+	    leftFrames = new BufferedImage[totalFrames];
+	    upFrames = new BufferedImage[totalFrames];
+	    rightFrames = new BufferedImage[totalFrames];
 
-	    rightFrames = new BufferedImage[3];
-	    rightFrames[0] = imageLoader.getSubImage(offsetX + (SPRITE_OFFSET - 2) * 3, offsetY + SPRITE_OFFSET, spriteWidth, spriteHeight);
-	    rightFrames[1] = imageLoader.getSubImage(offsetX + (SPRITE_OFFSET - 2) * 3, offsetY, spriteWidth, spriteHeight);
+	    for (int i = 0; i < totalFrames; i++) {
+		leftFrames[i] = imageLoader.getSubImage(offsetX + SPRITE_OFF_SET - 2, offsetY, spriteWidth, spriteHeight);
+		upFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 2, offsetY, spriteWidth, spriteHeight);
+		rightFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 3, offsetY + SPRITE_OFF_SET * i, spriteWidth, spriteHeight);
+
+	    }
 
 	    setCurrentFrames();
 
@@ -150,20 +151,16 @@ public abstract class Enemy extends Character
     @Override public void drawHealth(final Graphics g) {
 	super.drawHealth(g);
 	g.setColor(Color.BLACK);
-	final int blackWidth = this.getMaxHp() * 60;
-	final int blackHeight = 20;
-	final int blackX = this.getEntityIntX() - blackWidth / 2 + this.getIntWidth() / 2;
-	final int blackY = this.getEntityIntY() + this.getIntHeight() + 15;
-	g.fillRect(blackX, blackY, blackWidth, blackHeight); // Should be getInt maxHp
+	final int barWidth = this.getMaxHp() * 60;
+	final int barHeight = 20;
+	final int xCoord = this.getEntityIntX() - barWidth / 2 + this.getIntWidth() / 2;
+	final int yCoord = this.getEntityIntY() + this.getIntHeight() + 15;
+	g.fillRect(xCoord, yCoord, barWidth, barHeight);
 
 	//Current health (RED)
-	final int redWidth = this.getHp() * 60;
-	final int redHeight = 20;
-	final int yCoord = this.getEntityIntY() + this.getIntHeight() + 15;
-	final int xCoord = (this.getEntityIntX() - blackWidth / 2) + (this.getIntWidth() / 2);
 	g.setColor(Color.RED);
 	g.fillRect(xCoord, yCoord,
-		   redWidth, redHeight);
+		   barWidth, barHeight);
     }
 
     public void chasePlayer() {
