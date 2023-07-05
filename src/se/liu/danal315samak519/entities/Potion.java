@@ -31,7 +31,8 @@ public class Potion extends Movable
     }
 
     @Override public void handleCollision(Movable movable) {
-	pickUp((Player) movable);
+
+	pickUp((Person) movable);
     }
 
     private void setUser(Player user) {
