@@ -18,11 +18,4 @@ public class Red extends Enemy
 	setStats(health, level);
 	storeSpriteFrames(0, 0);
     }
-
-    @Override public void tick() {
-	super.tick();
-	chasePlayer();
-    }
-
-
 }

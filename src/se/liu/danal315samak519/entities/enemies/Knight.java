@@ -10,7 +10,6 @@ import java.awt.geom.Point2D;
  */
 public class Knight extends Enemy
 {
-
     public Knight(final Point2D.Float coord, final Player player) {
 	super(coord, player);
 	final int speed = 2, health = 5, level = 2, damage = 2;
@@ -20,12 +19,4 @@ public class Knight extends Enemy
 	setStats(health, level);
 	storeSpriteFrames(imageOffsetX, imageOffsetY);
     }
-
-
-    @Override public void tick() {
-	super.tick();
-	chasePlayer();
-    }
-
-
 }

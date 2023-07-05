@@ -6,8 +6,7 @@ import se.liu.danal315samak519.entities.Player;
 import java.awt.geom.Point2D;
 
 /**
- * A sentry enemy that shoots at the player.
- * Can not move, instead it only rotates to face the player.
+ * A sentry enemy that shoots at the player. Can not move, instead it only rotates to face the player.
  */
 public class Sentry extends Enemy
 {
@@ -21,11 +20,15 @@ public class Sentry extends Enemy
 	setProjectileWidth(projectileWidth);
     }
 
+    /**
+     * Rotates towards the player and shoots if the player is in front of the sentry.
+     */
     @Override public void tick() {
 	super.tick();
+	setVelocity(0, 0);
 	setDirection(getDirectionTowardsPlayer());
-	final int fowardVision = 500, sideVision = 100;
-	if(checkIfPlayerIsInFront(fowardVision, sideVision) && canAttack()){
+	final int forwardVision = 500, sideVision = 100;
+	if (checkIfPlayerIsInFront(forwardVision, sideVision) && canAttack()) {
 	    this.becomeAttacking();
 	    shoot();
 	}
@@ -40,6 +43,7 @@ public class Sentry extends Enemy
 
     /**
      * Returns the direction towards the player.
+     *
      * @return
      */
     private Direction getDirectionTowardsPlayer() {

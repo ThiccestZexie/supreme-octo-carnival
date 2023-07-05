@@ -26,9 +26,6 @@ public abstract class Person extends Movable
     private static final int PLAYER_HEIGHT = 50;
     private static final int PROJECTILE_WIDTH = 15;
     private static final int PROJECTILE_HEIGHT = 15;
-    private int ticksAttackCooldown = 0;
-
-    private int ticksInvincible = 0;
     protected int walkCycleIndex = 0;
     protected int exp = 0;
     protected int level = 1;
@@ -39,6 +36,8 @@ public abstract class Person extends Movable
     protected BufferedImage[] leftFrames = null;
     protected BufferedImage[] upFrames = null;
     protected BufferedImage[] rightFrames = null;
+    private int ticksAttackCooldown = 0;
+    private int ticksInvincible = 0;
     // Tick counters
     private int ticksSinceWalkFrameChange = 0;
     private int projectileWidth;
@@ -121,7 +120,7 @@ public abstract class Person extends Movable
 	return exp;
     }
 
-    public int getTicksAttackCooldown(){
+    public int getTicksAttackCooldown() {
 	return ticksAttackCooldown;
     }
 
@@ -139,6 +138,7 @@ public abstract class Person extends Movable
 
     /**
      * Player and enemies display health differently, so they should override this abstract method.
+     *
      * @param g
      */
     public abstract void drawHealth(final Graphics g);
@@ -210,6 +210,11 @@ public abstract class Person extends Movable
 	}
     }
 
+    /**
+     * Return true if Person is standing still.
+     *
+     * @return
+     */
     private boolean getIfStandingStill() {
 	return velX == 0 && velY == 0;
     }
@@ -234,6 +239,7 @@ public abstract class Person extends Movable
 	    }
 	}
     }
+
     @Override public BufferedImage getCurrentSprite() {
 	return getSpriteFrame(walkCycleIndex);
     }

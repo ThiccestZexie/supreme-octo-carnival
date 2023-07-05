@@ -25,10 +25,4 @@ public class Caster extends Enemy
 	setProjectileWidth(projectileWidth);
 	setProjectileHeight(projectileHeight);
     }
-
-
-    @Override public void tick() {
-	super.tick();
-	chasePlayer();
-    }
 }

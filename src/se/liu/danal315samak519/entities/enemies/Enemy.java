@@ -106,37 +106,28 @@ public abstract class Enemy extends Person
 	return player.getCoord().distance(this.getCoord());
     }
 
-    public boolean canSeePlayer() {
-	return true;
-//	if (distanceToPlayer() < 500) {
-//	    return true;
-//	}
-//	return false;
-    }
-
-
-    public boolean checkIfPlayerIsInFront(int fowardVision, int sideVision) {
+    public boolean checkIfPlayerIsInFront(int forwardVision, int sideVision) {
 	if (canAttack()) {
 	    Rectangle raycastRectangle = new Rectangle();
-	    final int half = 2;
+	    final float half = 2.0f;
 	    switch (getDirection()) {
 		case UP:
-		    raycastRectangle.setSize(sideVision, fowardVision);
+		    raycastRectangle.setSize(sideVision, forwardVision);
 		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / half) - raycastRectangle.getWidth() / half),
 						 (int) (this.getY() - raycastRectangle.getHeight()));
 		    break;
 		case DOWN:
-		    raycastRectangle.setSize(sideVision, fowardVision);
+		    raycastRectangle.setSize(sideVision, forwardVision);
 		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / half) - raycastRectangle.getWidth() / half),
 						 (int) (this.getY() + (this.getHeight())));
 		    break;
 		case LEFT:
-		    raycastRectangle.setSize(fowardVision, sideVision);
+		    raycastRectangle.setSize(forwardVision, sideVision);
 		    raycastRectangle.setLocation((int) (this.getX() - raycastRectangle.getWidth()),
 						 (int) ((this.getY() + (this.getHeight() / half)) - (raycastRectangle.getHeight() / half)));
 		    break;
 		case RIGHT:
-		    raycastRectangle.setSize(fowardVision, sideVision);
+		    raycastRectangle.setSize(forwardVision, sideVision);
 		    raycastRectangle.setLocation((int) (this.getX() + this.getWidth()),
 						 (int) ((this.getY() + (this.getHeight() / half)) - (raycastRectangle.getHeight() / half)));
 		    break;
@@ -171,11 +162,15 @@ public abstract class Enemy extends Person
     }
 
     public void chasePlayer() {
-	if (canSeePlayer()) { // CHASe PLAYER!!
-	    Point2D.Float velocity = getVelocityTowardsPlayer();
-	    setVelocity(velocity.x, velocity.y);
-	} else { // Chill...
-	    setVelocity(0, 0);
-	}
+	Point2D.Float velocity = getVelocityTowardsPlayer();
+	setVelocity(velocity.x, velocity.y);
+    }
+
+    /**
+     * All enemies chase player by default. The sentry overrides this.
+     */
+    public void tick() {
+	super.tick();
+	chasePlayer();
     }
 }
