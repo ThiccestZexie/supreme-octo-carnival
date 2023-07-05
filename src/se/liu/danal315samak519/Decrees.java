@@ -10,18 +10,18 @@ import java.util.random.RandomGenerator;
  */
 public class Decrees
 {
+    private static final int DECREE_AMOUNT = 5;
+    RandomGenerator randomDecreeGenerator = new Random();
     private String type;
     private float increase;
     private String effect;
-    private List<String> decreeEffects = Arrays.asList("Movement Increase", "Health Increase", "Arrow Size Increase", "Faster Arrows",
-						       "Full Restore");
-
-    private static final int DECREE_AMOUNT = 5;
+    private List<String> decreeEffects =
+	    Arrays.asList("Movement Increase", "Health Increase", "Arrow Size Increase", "Faster Arrows", "Full Restore");
 
     public Decrees(final String type) {
 	//Spread them out in different levels so its 13 faster then 26, then 40 or something like that
 	this.type = type;
-	switch(type){
+	switch (type) {
 	    case "Movement Increase": // 50% faster
 		this.effect = "Increases Movespeed";
 		final float speedIncrease = 1.5f;
@@ -49,9 +49,7 @@ public class Decrees
     }
 
 
-
-    public String getRandomDecree(){
-	RandomGenerator randomDecreeGenerator = new Random();
+    public String getRandomDecree() {
 	return this.decreeEffects.get(randomDecreeGenerator.nextInt(DECREE_AMOUNT));
     }
 
