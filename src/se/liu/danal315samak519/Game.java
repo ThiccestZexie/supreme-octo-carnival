@@ -287,12 +287,12 @@ public class Game
     /**
      * Handle collisions where two movables are involved Unfortunately this is terrible abstraction
      */
-    private void handleMovableCollision(final Movable movable0, final Movable movable1) {
-	if (!movable0.getHitBox().intersects(movable1.getHitBox()) || movable0.equals(movable1)) {
+    private void handleMovableCollision(final Movable movable, final Movable other) {
+	if (!movable.getHitBox().intersects(other.getHitBox()) || movable.equals(other)) {
 	    return; // No need to continue if no collision between movable0 and movable1, or if they are equal.
 	}
-	if (movable1 instanceof Person){
-	    movable0.handleCollision(movable1);
+	if (other instanceof Person){
+	    movable.handleCollision(other);
 	}
     }
 
