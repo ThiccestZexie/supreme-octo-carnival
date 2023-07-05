@@ -1,6 +1,7 @@
 package se.liu.danal315samak519;
 
 import se.liu.danal315samak519.entities.Movable;
+import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
@@ -19,9 +20,9 @@ public class GameComponent extends JComponent implements FrameListener
     private static final int ALPHA = 150;
     private static final int LEVEL_UP_FRAMES = 19;
     private static final int ABOVE_PLAYER_INCREMENT = 30;
-    private Game game = new Game();
     public int indexOfLevelUpFrame = 0;
     public boolean didPlayerLevel = false;
+    private Game game = new Game();
     private int oldPlayerLevel;
     private Point tileSize;
     private boolean debug = true;
@@ -39,7 +40,6 @@ public class GameComponent extends JComponent implements FrameListener
 	setKeyBindings();
 	game.addFrameListener(this);
 	oldPlayerLevel = game.getPlayer().getLevel();
-
     }
 
     /**
@@ -49,8 +49,8 @@ public class GameComponent extends JComponent implements FrameListener
 	super.paintComponent(g);
 	paintMapLayer(g, 0); // Paint background
 	paintEntities(g);
-	paintPlayer(g);
 	paintMapLayer(g, 1); // Paint foreground
+	paintPlayer(g);
 	paintGUI(g);
 	if (game.isPaused()) {
 	    paintPauseMenu(g);
@@ -70,15 +70,16 @@ public class GameComponent extends JComponent implements FrameListener
      * @param g
      */
     private void paintPauseMenu(final Graphics g) {
-	int r = 0, gr = 0,b = 0, a = ALPHA;
-	final Point screenCenter = new Point(getWidth()/2,getHeight()/2) ;
+	int r = 0, gr = 0, b = 0, a = ALPHA;
+	final Point screenCenter = new Point(getWidth() / 2, getHeight() / 2);
 
 	g.setColor(new Color(r, gr, b, a));
 	g.fillRect(0, 0, getWidth(), getHeight());
 	g.setColor(Color.WHITE);
 	g.drawString("Press ESC to resume!", screenCenter.x, screenCenter.y);
     }
-    public Game getGame(){
+
+    public Game getGame() {
 	return game;
     }
 
@@ -93,7 +94,8 @@ public class GameComponent extends JComponent implements FrameListener
 
 	paintLevelUpAnimation(g);
 	// PAINT SPRITE
-	g.drawImage(player.getCurrentSprite(), player.getEntityIntX(), player.getEntityIntY(), player.getIntWidth(), player.getIntHeight(), null);
+	g.drawImage(player.getCurrentSprite(), player.getEntityIntX(), player.getEntityIntY(), player.getIntWidth(), player.getIntHeight(),
+		    null);
 
     }
 
@@ -104,14 +106,13 @@ public class GameComponent extends JComponent implements FrameListener
 		g.setColor(movable.getColor());
 		g.drawRect(movable.getEntityIntX(), movable.getEntityIntY(), movable.getIntWidth(), movable.getIntHeight());
 	    }
-	   movable.draw(g);
+	    movable.draw(g);
 	}
     }
 
     private void paintGUI(final Graphics g) {
-
-	for (Movable movable : game.getMovables()) {
-	   movable.drawHealth(g);
+	for (Person person : game.getPersons()) {
+	    person.drawHealth(g);
 	}
 	final int expBarLength = 165;
 	final int expX = 5, expY = 60, expHeight = ABOVE_PLAYER_INCREMENT;
@@ -120,8 +121,7 @@ public class GameComponent extends JComponent implements FrameListener
 	g.setColor(Color.BLACK);
 	g.fillRect(expX, expY, expBarLength, expHeight);
 	g.setColor(Color.GREEN);
-	g.fillRect(expX, expY, game.getPlayer().getExp() * expBarLength / expRequirement,
-		   expHeight);
+	g.fillRect(expX, expY, game.getPlayer().getExp() * expBarLength / expRequirement, expHeight);
 	// Player hp bar
 	paintPlayerHP(g);
     }
@@ -133,27 +133,6 @@ public class GameComponent extends JComponent implements FrameListener
      */
     private void paintPlayerHP(Graphics g) {
 
-	int xCoord = 0;
-	int yCoord = 0;
-	int heartPos = 0;
-	final int spaceBetweenHearts = 60;
-	final int emptyHearts =  game.getPlayer().getMaxHp() / 2;
-	while (heartPos < emptyHearts)  {
-	    g.drawImage(game.getPlayer().emptyHeart, xCoord, yCoord, null);
-	    heartPos++;
-	    xCoord += spaceBetweenHearts;
-	}
-	xCoord = 0;
-	heartPos = 0;
-	while (heartPos < game.getPlayer().getHp()) {
-	    g.drawImage(game.getPlayer().halfHeart, xCoord, yCoord, null);
-	    heartPos++;
-	    if (heartPos < game.getPlayer().getHp()) {
-		g.drawImage(game.getPlayer().fullHeart, xCoord, yCoord, null);
-	    }
-	    heartPos++;
-	    xCoord += spaceBetweenHearts;
-	}
     }
 
 
@@ -221,7 +200,7 @@ public class GameComponent extends JComponent implements FrameListener
 	FontMetrics fm = g2.getFontMetrics();
 	int textWidth = fm.stringWidth(effect);
 	final Point stringPos = new Point(decreeOneX + (decreeWidth - textWidth) / 2, decreeOneY - decreeFontSize);
-	g2.drawString(effect, stringPos.x,stringPos.y );
+	g2.drawString(effect, stringPos.x, stringPos.y);
 
 	//decree 2
 	g2.setColor(Color.BLUE);
@@ -237,7 +216,7 @@ public class GameComponent extends JComponent implements FrameListener
     }
 
     private int getFPS() {
-	final double oneSecondInNano =  1_000_000_000.0;
+	final double oneSecondInNano = 1_000_000_000.0;
 	long currentTime = System.nanoTime();
 	long elapsedNanos = currentTime - lastFrameTime;
 	lastFrameTime = currentTime;
@@ -312,7 +291,6 @@ public class GameComponent extends JComponent implements FrameListener
 		game.togglePause();
 	    }
 	});
-
 
 
 	// Pressing keys
@@ -435,7 +413,7 @@ public class GameComponent extends JComponent implements FrameListener
 	private final int decreeTwoY;
 
 	private MyMouseAdapter(final int decreeOneX, final int decreeWidth, final int decreeOneY, final int decreeHeight,
-			      final int decreeTwoX, final int decreeTwoY)
+			       final int decreeTwoX, final int decreeTwoY)
 	{
 	    this.decreeOneX = decreeOneX;
 	    this.decreeWidth = decreeWidth;

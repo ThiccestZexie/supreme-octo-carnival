@@ -1,7 +1,9 @@
 package se.liu.danal315samak519.entities.weapons;
 
 import se.liu.danal315samak519.ImageLoader;
-import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.Person;
+
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -10,10 +12,31 @@ import java.io.IOException;
 public class Projectile extends Weapon
 {
 
-    public Projectile(final Character owner, final int projectileHeight, final int projectileWidth, final int projectileVel) {
-	super(owner);
-	this.setLifeSpan(120);
+    public static final int PROJECTILE_LIFE_SPAN = 120;
 
+    public Projectile(final Person owner, final int projectileHeight, final int projectileWidth, final int projectileVel) {
+	super(owner);
+	this.setLifeSpan(PROJECTILE_LIFE_SPAN);
+	snapToOwner(projectileWidth, projectileHeight);
+
+	switch (this.direction) {
+	    case UP -> setVelY(-projectileVel);
+	    case DOWN -> setVelY(projectileVel);
+	    case LEFT -> setVelX(-projectileVel);
+	    case RIGHT -> setVelX(projectileVel);
+	}
+	this.setHitBox();
+	storeImages();
+    }
+
+    /**
+     * Moves the projectile to appropiate location next to owner, depending on owner's direction. Also changes size of projectile to fit the
+     * direction.
+     *
+     * @param projectileWidth  width of projectile
+     * @param projectileHeight height of projectile
+     */
+    private void snapToOwner(float projectileWidth, float projectileHeight) {
 	switch (owner.getDirection()) {
 	    case UP:
 		setSize(projectileWidth, projectileHeight);
@@ -32,31 +55,20 @@ public class Projectile extends Weapon
 		setLocation((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / 2.0f)) - (this.getHeight() / 2.0f));
 		break;
 	}
-
 	setDirection(owner.getDirection());
-	switch (this.direction) {
-	    case UP -> setVelY(-projectileVel);
-	    case DOWN -> setVelY(projectileVel);
-	    case LEFT -> setVelX(-projectileVel);
-	    case RIGHT -> setVelX(projectileVel);
-	}
-	this.setHitBox();
-	storeImages();
-
     }
 
 
-    public void storeImages(){
+    public void storeImages() {
 	try {
 	    final int spriteHeight = 16;
 	    final int spriteWidth = 16;
-	    final int imageOffSetX = 120;
+	    final int imageOffsetForArrow = 120;
 	    ImageLoader enemiesLoader = new ImageLoader("enemies.png");
 
-	    currentSprite = enemiesLoader.getSubImage( imageOffSetX,0,spriteWidth, spriteHeight);
-	}
-	catch (IOException e) {
+	    currentSprite = enemiesLoader.getSubImage(imageOffsetForArrow, 0, spriteWidth, spriteHeight);
+	} catch (IOException e) {
 	    e.printStackTrace();
+	}
     }
-}
 }

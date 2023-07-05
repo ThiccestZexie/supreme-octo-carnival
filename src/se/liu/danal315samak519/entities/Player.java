@@ -9,20 +9,20 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Queue;
 
 /**
  * The player character. The player can move around and shoot projectiles. The player can also level up and gain stats. The player can also
  * pick up potions to heal. The player can also pick up decrees to gain buffs.
  */
-public class Player extends Character
+public class Player extends Person
 {
     private static final int SUB_IMAGE_SIZE = 32;
     public BufferedImage[] levelUpFrames = null;
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
-    public Deque<Decrees> decrees = new LinkedList<>();
+    public Queue<Decrees> decrees = new LinkedList<>();
 
     public Player(final Point2D.Float coord)
     {
@@ -75,8 +75,8 @@ public class Player extends Character
 	try {
 	    // HARDCODED FOR EXACTLY 20 FRAMES
 	    final int amountOfFrames = 20;
-	    final int loopsForTen = amountOfFrames/10;
-	    final int loopsforones = amountOfFrames/2;
+	    final int loopsForTen = amountOfFrames / 10;
+	    final int loopsforones = amountOfFrames / 2;
 	    levelUpFrames = new BufferedImage[amountOfFrames];
 	    for (int tens = 0; tens < loopsForTen; tens++) {
 		for (int ones = 0; ones < loopsforones; ones++) {
@@ -106,8 +106,8 @@ public class Player extends Character
 	    for (int i = 0; i < totalFrames; i++) {
 		downFrames[i] = linkImageLoader.getSubImage(0, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
 		leftFrames[i] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
-		upFrames[i] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE* 2, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
-		rightFrames[i] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE*3, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
+		upFrames[i] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE * 2, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
+		rightFrames[i] = linkImageLoader.getSubImage(SUB_IMAGE_SIZE * 3, SUB_IMAGE_SIZE * i, spriteWidth, spriteHeight);
 	    }
 
 
@@ -132,4 +132,32 @@ public class Player extends Character
 	}
     }
 
+    /**
+     * Display player's health, by drawing hearts in the top left corner of the screen.
+     * @param g
+     */
+    @Override public void drawHealth(final Graphics g) {
+	int x = 0;
+	int y = 0;
+	int currentHeart = 0;
+	final int pixelsBetweenHearts = 60;
+	final int totalHearts = getMaxHp() / 2;
+	// Draw all empty hearts
+	while (currentHeart < totalHearts) {
+	    g.drawImage(emptyHeart, x, y, null);
+	    x += pixelsBetweenHearts;
+	    currentHeart++;
+	}
+	x = 0;
+	currentHeart = 0;
+	while (currentHeart < getHp()) {
+	    g.drawImage(halfHeart, x, y, null);
+	    currentHeart++;
+	    if (currentHeart < getHp()) {
+		g.drawImage(fullHeart, x, y, null);
+	    }
+	    currentHeart++;
+	    x += pixelsBetweenHearts;
+	}
+    }
 }

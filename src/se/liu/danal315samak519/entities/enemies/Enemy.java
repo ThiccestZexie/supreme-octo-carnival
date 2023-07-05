@@ -1,8 +1,8 @@
 package se.liu.danal315samak519.entities.enemies;
 
 import se.liu.danal315samak519.ImageLoader;
-import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
+import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
 
@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * Superclass to all enemies.
  */
-public abstract class Enemy extends Character
+public abstract class Enemy extends Person
 {
     private static final int SPRITE_OFF_SET = 32;
     protected Player player;
@@ -42,7 +42,7 @@ public abstract class Enemy extends Character
 
 	    downFrames = new BufferedImage[totalFrames];
 	    for (int i = 0; i < totalFrames; i++) {
-		downFrames[i] = imageLoader.getSubImage(offsetX, offsetY + spriteWidth * (i*2), spriteWidth, spriteHeight);
+		downFrames[i] = imageLoader.getSubImage(offsetX, offsetY + spriteWidth * (i * 2), spriteWidth, spriteHeight);
 	    }
 
 
@@ -53,14 +53,15 @@ public abstract class Enemy extends Character
 	    for (int i = 0; i < totalFrames; i++) {
 		leftFrames[i] = imageLoader.getSubImage(offsetX + SPRITE_OFF_SET - 2, offsetY, spriteWidth, spriteHeight);
 		upFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 2, offsetY, spriteWidth, spriteHeight);
-		rightFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 3, offsetY + SPRITE_OFF_SET * i, spriteWidth, spriteHeight);
+		rightFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 3, offsetY + SPRITE_OFF_SET * i, spriteWidth,
+							 spriteHeight);
 
 	    }
 
 	    setCurrentFrames();
 
 	} catch (IOException e) {
-	   e.printStackTrace();
+	    e.printStackTrace();
 	}
     }
 
@@ -130,7 +131,7 @@ public abstract class Enemy extends Character
 						 (int) (this.getY() + (this.getHeight())));
 		    break;
 		case LEFT:
-		    raycastRectangle.setSize(fowardVision,  sideVision );
+		    raycastRectangle.setSize(fowardVision, sideVision);
 		    raycastRectangle.setLocation((int) (this.getX() - raycastRectangle.getWidth()),
 						 (int) ((this.getY() + (this.getHeight() / half)) - (raycastRectangle.getHeight() / half)));
 		    break;
@@ -148,19 +149,25 @@ public abstract class Enemy extends Character
 	return false;
     }
 
+    /**
+     * Draw a health bar under the enemy.
+     *
+     * @param g
+     */
     @Override public void drawHealth(final Graphics g) {
-	super.drawHealth(g);
+	// Draw background (BLACK)
 	g.setColor(Color.BLACK);
-	final int barWidth = this.getMaxHp() * 60;
+	final int fullBarWidth = this.getMaxHp() * 60;
 	final int barHeight = 20;
-	final int xCoord = this.getEntityIntX() - barWidth / 2 + this.getIntWidth() / 2;
-	final int yCoord = this.getEntityIntY() + this.getIntHeight() + 15;
-	g.fillRect(xCoord, yCoord, barWidth, barHeight);
+	final int barX = this.getEntityIntX() - fullBarWidth / 2 + this.getIntWidth() / 2;
+	final int barY = this.getEntityIntY() + this.getIntHeight() + 15;
+	g.fillRect(barX, barY, fullBarWidth, barHeight);
 
-	//Current health (RED)
+	// Draw red bar, current health
 	g.setColor(Color.RED);
-	g.fillRect(xCoord, yCoord,
-		   barWidth, barHeight);
+	float percentFilled = (float) getHp() / getMaxHp();
+	int redBarWidth = (int) (fullBarWidth * percentFilled);
+	g.fillRect(barX, barY, redBarWidth, barHeight);
     }
 
     public void chasePlayer() {

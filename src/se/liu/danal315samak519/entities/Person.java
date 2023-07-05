@@ -4,13 +4,14 @@ import se.liu.danal315samak519.Direction;
 import se.liu.danal315samak519.entities.weapons.Projectile;
 import se.liu.danal315samak519.entities.weapons.Sword;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 /**
  * A movable that can move and attack. Can be either the player or an enemy.
  */
-public abstract class Character extends Movable
+public abstract class Person extends Movable
 {
     // CONSTANTS
     protected static final int TICKS_PER_WALK_FRAME = 8;
@@ -45,7 +46,7 @@ public abstract class Character extends Movable
     private int projectileVelocity;
 
 
-    protected Character(final Point2D.Float coord) {
+    protected Person(final Point2D.Float coord) {
 
 	setLocation(coord);
 	setSize(PLAYER_WIDTH, PLAYER_HEIGHT);
@@ -135,6 +136,12 @@ public abstract class Character extends Movable
     public Sword getSword() {
 	return new Sword(this);
     }
+
+    /**
+     * Player and enemies display health differently, so they should override this abstract method.
+     * @param g
+     */
+    public abstract void drawHealth(final Graphics g);
 
 
     public void levelUp() {

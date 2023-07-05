@@ -1,8 +1,8 @@
 package se.liu.danal315samak519;
 
-import se.liu.danal315samak519.entities.Character;
 import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Obstacle;
+import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Caster;
@@ -10,9 +10,9 @@ import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.entities.enemies.Sentry;
+import se.liu.danal315samak519.entities.weapons.Weapon;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
-import se.liu.danal315samak519.entities.weapons.Weapon;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -25,11 +25,13 @@ import java.util.random.RandomGenerator;
 
 public class Game
 {
-    private final RandomGenerator randomGenerator = new Random();
     private static final int MARGIN = 150;
+    private final RandomGenerator randomGenerator = new Random();
     private List<Movable> movables = new ArrayList<>();
-
-    private LinkedList<Movable> pendingMovables = new LinkedList<>(); // For push and pop functions.
+    /**
+     * Needs to be a linked list to allow for push/pop.
+     */
+    private LinkedList<Movable> pendingMovables = new LinkedList<>();
     private Collection<FrameListener> frameListeners = new ArrayList<>();
     private Player player = null;
     private Room room;
@@ -51,20 +53,19 @@ public class Game
 	resetGame();
     }
 
-    public void pause(){
+    public void pause() {
 	paused = true;
     }
 
 
-
-    public void unpause(){
+    public void unpause() {
 	paused = false;
     }
 
     /**
      * Resets the game by setting player and room to default values
      */
-    private void resetGame(){
+    private void resetGame() {
 	setPlayer(new Player(new Point2D.Float(getRoom().getCenterX(), getRoom().getCenterY())));
 	resetRoom();
     }
@@ -81,7 +82,7 @@ public class Game
      */
     public void tick()
     {
-	if(isPaused()){
+	if (isPaused()) {
 	    return; // Do nothing if paused
 	}
 
@@ -102,8 +103,7 @@ public class Game
 	    while (movable0.hasPending()) {
 		pushPending(movable0.popPending());
 	    }
-	    // Bad abstraction, but it works
-	    if (movable0 instanceof Enemy) {
+	    if (movable0 instanceof Enemy) { // NECESSARY INSTANCEOF CHECK!
 		setRoomIsCleared(false); // Found enemy! Not cleared.
 	    } else if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
 		Obstacle obstacle = (Obstacle) movable0;
@@ -118,16 +118,16 @@ public class Game
     }
 
     /**
-     * Remove the movable if it is garbage, also adds its pending movables to the pending list
-     * If the player is garbage, reset the game
+     * Remove the movable if it is garbage, also adds its pending movables to the pending list. If the player is garbage, reset the game
+     *
      * @param movable
      */
     private void handleDeath(final Movable movable) {
 	if (movable.getIsGarbage()) {
-	    if(isPlayerDead()){
+	    if (isPlayerDead()) {
 		pause();
 		resetGame();
-	    } else{
+	    } else {
 		while (movable.hasPending()) {
 		    pushPending(movable.popPending());
 		}
@@ -135,7 +135,8 @@ public class Game
 	    }
 	}
     }
-    private boolean isPlayerDead(){
+
+    private boolean isPlayerDead() {
 	return player.getIsGarbage();
     }
 
@@ -187,8 +188,7 @@ public class Game
     }
 
     /**
-     * "Changes" the room to the same one, effectively resetting everything
-     * Currently hardcoded to map0.tmx over and over.
+     * "Changes" the room to the same one, effectively resetting everything Currently hardcoded to map0.tmx over and over.
      */
     private void resetRoom() {
 	changeRoom(new Room("map0.tmx"));
@@ -234,10 +234,10 @@ public class Game
      *
      * @param movable
      */
-    private void handleWallCollision(final Movable movable){
+    private void handleWallCollision(final Movable movable) {
 	int minLayerAmount = 2;
 	if (getRoom().getLayers() < minLayerAmount) {
-	     throw new IndexOutOfBoundsException("There is no foreground layer in loaded room! Can't check wall collisions.");
+	    throw new IndexOutOfBoundsException("There is no foreground layer in loaded room! Can't check wall collisions.");
 	}
 	for (Tile tile : room.getForegroundTileList()) {
 	    movable.nudgeAwayFrom(tile.getHitBox());
@@ -286,21 +286,21 @@ public class Game
 	if (!movable0.getHitBox().intersects(movable1.getHitBox()) || movable0.equals(movable1)) {
 	    return; // No need to continue if no collision between movable0 and movable1, or if they are equal.
 	}
-	if (movable0 instanceof Obstacle && movable1 instanceof Character) {
+	if (movable0 instanceof Obstacle && movable1 instanceof Person) {
 	    movable1.nudgeAwayFrom(movable0.getHitBox());
 	}
-	if (movable0 instanceof Enemy && movable1 instanceof Character) {
+	if (movable0 instanceof Enemy && movable1 instanceof Person) {
 	    movable0.nudgeAwayFrom(movable1.getHitBox());
 	    if (movable1 instanceof Player) {
 		((Player) movable1).tryTakeDamage(((Enemy) movable0).getDamage());
 	    }
 	}
-	// Projectile-Character
-	if (movable0 instanceof Weapon && movable1 instanceof Character) {
+	// Projectile-Person
+	if (movable0 instanceof Weapon && movable1 instanceof Person) {
 	    Weapon weapon = (Weapon) movable0;
-	    Character character = (Character) movable1;
-	    if (!character.equals(weapon.getOwner())) {
-		character.tryTakeDamage(1); // Hardcoded projectile damage of 1
+	    Person person = (Person) movable1;
+	    if (!person.equals(weapon.getOwner())) {
+		person.tryTakeDamage(1); // Hardcoded projectile damage of 1
 		weapon.markAsGarbage();
 	    }
 	}
@@ -366,8 +366,13 @@ public class Game
 	this.room = room;
     }
 
+    /**
+     * Add a movable to the list of movable, if it is not null.
+     *
+     * @param movable
+     */
     private void addMovable(final Movable movable) {
-	if (movable != null) { // Don't add null objects
+	if (movable != null) {
 	    movables.add(movable);
 	}
     }
@@ -378,6 +383,21 @@ public class Game
 
     public void togglePause() {
 	paused = !paused;
+    }
+
+    /**
+     * Return a list of all movables that are instances of Person, including the player!
+     *
+     * @return
+     */
+    public List<Person> getPersons() {
+	List<Person> persons = new ArrayList<>();
+	for (Movable movable : getMovablesInclPlayer()) {
+	    if (movable instanceof Person) {
+		persons.add((Person) movable);
+	    }
+	}
+	return persons;
     }
 }
 

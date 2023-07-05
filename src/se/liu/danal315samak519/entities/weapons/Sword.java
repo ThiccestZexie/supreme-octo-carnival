@@ -1,6 +1,6 @@
 package se.liu.danal315samak519.entities.weapons;
 
-import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.Person;
 
 
 /**
@@ -9,7 +9,7 @@ import se.liu.danal315samak519.entities.Character;
 public class Sword extends Weapon
 {
     private static final float SWORD_LENGTH = 60.0f, SWORD_WIDTH = 10.0f;
-    public Sword(final Character owner) {
+    public Sword(final Person owner) {
 	super(owner);
 	float ownerSideCenter = owner.getWidth() /2.0f;
 	float swordCenter = 0.0f;

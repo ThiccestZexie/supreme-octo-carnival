@@ -13,13 +13,14 @@ import java.io.IOException;
  */
 public class Potion extends Movable
 {
+    private static final int HEALAMOUNT = 2;
     private Player user = null;
     private BufferedImage currentSprite = null;
-    private static final int HEALAMOUNT = 2;
+
     public Potion(final Point2D.Float coord) {
-	final Dimension potionSize = new Dimension(25,25);
+	final Dimension potionSize = new Dimension(25, 25);
 	setLocation(coord);
-	setSize(potionSize.width,  potionSize.height);
+	setSize(potionSize.width, potionSize.height);
 	setHitBox();
 	setColor(Color.GRAY);
 	storeFullHeartImage();

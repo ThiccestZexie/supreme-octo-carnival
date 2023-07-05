@@ -1,7 +1,9 @@
 package se.liu.danal315samak519.entities.weapons;
 
-import se.liu.danal315samak519.entities.Character;
+import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Movable;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -10,15 +12,15 @@ import java.awt.image.BufferedImage;
 public abstract class Weapon extends Movable
 {
     protected BufferedImage currentSprite = null;
-    protected Character owner;
+    protected Person owner;
     protected int lifeSpan;
 
-    protected Weapon(final Character owner) {
+    protected Weapon(final Person owner) {
 	this.owner = owner;
 	this.lifeSpan = 5;
     }
 
-    public Character getOwner() {
+    public Person getOwner() {
 	return owner;
     }
 

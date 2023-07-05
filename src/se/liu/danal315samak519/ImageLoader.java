@@ -10,8 +10,8 @@ import java.io.IOException;
  */
 public class ImageLoader
 {
-    private BufferedImage image;
     private final int width, height;
+    private BufferedImage image;
 
     /**
      * Loads an image from the resources/images folder.
@@ -33,14 +33,9 @@ public class ImageLoader
      *
      * @return The loaded image.
      */
-    public static BufferedImage loadImage(final String imageName) {
-	try {
-	    String imagePath = "resources/images/" + imageName;
-	    return ImageIO.read(new File(imagePath));
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    return null;
-	}
+    public static BufferedImage loadImage(final String imageName) throws IOException {
+	String imagePath = "resources/images/" + imageName;
+	return ImageIO.read(new File(imagePath));
     }
 
     public int getWidth() {

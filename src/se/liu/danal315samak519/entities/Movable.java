@@ -11,13 +11,12 @@ import java.util.LinkedList;
 /**
  * Entities that have velocity, and move according to velocity when ticking.
  */
-public abstract class 	Movable extends Entity
+public abstract class Movable extends Entity
 {
     protected Direction direction = Direction.DOWN;
     protected float maxSpeed;
     protected float velX;
     protected float velY;
-
 
 
     /**
@@ -65,9 +64,11 @@ public abstract class 	Movable extends Entity
 	    }
 	}
     }
-    public void draw(final Graphics g){
+
+    public void draw(final Graphics g) {
 	g.drawImage(this.getCurrentSprite(), this.getEntityIntX(), this.getEntityIntY(), this.getIntWidth(), this.getIntHeight(), null);
     }
+
     public float getMaxSpeed() {
 	return maxSpeed;
     }
@@ -85,9 +86,7 @@ public abstract class 	Movable extends Entity
 	setVelX(vx);
 	setVelY(vy);
     }
-    public void drawHealth(final Graphics g){
-	return;
-    }
+
 
     /**
      * Sets direction according to velocity.
