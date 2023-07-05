@@ -71,7 +71,7 @@ public class Player extends Person
     }
 
 
-    private void storeLevelUpFrames() {
+    @SuppressWarnings("StringConcatenationMissingWhitespace") private void storeLevelUpFrames() {
 	try {
 	    // HARDCODED FOR EXACTLY 20 FRAMES
 	    final int amountOfFrames = 20;

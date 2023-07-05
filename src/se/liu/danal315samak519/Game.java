@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.random.RandomGenerator;
 
 
+@SuppressWarnings("SSBasedInspection")
 public class Game
 {
     private static final int MARGIN = 150;

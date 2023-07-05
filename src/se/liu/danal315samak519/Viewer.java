@@ -22,7 +22,7 @@ public class Viewer
 	JFrame frame = new JFrame("Rogue Runner");
 	try {
 	    frame.setIconImage(ImageLoader.loadImage("icon.png"));
-	} catch (IOException e) {
+	} catch (IOException ignored) {
 	    System.out.println("Could not load icon.png");
 	}
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

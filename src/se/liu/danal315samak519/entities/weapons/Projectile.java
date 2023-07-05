@@ -3,7 +3,6 @@ package se.liu.danal315samak519.entities.weapons;
 import se.liu.danal315samak519.ImageLoader;
 import se.liu.danal315samak519.entities.Person;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**

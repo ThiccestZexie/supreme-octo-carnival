@@ -2,7 +2,6 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
 
-import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 /**
