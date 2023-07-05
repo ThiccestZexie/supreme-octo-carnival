@@ -1,7 +1,6 @@
 package se.liu.danal315samak519;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -13,18 +12,14 @@ public class Viewer
 {
     private static final int TARGET_FPS = 60;
     private GameComponent gameComponent = new GameComponent();
+    private JFrame frame = new JFrame("Rogue Runner");
 
     /**
      * Creates new frame, shows it and starts the timer.
      */
     public void show() {
 	// Create frame
-	JFrame frame = new JFrame("Rogue Runner");
-	try {
-	    frame.setIconImage(ImageLoader.loadImage("icon.png"));
-	} catch (IOException ignored) {
-	    System.out.println("Could not load icon.png");
-	}
+	frame.setIconImage(ImageLoader.loadImage("icon.png"));
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.add(gameComponent);
 
@@ -36,8 +31,7 @@ public class Viewer
     }
 
     /**
-     * Starts the timer for game ticks.
-     * The timer will tick at TARGET_FPS.
+     * Starts the timer for game ticks. The timer will tick at TARGET_FPS.
      */
     public void startTimer() {
 	int millisDelay = 1000 / TARGET_FPS;

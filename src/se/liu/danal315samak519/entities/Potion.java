@@ -6,7 +6,6 @@ import se.liu.danal315samak519.ImageLoader;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 /**
  * A potion that heals the player.
@@ -44,12 +43,7 @@ public class Potion extends Movable
     }
 
     public void storeFullHeartImage() {
-	try {
-	    ImageLoader imageLoader = new ImageLoader("hearts/heart_full.png");
-	    this.currentSprite = imageLoader.getImage();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-
+	ImageLoader imageLoader = new ImageLoader("hearts/heart_full.png");
+	this.currentSprite = imageLoader.getImage();
     }
 }

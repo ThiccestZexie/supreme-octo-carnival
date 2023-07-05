@@ -9,7 +9,6 @@ import se.liu.danal315samak519.entities.Potion;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 /**
  * Superclass to all enemies.
@@ -34,35 +33,30 @@ public abstract class Enemy extends Person
      * @param offsetY
      */
     protected void storeSpriteFrames(int offsetX, int offsetY) {
-	try {
-	    final int spriteHeight = 16;
-	    final int spriteWidth = 16;
-	    final int totalFrames = 2;
-	    ImageLoader imageLoader = new ImageLoader("enemies.png");
+	final int spriteHeight = 16;
+	final int spriteWidth = 16;
+	final int totalFrames = 2;
+	ImageLoader imageLoader = new ImageLoader("enemies.png");
 
-	    downFrames = new BufferedImage[totalFrames];
-	    for (int i = 0; i < totalFrames; i++) {
-		downFrames[i] = imageLoader.getSubImage(offsetX, offsetY + spriteWidth * (i * 2), spriteWidth, spriteHeight);
-	    }
-
-
-	    leftFrames = new BufferedImage[totalFrames];
-	    upFrames = new BufferedImage[totalFrames];
-	    rightFrames = new BufferedImage[totalFrames];
-
-	    for (int i = 0; i < totalFrames; i++) {
-		leftFrames[i] = imageLoader.getSubImage(offsetX + SPRITE_OFF_SET - 2, offsetY, spriteWidth, spriteHeight);
-		upFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 2, offsetY, spriteWidth, spriteHeight);
-		rightFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 3, offsetY + SPRITE_OFF_SET * i, spriteWidth,
-							 spriteHeight);
-
-	    }
-
-	    setCurrentFrames();
-
-	} catch (IOException e) {
-	    e.printStackTrace();
+	downFrames = new BufferedImage[totalFrames];
+	for (int i = 0; i < totalFrames; i++) {
+	    downFrames[i] = imageLoader.getSubImage(offsetX, offsetY + spriteWidth * (i * 2), spriteWidth, spriteHeight);
 	}
+
+
+	leftFrames = new BufferedImage[totalFrames];
+	upFrames = new BufferedImage[totalFrames];
+	rightFrames = new BufferedImage[totalFrames];
+
+	for (int i = 0; i < totalFrames; i++) {
+	    leftFrames[i] = imageLoader.getSubImage(offsetX + SPRITE_OFF_SET - 2, offsetY, spriteWidth, spriteHeight);
+	    upFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 2, offsetY, spriteWidth, spriteHeight);
+	    rightFrames[i] =
+		    imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 3, offsetY + SPRITE_OFF_SET * i, spriteWidth, spriteHeight);
+
+	}
+
+	setCurrentFrames();
     }
 
     @Override public void markAsGarbage() {

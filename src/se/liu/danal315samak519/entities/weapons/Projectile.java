@@ -3,8 +3,6 @@ package se.liu.danal315samak519.entities.weapons;
 import se.liu.danal315samak519.ImageLoader;
 import se.liu.danal315samak519.entities.Person;
 
-import java.io.IOException;
-
 /**
  * A projectile that is fired by a character.
  */
@@ -59,15 +57,10 @@ public class Projectile extends Weapon
 
 
     public void storeImages() {
-	try {
-	    final int spriteHeight = 16;
-	    final int spriteWidth = 16;
-	    final int imageOffsetForArrow = 120;
-	    ImageLoader enemiesLoader = new ImageLoader("enemies.png");
-
-	    currentSprite = enemiesLoader.getSubImage(imageOffsetForArrow, 0, spriteWidth, spriteHeight);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
+	final int spriteHeight = 16;
+	final int spriteWidth = 16;
+	final int imageOffsetForArrow = 120;
+	ImageLoader enemiesSpriteSheetLoader = new ImageLoader("enemies.png");
+	currentSprite = enemiesSpriteSheetLoader.getSubImage(imageOffsetForArrow, 0, spriteWidth, spriteHeight);
     }
 }

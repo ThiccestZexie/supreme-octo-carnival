@@ -20,7 +20,7 @@ public class ImageLoader
      *
      * @throws IOException If the image could not be loaded.
      */
-    public ImageLoader(final String imageName) throws IOException {
+    public ImageLoader(final String imageName) {
 	this.image = loadImage(imageName);
 	this.width = image.getWidth();
 	this.height = image.getHeight();
@@ -31,11 +31,17 @@ public class ImageLoader
      *
      * @param imageName The name of the image to load. Must be in the resources/images folder.
      *
-     * @return The loaded image.
+     * @return The loaded image. Null if the image could not be loaded.
      */
-    public static BufferedImage loadImage(final String imageName) throws IOException {
+    public static BufferedImage loadImage(final String imageName) {
+	BufferedImage image = null;
 	String imagePath = "resources/images/" + imageName;
-	return ImageIO.read(new File(imagePath));
+	try {
+	    image = ImageIO.read(new File(imagePath));
+	} catch (IOException e) {
+	    System.err.println("Failed to locate image with path: " + imagePath);
+	}
+	return image;
     }
 
     public int getWidth() {
