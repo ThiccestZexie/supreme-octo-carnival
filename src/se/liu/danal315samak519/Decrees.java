@@ -11,7 +11,7 @@ import java.util.random.RandomGenerator;
 public class Decrees
 {
     private static final int DECREE_AMOUNT = 5;
-    RandomGenerator randomDecreeGenerator = new Random();
+    private RandomGenerator randomDecreeGenerator = new Random();
     private String type;
     private float increase;
     private String effect;

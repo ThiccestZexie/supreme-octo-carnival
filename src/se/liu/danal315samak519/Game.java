@@ -4,13 +4,11 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Obstacle;
 import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Player;
-import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Caster;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.entities.enemies.Sentry;
-import se.liu.danal315samak519.entities.weapons.Weapon;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
 
@@ -19,7 +17,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -29,7 +26,7 @@ import java.util.random.RandomGenerator;
 public class Game
 {
     private static final int MARGIN = 150;
-    private final static RandomGenerator RANDOM_GENERATOR = new Random();
+    private final RandomGenerator randomGenerator = new Random();
     private List<Movable> movables = new ArrayList<>();
 
     /**
@@ -211,10 +208,10 @@ public class Game
 	final int minEnemies = 1;
 	final int maxEnemies = 2;
 
-	int randomEnemyCount = minEnemies + RANDOM_GENERATOR.nextInt(maxEnemies - minEnemies + 1);
+	int randomEnemyCount = minEnemies + randomGenerator.nextInt(maxEnemies - minEnemies + 1);
 	for (int i = 0; i < randomEnemyCount; i++) {
 	    int enemyTypes = 4;
-	    int randomEnemyType = RANDOM_GENERATOR.nextInt(enemyTypes);
+	    int randomEnemyType = randomGenerator.nextInt(enemyTypes);
 	    switch (randomEnemyType) {
 		case 0 -> addMovable(new Caster(getRandomCoord(), player));
 		case 1 -> addMovable(new Sentry(getRandomCoord(), player));
@@ -230,8 +227,8 @@ public class Game
      * @return a Point2D.Float with the 'random' coordinates
      */
     private Point2D.Float getRandomCoord() {
-	return new Point2D.Float(MARGIN + RANDOM_GENERATOR.nextInt(getRoom().getWidth() - 2 * MARGIN),
-				 MARGIN + RANDOM_GENERATOR.nextInt(getRoom().getHeight() - 2 * MARGIN));
+	return new Point2D.Float(MARGIN + randomGenerator.nextInt(getRoom().getWidth() - 2 * MARGIN),
+				 MARGIN + randomGenerator.nextInt(getRoom().getHeight() - 2 * MARGIN));
     }
 
     /**
