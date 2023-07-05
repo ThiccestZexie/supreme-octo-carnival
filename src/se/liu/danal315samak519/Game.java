@@ -15,8 +15,10 @@ import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -29,11 +31,12 @@ public class Game
     private static final int MARGIN = 150;
     private final static RandomGenerator RANDOM_GENERATOR = new Random();
     private List<Movable> movables = new ArrayList<>();
+
     /**
      * Needs to be a linked list to allow for push/pop.
      */
-    private LinkedList<Movable> pendingMovables = new LinkedList<>();
-    private Collection<FrameListener> frameListeners = new ArrayList<>();
+    private Deque<Movable> pendingMovables = new ArrayDeque<>();
+    private Collection<FrameListener> frameListeners = new ArrayDeque<>();
     private Player player = null;
     private Room room;
     private boolean roomIsCleared;
