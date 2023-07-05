@@ -167,4 +167,10 @@ public abstract class Enemy extends Person
 	super.tick();
 	chasePlayer();
     }
+    @Override public void handleCollision(final Movable movable) {
+	super.handleCollision(movable);
+	Person person = (Person) movable;
+	this.nudgeAwayFrom(person.getHitBox());
+	person.tryTakeDamage(this.getDamage());
+    }
 }

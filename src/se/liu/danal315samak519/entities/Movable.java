@@ -151,4 +151,9 @@ public abstract class Movable extends Entity
     public boolean hasPending() {
 	return !pending.isEmpty();
     }
+
+    public void handleCollision(Movable movable){
+	return;
+    }
+
 }

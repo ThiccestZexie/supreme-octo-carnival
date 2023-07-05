@@ -291,29 +291,8 @@ public class Game
 	if (!movable0.getHitBox().intersects(movable1.getHitBox()) || movable0.equals(movable1)) {
 	    return; // No need to continue if no collision between movable0 and movable1, or if they are equal.
 	}
-	if (movable0 instanceof Obstacle && movable1 instanceof Person) {
-	    movable1.nudgeAwayFrom(movable0.getHitBox());
-	}
-	if (movable0 instanceof Enemy && movable1 instanceof Person) {
-	    movable0.nudgeAwayFrom(movable1.getHitBox());
-	    if (movable1 instanceof Player) {
-		((Player) movable1).tryTakeDamage(((Enemy) movable0).getDamage());
-	    }
-	}
-	// Projectile-Person
-	if (movable0 instanceof Weapon && movable1 instanceof Person) {
-	    Weapon weapon = (Weapon) movable0;
-	    Person person = (Person) movable1;
-	    if (!person.equals(weapon.getOwner())) {
-		person.tryTakeDamage(1); // Hardcoded projectile damage of 1
-		weapon.markAsGarbage();
-	    }
-	}
-	// Player-Potion
-	if (movable0 instanceof Potion && movable1 instanceof Player) {
-	    Potion potion = (Potion) movable0;
-	    Player player = (Player) movable1;
-	    potion.pickUp(player);
+	if (movable1 instanceof Person){
+	    movable0.handleCollision(movable1);
 	}
     }
 

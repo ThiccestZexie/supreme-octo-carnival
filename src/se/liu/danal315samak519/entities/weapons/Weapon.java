@@ -41,5 +41,15 @@ public abstract class Weapon extends Movable
     public void setLifeSpan(final int lifeSpan) {
 	this.lifeSpan = lifeSpan;
     }
+
+    @Override public void handleCollision(final Movable movable) {
+	super.handleCollision(movable);
+	Person person = (Person) movable;
+	if(!person.equals(this.getOwner())){
+	    person.tryTakeDamage(1);
+	    this.markAsGarbage();
+	}
+    }
 }
+
 	

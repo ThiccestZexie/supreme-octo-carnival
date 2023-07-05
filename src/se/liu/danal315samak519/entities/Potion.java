@@ -30,13 +30,17 @@ public class Potion extends Movable
 	return currentSprite;
     }
 
+    @Override public void handleCollision(Movable movable) {
+	pickUp((Player) movable);
+    }
+
     private void setUser(Player user) {
 	this.user = user;
     }
 
-    public void pickUp(Player player) {
-	if (this.hitBox.intersects(player.hitBox)) {
-	    setUser(player);
+    public void pickUp(Person player) {
+	if (this.hitBox.intersects(player.hitBox) && player instanceof Player) {
+	    setUser((Player) player);
 	    user.heal(HEALAMOUNT);
 	    this.markAsGarbage();
 	}
@@ -46,4 +50,5 @@ public class Potion extends Movable
 	ImageLoader imageLoader = new ImageLoader("hearts/heart_full.png");
 	this.currentSprite = imageLoader.getImage();
     }
+
 }
