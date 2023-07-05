@@ -15,9 +15,9 @@ import java.awt.event.MouseEvent;
 /**
  * Handles all the painting to the screen. Also handles the keybindings.
  */
+@SuppressWarnings("CloneableClassWithoutClone") // We don't need to clone any classes.
 public class GameComponent extends JComponent implements FrameListener
 {
-    private static final int ALPHA = 150;
     private static final int LEVEL_UP_FRAMES = 19;
     private static final int ABOVE_PLAYER_INCREMENT = 30;
     public int indexOfLevelUpFrame = 0;
@@ -70,13 +70,18 @@ public class GameComponent extends JComponent implements FrameListener
      * @param g
      */
     private void paintPauseMenu(final Graphics g) {
-	int r = 0, gr = 0, b = 0, a = ALPHA;
 	final Point screenCenter = new Point(getWidth() / 2, getHeight() / 2);
-
-	g.setColor(new Color(r, gr, b, a));
+	final int r = 0, gr = 0, b = 0, alpha = 200;
+	g.setColor(new Color(r, gr, b, alpha));
 	g.fillRect(0, 0, getWidth(), getHeight());
 	g.setColor(Color.WHITE);
-	g.drawString("Press ESC to resume!", screenCenter.x, screenCenter.y);
+	// set the font to monospaced, bold, size 20
+	g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
+	// make the text centered
+	final FontMetrics fm = g.getFontMetrics();
+	final int x = screenCenter.x - fm.stringWidth("Press any key to resume") / 2;
+	final int y = screenCenter.y - fm.getHeight() / 2 + fm.getAscent();
+	g.drawString("Press any key to resume", x, y);
     }
 
     public Game getGame() {

@@ -6,6 +6,7 @@ import se.liu.danal315samak519.ImageLoader;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Queue;
@@ -19,7 +20,7 @@ public class Player extends Person
     private static final int SUB_IMAGE_SIZE = 32;
     public BufferedImage[] levelUpFrames = null;
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
-    public Queue<Decrees> decrees = new LinkedList<>();
+    public Collection<Decrees> decrees = new LinkedList<>();
 
     public Player(final Point2D.Float coord)
     {

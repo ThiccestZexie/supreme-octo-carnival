@@ -27,7 +27,7 @@ import java.util.random.RandomGenerator;
 public class Game
 {
     private static final int MARGIN = 150;
-    private final RandomGenerator randomGenerator = new Random();
+    private final static RandomGenerator RANDOM_GENERATOR = new Random();
     private List<Movable> movables = new ArrayList<>();
     /**
      * Needs to be a linked list to allow for push/pop.
@@ -202,16 +202,16 @@ public class Game
     }
 
     /**
-     * Spawn enemies in the room 1/4 chance for each type of enemy
+     * Spawn enemies in the room with equal chance for each type of enemy
      */
     private void spawnEnemies() {
-	int minEnemies = 1;
-	int maxEnemies = 2;
+	final int minEnemies = 1;
+	final int maxEnemies = 2;
 
-	int randomEnemyCount = minEnemies + randomGenerator.nextInt(maxEnemies - minEnemies + 1);
+	int randomEnemyCount = minEnemies + RANDOM_GENERATOR.nextInt(maxEnemies - minEnemies + 1);
 	for (int i = 0; i < randomEnemyCount; i++) {
 	    int enemyTypes = 4;
-	    int randomEnemyType = randomGenerator.nextInt(enemyTypes);
+	    int randomEnemyType = RANDOM_GENERATOR.nextInt(enemyTypes);
 	    switch (randomEnemyType) {
 		case 0 -> addMovable(new Caster(getRandomCoord(), player));
 		case 1 -> addMovable(new Sentry(getRandomCoord(), player));
@@ -222,12 +222,13 @@ public class Game
     }
 
     /**
-     * @return a random point within the room, but not too close to the edges
+     * Returns a random point within the room, but not too close to the edges
+     *
+     * @return a Point2D.Float with the 'random' coordinates
      */
     private Point2D.Float getRandomCoord() {
-	int margin = MARGIN;
-	return new Point2D.Float(margin + randomGenerator.nextInt(getRoom().getWidth() - 2 * margin),
-				 margin + randomGenerator.nextInt(getRoom().getHeight() - 2 * margin));
+	return new Point2D.Float(MARGIN + RANDOM_GENERATOR.nextInt(getRoom().getWidth() - 2 * MARGIN),
+				 MARGIN + RANDOM_GENERATOR.nextInt(getRoom().getHeight() - 2 * MARGIN));
     }
 
     /**

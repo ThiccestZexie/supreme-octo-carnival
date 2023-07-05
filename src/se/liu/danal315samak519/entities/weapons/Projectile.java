@@ -10,6 +10,7 @@ public class Projectile extends Weapon
 {
 
     public static final int PROJECTILE_LIFE_SPAN = 120;
+    private static final float TWO = 2.0f; // Used for halving values
 
     public Projectile(final Person owner, final int projectileHeight, final int projectileWidth, final int projectileVel) {
 	super(owner);
@@ -37,19 +38,19 @@ public class Projectile extends Weapon
 	switch (owner.getDirection()) {
 	    case UP:
 		setSize(projectileWidth, projectileHeight);
-		setLocation((owner.getX() + (owner.getWidth() / 2.0f) - this.getWidth() / 2.0f), (owner.getY() - this.getHeight()));
+		setLocation((owner.getX() + (owner.getWidth() / TWO) - this.getWidth() / TWO), (owner.getY() - this.getHeight()));
 		break;
 	    case DOWN:
 		setSize(projectileWidth, projectileHeight);
-		setLocation((owner.getX() + (owner.getWidth() / 2.0f) - this.getWidth() / 2.0f), (owner.getY() + (owner.getHeight())));
+		setLocation((owner.getX() + (owner.getWidth() / TWO) - this.getWidth() / TWO), (owner.getY() + (owner.getHeight())));
 		break;
 	    case LEFT:
 		setSize(projectileHeight, projectileWidth);
-		setLocation((owner.getX() - this.getWidth()), (owner.getY() + (owner.getHeight() / 2.0f)) - (this.getHeight() / 2.0f));
+		setLocation((owner.getX() - this.getWidth()), (owner.getY() + (owner.getHeight() / TWO)) - (this.getHeight() / TWO));
 		break;
 	    case RIGHT:
 		setSize(projectileHeight, projectileWidth);
-		setLocation((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / 2.0f)) - (this.getHeight() / 2.0f));
+		setLocation((owner.getX() + owner.getWidth()), (owner.getY() + (owner.getHeight() / TWO)) - (this.getHeight() / TWO));
 		break;
 	}
 	setDirection(owner.getDirection());

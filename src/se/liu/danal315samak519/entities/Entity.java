@@ -10,13 +10,13 @@ import java.util.Random;
  */
 public abstract class Entity
 {
+    private static final Random RANDOM = new Random();
     protected Point2D.Float coord = null;
     protected float width;
     protected float height;
     protected Color color = null;
     protected Rectangle2D.Float hitBox = null;
     protected boolean isGarbage = false;
-    private Random random = new Random();
 
     protected void setLocation(final Point2D.Float coord) {
 	if (this.coord != null) {
@@ -26,8 +26,12 @@ public abstract class Entity
 	}
     }
 
+    /**
+     * Returns the static random object.
+     * @return
+     */
     protected Random getRandom(){
-	return this.random;
+	return RANDOM;
     }
 
     public int getIntWidth() {
