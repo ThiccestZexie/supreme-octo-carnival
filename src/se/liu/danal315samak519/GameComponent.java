@@ -128,19 +128,7 @@ public class GameComponent extends JComponent implements FrameListener
 	g.fillRect(expX, expY, expBarLength, expHeight);
 	g.setColor(Color.GREEN);
 	g.fillRect(expX, expY, game.getPlayer().getExp() * expBarLength / expRequirement, expHeight);
-	// Player hp bar
-	paintPlayerHP(g);
     }
-
-    /**
-     * Paints the health of the player using heart sprites in the top left corner of the screen.
-     *
-     * @param g
-     */
-    private void paintPlayerHP(Graphics g) {
-
-    }
-
 
     private void paintLevelUpAnimation(final Graphics g) {
 	if (oldPlayerLevel < game.getPlayer().getLevel()) {

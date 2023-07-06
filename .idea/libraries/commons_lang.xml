@@ -3,9 +3,7 @@
     <CLASSES>
       <root url="file://$PROJECT_DIR$/libs/commons-lang" />
     </CLASSES>
-    <JAVADOC>
-      <root url="file://$PROJECT_DIR$/libs/commons-lang/apidocs" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES />
     <jarDirectory url="file://$PROJECT_DIR$/libs/commons-lang" recursive="false" />
   </library>
