@@ -18,6 +18,7 @@ public class Sentry extends Enemy
 	setStats(health, level);
 	storeSpriteFrames(imageOffsetX, 0);
 	setProjectileWidth(projectileWidth);
+	setCanMove(false);
     }
 
     /**
@@ -25,7 +26,6 @@ public class Sentry extends Enemy
      */
     @Override public void tick() {
 	super.tick();
-	setVelocity(0, 0);
 	setDirection(getDirectionTowardsPlayer());
 	final int forwardVision = 500, sideVision = 100;
 	if (checkIfPlayerIsInFront(forwardVision, sideVision) && canAttack()) {

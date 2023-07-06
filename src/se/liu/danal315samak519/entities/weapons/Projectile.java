@@ -10,6 +10,7 @@ public class Projectile extends Weapon
 {
 
     public static final int PROJECTILE_LIFE_SPAN = 120;
+    private static final int PROJECTILE_DAMAGE = 1;
     private static final float TWO = 2.0f; // Used for halving values
 
     public Projectile(final Person owner, final int projectileHeight, final int projectileWidth, final int projectileVel) {
@@ -63,5 +64,15 @@ public class Projectile extends Weapon
 	final int imageOffsetForArrow = 120;
 	ImageLoader enemiesSpriteSheetLoader = new ImageLoader("enemies.png");
 	currentSprite = enemiesSpriteSheetLoader.getSubImage(imageOffsetForArrow, 0, spriteWidth, spriteHeight);
+    }
+
+    /**
+     * Returns the damage of the projectile and marks it as garbage.
+     *
+     * @return
+     */
+    @Override public int getDamage() {
+	markAsGarbage();
+	return PROJECTILE_DAMAGE;
     }
 }

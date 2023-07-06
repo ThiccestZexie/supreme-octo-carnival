@@ -2,6 +2,7 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Decrees;
 import se.liu.danal315samak519.ImageLoader;
+import se.liu.danal315samak519.entities.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -9,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
-import java.util.Queue;
 
 /**
  * The player character. The player can move around and shoot projectiles. The player can also level up and gain stats. The player can also
@@ -143,5 +143,18 @@ public class Player extends Person
 	    currentHeart++;
 	    x += pixelsBetweenHearts;
 	}
+    }
+
+    @Override public void interactWith(final Movable movable) {
+	super.interactWith(movable);
+	boolean isPotion = movable instanceof Potion;
+	boolean isOwnWeapon = movable instanceof Weapon && ((Weapon) movable).getOwner().equalWith(this);
+	boolean isNotPerson = !(movable instanceof Person);
+	boolean isSelf = movable.equalWith(this);
+	boolean areNotIntersecting = !this.intersects(movable);
+	if (isPotion || isOwnWeapon || isSelf || areNotIntersecting) {
+	    return;
+	}
+	takeDamage(movable.getDamage());
     }
 }

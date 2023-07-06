@@ -17,10 +17,10 @@ public abstract class Movable extends Entity
     protected float maxSpeed;
     protected float velX;
     protected float velY;
-
+    private boolean canMove = true;
 
     /**
-     * List of movables that THIS movable wants to add. Used for projectiles and loot
+     * List of movables that THIS movable wants to add. Used for projectiles and loot.
      */
     private Deque<Movable> pending = new LinkedList<>();
 
@@ -32,10 +32,21 @@ public abstract class Movable extends Entity
 	this.direction = direction;
     }
 
+    /**
+     * Default returns null, which indicates to GameComponent that this is invisible. Should be overriden by entities that actually have
+     * sprites.
+     *
+     * @return
+     */
     public BufferedImage getCurrentSprite() {
 	return null;
     }
 
+    /**
+     * Nudges this movable away from another hitbox
+     *
+     * @param otherHitBox
+     */
     public void nudgeAwayFrom(Rectangle2D otherHitBox) {
 	if (!this.getHitBox().intersects(otherHitBox)) {
 	    return; // No collision
@@ -130,8 +141,10 @@ public abstract class Movable extends Entity
     }
 
     public void setVelX(final float vx) {
-	this.velX = vx;
-	setAppropiateDir();
+	if (getCanMove()) {
+	    this.velX = vx;
+	    setAppropiateDir();
+	}
     }
 
     public float getVelY() {
@@ -139,8 +152,10 @@ public abstract class Movable extends Entity
     }
 
     public void setVelY(final float vy) {
-	this.velY = vy;
-	setAppropiateDir();
+	if (getCanMove()) {
+	    this.velY = vy;
+	    setAppropiateDir();
+	}
     }
 
     /**
@@ -150,5 +165,49 @@ public abstract class Movable extends Entity
      */
     public boolean hasPending() {
 	return !pending.isEmpty();
+    }
+
+    /**
+     * Interacts with another movable. Override in subclasses. Usually means taking damage or dealing damage. Or in potions case, being
+     * picked up.
+     *
+     * @param movable
+     */
+    public void interactWith(final Movable movable) {
+    }
+
+    public boolean intersects(final Movable movable) {
+	return this.getHitBox().intersects(movable.getHitBox());
+    }
+
+    public boolean equalWith(final Movable movable) {
+	return this.equals(movable);
+    }
+
+    /**
+     * Movables don't deal damage by default, so this returns 0. Override in subclasses.
+     *
+     * @return 0
+     */
+    public int getDamage() {
+	return 0;
+    }
+
+    /**
+     * Returns if the movable can move or not.
+     *
+     * @return
+     */
+    public boolean getCanMove() {
+	return canMove;
+    }
+
+    /**
+     * Change if the movable can move or not.
+     *
+     * @param canMove
+     */
+    protected void setCanMove(boolean canMove) {
+	this.canMove = canMove;
     }
 }

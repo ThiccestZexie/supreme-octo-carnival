@@ -5,6 +5,7 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
+import se.liu.danal315samak519.entities.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -17,7 +18,6 @@ public abstract class Enemy extends Person
 {
     private static final int SPRITE_OFF_SET = 32;
     protected Player player;
-    protected int damage = 1;
 
     protected Enemy(final Point2D.Float coord, final Player player)
     {
@@ -88,13 +88,6 @@ public abstract class Enemy extends Person
 	return velocity;
     }
 
-    public int getDamage() {
-	return damage;
-    }
-
-    protected void setDamage(int damage) {
-	this.damage = damage;
-    }
 
     private double getDistanceToPlayer() {
 	return player.getCoord().distance(this.getCoord());
@@ -166,5 +159,21 @@ public abstract class Enemy extends Person
     public void tick() {
 	super.tick();
 	chasePlayer();
+    }
+
+    @Override public void interactWith(final Movable movable) {
+	super.interactWith(movable);
+	boolean isPotion = movable instanceof Potion;
+	boolean isOwnWeapon = movable instanceof Weapon && ((Weapon) movable).getOwner().equalWith(this);
+	boolean isNotPerson = !(movable instanceof Person);
+	boolean isSelf = movable.equalWith(this);
+	boolean areNotIntersecting = !this.intersects(movable);
+	if (isPotion || isOwnWeapon || isSelf || areNotIntersecting) {
+	    return;
+	}
+	if(!(movable instanceof Weapon)){
+	    nudgeAwayFrom(movable.getHitBox());
+	}
+	takeDamage(movable.getDamage());
     }
 }

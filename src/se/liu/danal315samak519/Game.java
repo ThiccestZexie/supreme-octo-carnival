@@ -4,13 +4,11 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Obstacle;
 import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Player;
-import se.liu.danal315samak519.entities.Potion;
 import se.liu.danal315samak519.entities.enemies.Caster;
 import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.entities.enemies.Sentry;
-import se.liu.danal315samak519.entities.weapons.Weapon;
 import se.liu.danal315samak519.map.Room;
 import se.liu.danal315samak519.map.Tile;
 
@@ -19,7 +17,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -177,22 +174,29 @@ public class Game
 	return list;
     }
 
+    /**
+     * Clears the room of movables, changes the room, and repopulates the room with the new room's movables.
+     *
+     * @param room
+     */
     private void changeRoom(Room room) {
-	// Clear previous movables (if necessary)
-	if (getMovables() != null) {
-	    for (Movable movable : getMovables()) {
-		movable.markAsGarbage();
-	    }
-	}
-	// Actually set to new room
+	garbageEverything();
 	setRoom(room);
-	// Populate with new movables
 	spawnEnemies();
 	spawnObstacles();
     }
 
     /**
-     * "Changes" the room to the same one, effectively resetting everything Currently hardcoded to map0.tmx over and over.
+     * Marks every movable as garbage, effectively removing them from the game.
+     */
+    private void garbageEverything() {
+	for (Movable movable : getMovables()) {
+	    movable.markAsGarbage();
+	}
+    }
+
+    /**
+     * "Changes" the room to the same one, effectively resetting everything. Currently hardcoded to map0.tmx over and over.
      */
     private void resetRoom() {
 	changeRoom(new Room("map0.tmx"));
@@ -285,36 +289,11 @@ public class Game
     }
 
     /**
-     * Handle collisions where two movables are involved Unfortunately this is terrible abstraction
+     * Handle collisions where two movables are involved. They should always be pushed away from eachother, and also interact with
+     * eachother, which means different things for different combinations.
      */
     private void handleMovableCollision(final Movable movable0, final Movable movable1) {
-	if (!movable0.getHitBox().intersects(movable1.getHitBox()) || movable0.equals(movable1)) {
-	    return; // No need to continue if no collision between movable0 and movable1, or if they are equal.
-	}
-	if (movable0 instanceof Obstacle && movable1 instanceof Person) {
-	    movable1.nudgeAwayFrom(movable0.getHitBox());
-	}
-	if (movable0 instanceof Enemy && movable1 instanceof Person) {
-	    movable0.nudgeAwayFrom(movable1.getHitBox());
-	    if (movable1 instanceof Player) {
-		((Player) movable1).tryTakeDamage(((Enemy) movable0).getDamage());
-	    }
-	}
-	// Projectile-Person
-	if (movable0 instanceof Weapon && movable1 instanceof Person) {
-	    Weapon weapon = (Weapon) movable0;
-	    Person person = (Person) movable1;
-	    if (!person.equals(weapon.getOwner())) {
-		person.tryTakeDamage(1); // Hardcoded projectile damage of 1
-		weapon.markAsGarbage();
-	    }
-	}
-	// Player-Potion
-	if (movable0 instanceof Potion && movable1 instanceof Player) {
-	    Potion potion = (Potion) movable0;
-	    Player player = (Player) movable1;
-	    potion.pickUp(player);
-	}
+	movable0.interactWith(movable1);
     }
 
     private boolean getRoomIsCleared() {
@@ -344,15 +323,14 @@ public class Game
 	}
     }
 
-    public void playerSwordAttack() {
+    public void doPlayerSwordAttack() {
 	if (player.canAttack()) {
 	    player.becomeAttacking();
 	    addMovable(player.getSword());
 	}
-	notifyListeners();
     }
 
-    public void playerShootArrow() {
+    public void doPlayerArrowShoot() {
 	if (player.canAttack()) {
 	    player.becomeAttacking();
 	    addMovable(player.getProjectile());

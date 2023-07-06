@@ -31,6 +31,7 @@ public abstract class Person extends Movable
     protected int level = 1;
     protected int maxHP;
     protected int hp;
+    protected int damage = 1;
     protected BufferedImage[] currentFrames = null;
     protected BufferedImage[] downFrames = null;
     protected BufferedImage[] leftFrames = null;
@@ -170,25 +171,39 @@ public abstract class Person extends Movable
 	return false;
     }
 
-    protected void decreaseHp(int damage) {
-	hp -= damage;
+    /**
+     * Takes the specified damage, and become garbage if below 1 hp.
+     *
+     * @param damage
+     */
+    public void takeDamage(int damage) {
+	if (getIsInvincible()) {
+	    return; // Don't take damage if invincible!
+	}
+	this.hp -= damage;
+	becomeInvincible();
+	if (this.hp < 1) {
+	    this.hp = 0;
+	    markAsGarbage();
+	}
     }
 
     public boolean getIsInvincible() {
 	return ticksInvincible > 0;
     }
 
-    public void tryTakeDamage(int damage) {
-	if (getIsInvincible()) {
-	    return; // Don't take damage!
+    /**
+     * All movables should be nudged away from Obstacles
+     *
+     * @param movable
+     */
+    @Override public void interactWith(Movable movable) {
+	if (!this.intersects(movable)) {
+	    return;
 	}
-
-	if (getHp() > damage) {
-	    decreaseHp(damage);
-	} else {
-	    this.markAsGarbage(); // DEAD
+	if (movable instanceof Obstacle && !movable.equalWith(this)) {
+	    nudgeAwayFrom(movable.getHitBox());
 	}
-	becomeInvincible();
     }
 
     @Override public void tick() {
@@ -241,13 +256,12 @@ public abstract class Person extends Movable
     }
 
     @Override public BufferedImage getCurrentSprite() {
-	return getSpriteFrame(walkCycleIndex);
+	return getAnimationFrame(walkCycleIndex);
     }
 
-    private BufferedImage getSpriteFrame(int index) {
+    private BufferedImage getAnimationFrame(int index) {
 	return currentFrames[index];
     }
-
 
     public boolean canAttack() {
 	return this.ticksAttackCooldown < 1;
@@ -267,6 +281,14 @@ public abstract class Person extends Movable
 
     public void setProjectileVelocity(final int projectileVelocity) {
 	this.projectileVelocity = projectileVelocity;
+    }
+
+    public int getDamage() {
+	return damage;
+    }
+
+    protected void setDamage(int damage) {
+	this.damage = damage;
     }
 
 }

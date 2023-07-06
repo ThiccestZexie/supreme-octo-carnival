@@ -1,7 +1,7 @@
 package se.liu.danal315samak519.entities.weapons;
 
-import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Movable;
+import se.liu.danal315samak519.entities.Person;
 
 import java.awt.image.BufferedImage;
 
@@ -40,6 +40,10 @@ public abstract class Weapon extends Movable
 
     public void setLifeSpan(final int lifeSpan) {
 	this.lifeSpan = lifeSpan;
+    }
+
+    @Override public int getDamage() {
+	return owner.getDamage();
     }
 }
 	

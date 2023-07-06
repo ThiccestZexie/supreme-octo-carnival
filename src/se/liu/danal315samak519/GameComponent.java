@@ -341,14 +341,14 @@ public class GameComponent extends JComponent implements FrameListener
     private class AttackAction extends AbstractAction
     {
 	public void actionPerformed(ActionEvent e) {
-	    game.playerSwordAttack();
+	    game.doPlayerSwordAttack();
 	}
     }
 
     private class ShootAction extends AbstractAction
     {
 	public void actionPerformed(ActionEvent e) {
-	    game.playerShootArrow();
+	    game.doPlayerArrowShoot();
 	}
     }
 
