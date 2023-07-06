@@ -111,7 +111,6 @@ public class Game
      */
     private void checkIfRoomCompleted() {
 	boolean roomComplete = !getIfPlayerInPlayArea() || player.getKillsInRoom() == enemyAmount;
-	System.out.println(roomComplete);
 	for (Obstacle obstacle : getRoom().getObstacles()) {
 	    obstacle.setRoomComplete(roomComplete);
 	}
