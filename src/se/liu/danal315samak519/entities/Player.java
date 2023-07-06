@@ -22,6 +22,7 @@ public class Player extends Person
     public Image fullHeart = null, halfHeart = null, emptyHeart = null;
     public Collection<Decrees> decrees = new LinkedList<>();
 
+    private int killsInRoom = 0;
     public Player(final Point2D.Float coord)
     {
 	super(coord);
@@ -145,5 +146,15 @@ public class Player extends Person
 	}
     }
 
+    public int getKillsInRoom() {
+	return killsInRoom;
+    }
 
+    public void incrementKillsInRoom() {
+	this.killsInRoom++;
+    }
+
+    public void setKillsInRoom(final int killsInRoom) {
+	this.killsInRoom = killsInRoom;
+    }
 }
