@@ -11,7 +11,7 @@ import java.util.random.RandomGenerator;
 public class Decrees
 {
     private static final int DECREE_AMOUNT = 5;
-    private static final RandomGenerator RANDOM_GENERATOR = new Random();
+    private final RandomGenerator randomGenerator = new Random();
     private String type;
     private float increase;
     private String effect;
@@ -49,7 +49,7 @@ public class Decrees
 
 
     public String getRandomDecree() {
-	return this.decreeEffects.get(RANDOM_GENERATOR.nextInt(DECREE_AMOUNT));
+	return this.decreeEffects.get(randomGenerator.nextInt(DECREE_AMOUNT));
     }
 
     public float getIncrease() {
