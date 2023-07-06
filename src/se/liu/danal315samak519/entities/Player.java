@@ -150,7 +150,6 @@ public class Player extends Person
 	super.interactWith(movable);
 	boolean isPotion = movable instanceof Potion;
 	boolean isOwnWeapon = movable instanceof Weapon && ((Weapon) movable).getOwner().equalWith(this);
-	boolean isNotPerson = !(movable instanceof Person);
 	boolean isSelf = movable.equalWith(this);
 	boolean areNotIntersecting = !this.intersects(movable);
 	if (isPotion || isOwnWeapon || isSelf || areNotIntersecting) {
