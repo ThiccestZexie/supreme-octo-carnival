@@ -393,22 +393,6 @@ public class GameComponent extends JComponent implements FrameListener
 	}
     }
 
-    /**
-     * This class is used to pause the game when ESCAPE is pressed, and resume when any other key is pressed.
-     */
-    private class PauseAction extends AbstractAction
-    {
-	private boolean shouldPause;
-
-	public void actionPerformed(final ActionEvent e) {
-	    if (shouldPause) {
-		game.pause();
-	    } else {
-		game.unpause();
-	    }
-	}
-    }
-
     private class MyMouseAdapter extends MouseAdapter
     {
 	private final int decreeOneX;
