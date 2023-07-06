@@ -46,4 +46,4 @@ public abstract class Weapon extends Movable
 	return owner.getDamage();
     }
 }
-	
+

@@ -60,4 +60,5 @@ public class Potion extends Movable
 	ImageLoader imageLoader = new ImageLoader("hearts/heart_full.png");
 	this.currentSprite = imageLoader.getImage();
     }
+
 }

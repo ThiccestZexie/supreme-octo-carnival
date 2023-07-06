@@ -61,6 +61,7 @@ public abstract class Enemy extends Person
 
     @Override public void markAsGarbage() {
 	super.markAsGarbage();
+	player.incrementKillsInRoom();
 	Movable dropped = getDropped();
 	if (dropped != null) {
 	    pushPending(dropped);

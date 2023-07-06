@@ -26,7 +26,7 @@ import java.util.random.RandomGenerator;
 public class Game
 {
     private static final int MARGIN = 150;
-    private final static RandomGenerator RANDOM_GENERATOR = new Random();
+    private final RandomGenerator randomGenerator = new Random();
     private List<Movable> movables = new ArrayList<>();
 
     /**
@@ -36,6 +36,8 @@ public class Game
     private Collection<FrameListener> frameListeners = new ArrayDeque<>();
     private Player player = null;
     private Room room;
+
+    private int enemyAmount = 0;
     private boolean roomIsCleared;
     /**
      * When the game is inactive, the game is paused.
@@ -89,7 +91,7 @@ public class Game
 
 	handlePlayerOutOfBounds();
 	birthPending();
-	setRoomIsCleared(true); // Assume room is cleared
+	setRoomIsCleared(false); // Assume room is cleared
 
 	// Iterate through all movables, handle collisions and tick
 	List<Movable> allMovables = getMovablesInclPlayer();
@@ -104,9 +106,9 @@ public class Game
 	    while (movable0.hasPending()) {
 		pushPending(movable0.popPending());
 	    }
-	    if (movable0 instanceof Enemy) { // NECESSARY INSTANCEOF CHECK!
-		setRoomIsCleared(false); // Found enemy! Not cleared.
-	    } else if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
+	    if (player.getKillsInRoom() == enemyAmount) { // NECESSARY INSTANCEOF CHECK!
+		setRoomIsCleared(true); // Found enemy! Not cleared.
+	    }  if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
 		Obstacle obstacle = (Obstacle) movable0;
 		// If room is cleared, open all gates
 		if (getRoomIsCleared() || !getIfPlayerInPlayArea()) {
@@ -182,6 +184,8 @@ public class Game
     private void changeRoom(Room room) {
 	garbageEverything();
 	setRoom(room);
+	getPlayer().setKillsInRoom(0);
+	// Populate with new movables
 	spawnEnemies();
 	spawnObstacles();
     }
@@ -215,10 +219,11 @@ public class Game
 	final int minEnemies = 1;
 	final int maxEnemies = 2;
 
-	int randomEnemyCount = minEnemies + RANDOM_GENERATOR.nextInt(maxEnemies - minEnemies + 1);
+	int randomEnemyCount = minEnemies + randomGenerator.nextInt(maxEnemies - minEnemies + 1);
+	enemyAmount = randomEnemyCount;
 	for (int i = 0; i < randomEnemyCount; i++) {
-	    int enemyTypes = 4;
-	    int randomEnemyType = RANDOM_GENERATOR.nextInt(enemyTypes);
+	    final int enemyTypes = 4;
+	    int randomEnemyType = randomGenerator.nextInt(enemyTypes);
 	    switch (randomEnemyType) {
 		case 0 -> addMovable(new Caster(getRandomCoord(), player));
 		case 1 -> addMovable(new Sentry(getRandomCoord(), player));
@@ -234,8 +239,8 @@ public class Game
      * @return a Point2D.Float with the 'random' coordinates
      */
     private Point2D.Float getRandomCoord() {
-	return new Point2D.Float(MARGIN + RANDOM_GENERATOR.nextInt(getRoom().getWidth() - 2 * MARGIN),
-				 MARGIN + RANDOM_GENERATOR.nextInt(getRoom().getHeight() - 2 * MARGIN));
+	return new Point2D.Float(MARGIN + randomGenerator.nextInt(getRoom().getWidth() - 2 * MARGIN),
+				 MARGIN + randomGenerator.nextInt(getRoom().getHeight() - 2 * MARGIN));
     }
 
     /**

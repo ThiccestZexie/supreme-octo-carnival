@@ -1,5 +1,6 @@
 package se.liu.danal315samak519.entities.weapons;
 
+import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Person;
 
 
@@ -54,4 +55,6 @@ public class Sword extends Weapon
 	super.tick();
 	followOwner();
     }
+
+
 }
