@@ -49,14 +49,7 @@ public class Obstacle extends Movable
 	    return;
 	}
 	Direction towardsTarget = Direction.getDirectionBetweenPoints(getX(), getY(), targetX, targetY);
-	// RANDOM MAGIC CONSTANT
 	final float speed = 8;
 	setVelocity(speed * towardsTarget.getX(), speed * towardsTarget.getY());
-    }
-
-    @Override public void handleCollision(final Movable movable) {
-	super.handleCollision(movable);
-	Person person = (Person) movable;
-	person.nudgeAwayFrom(this.getHitBox());
     }
 }
