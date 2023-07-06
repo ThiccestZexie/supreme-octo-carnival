@@ -1,10 +1,8 @@
 package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Direction;
-import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.weapons.Projectile;
 import se.liu.danal315samak519.entities.weapons.Sword;
-import se.liu.danal315samak519.entities.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

@@ -76,7 +76,8 @@ public class GameComponent extends JComponent implements FrameListener
 	g.fillRect(0, 0, getWidth(), getHeight());
 	g.setColor(Color.WHITE);
 	// set the font to monospaced, bold, size 20
-	g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
+	final int fontSize = 20;
+	g.setFont(new Font(Font.MONOSPACED, Font.BOLD, fontSize));
 	// make the text centered
 	final FontMetrics fm = g.getFontMetrics();
 	final int x = screenCenter.x - fm.stringWidth("Press any key to resume") / 2;

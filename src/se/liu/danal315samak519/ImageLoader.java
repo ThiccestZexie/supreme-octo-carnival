@@ -38,12 +38,11 @@ public class ImageLoader
 	String imagePath = "resources/images/" + imageName;
 	try {
 	    image = ImageIO.read(new File(imagePath));
-	} catch (IOException e) {
+	} catch (IOException ignored) {
 	    System.err.println("Failed to locate image with path: " + imagePath);
 	}
 	return image;
     }
-
     public int getWidth() {
 	return width;
     }
