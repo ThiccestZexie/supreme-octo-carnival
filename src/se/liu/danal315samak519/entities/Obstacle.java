@@ -11,6 +11,7 @@ public class Obstacle extends Movable
 {
     private float openX, openY;
     private float closedX, closedY;
+    private boolean roomComplete;
 
     public Obstacle(float openX, float openY, float closedX, float closedY, float width, float height) {
 	this.openX = openX;
@@ -22,6 +23,15 @@ public class Obstacle extends Movable
 	setHitBox();
     }
 
+    /**
+     * Used to point roomComplete to a new object.
+     *
+     * @param roomComplete
+     */
+    public void setRoomComplete(boolean roomComplete) {
+	this.roomComplete = roomComplete;
+    }
+
     public void open() {
 	setVelocityTowards(openX, openY);
     }
@@ -30,14 +40,22 @@ public class Obstacle extends Movable
 	setVelocityTowards(closedX, closedY);
     }
 
+    @Override public void tick() {
+	super.tick();
+	if (roomComplete) {
+	    open();
+	} else {
+	    close();
+	}
+    }
+
 
     /**
-     * Obstacles are not nudged away from other hitboxes
+     * Obstacles cannot be nudged away from other hitboxes.
      *
      * @param otherHitBox
      */
     @Override public void nudgeAwayFrom(final Rectangle2D otherHitBox) {
-	// Do nothing
     }
 
     /**

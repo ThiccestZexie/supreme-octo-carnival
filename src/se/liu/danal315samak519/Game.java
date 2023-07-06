@@ -5,7 +5,6 @@ import se.liu.danal315samak519.entities.Obstacle;
 import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.enemies.Caster;
-import se.liu.danal315samak519.entities.enemies.Enemy;
 import se.liu.danal315samak519.entities.enemies.Knight;
 import se.liu.danal315samak519.entities.enemies.Red;
 import se.liu.danal315samak519.entities.enemies.Sentry;
@@ -28,19 +27,17 @@ public class Game
     private static final int MARGIN = 150;
     private final RandomGenerator randomGenerator = new Random();
     private List<Movable> movables = new ArrayList<>();
-
-    /**
-     * Needs to be a linked list to allow for push/pop.
-     */
     private Deque<Movable> pendingMovables = new ArrayDeque<>();
     private Collection<FrameListener> frameListeners = new ArrayDeque<>();
     private Player player = null;
     private Room room;
 
-    private int enemyAmount = 0;
-    private boolean roomIsCleared;
     /**
-     * When the game is inactive, the game is paused.
+     * How many enemies were spawned in the room creation
+     */
+    private int enemyAmount = 0;
+    /**
+     * Whether the game is paused. If true, no ticks are made.
      */
     private boolean paused = false;
 
@@ -88,10 +85,9 @@ public class Game
 	if (isPaused()) {
 	    return; // Do nothing if paused
 	}
-
 	handlePlayerOutOfBounds();
 	birthPending();
-	setRoomIsCleared(false); // Assume room is cleared
+	checkIfRoomCompleted();
 
 	// Iterate through all movables, handle collisions and tick
 	List<Movable> allMovables = getMovablesInclPlayer();
@@ -103,20 +99,21 @@ public class Game
 	    for (Movable movable1 : allMovables) {
 		handleMovableCollision(movable0, movable1);
 	    }
+	    // Spawn all the movables' pending movables
 	    while (movable0.hasPending()) {
 		pushPending(movable0.popPending());
 	    }
-	    if (player.getKillsInRoom() == enemyAmount) { // NECESSARY INSTANCEOF CHECK!
-		setRoomIsCleared(true); // Found enemy! Not cleared.
-	    }  if (movable0 instanceof Obstacle) { // OPEN GATES IF NO MORE ENEMIES
-		Obstacle obstacle = (Obstacle) movable0;
-		// If room is cleared, open all gates
-		if (getRoomIsCleared() || !getIfPlayerInPlayArea()) {
-		    obstacle.open();
-		} else { // Else close all gates
-		    obstacle.close();
-		}
-	    }
+	}
+    }
+
+    /**
+     * Makes the room complete if the player is outside the room or all enemies are dead.
+     */
+    private void checkIfRoomCompleted() {
+	boolean roomComplete = !getIfPlayerInPlayArea() || player.getKillsInRoom() == enemyAmount;
+	System.out.println(roomComplete);
+	for (Obstacle obstacle : getRoom().getObstacles()) {
+	    obstacle.setRoomComplete(roomComplete);
 	}
     }
 
@@ -220,7 +217,7 @@ public class Game
 	final int maxEnemies = 2;
 
 	int randomEnemyCount = minEnemies + randomGenerator.nextInt(maxEnemies - minEnemies + 1);
-	enemyAmount = randomEnemyCount;
+	this.enemyAmount = randomEnemyCount;
 	for (int i = 0; i < randomEnemyCount; i++) {
 	    final int enemyTypes = 4;
 	    int randomEnemyType = randomGenerator.nextInt(enemyTypes);
@@ -287,6 +284,9 @@ public class Game
 	}
     }
 
+    /**
+     * Spawn movables that are waiting to be spawned.
+     */
     private void birthPending() {
 	while (!pendingMovables.isEmpty()) {
 	    addMovable(pendingMovables.pop());
@@ -299,14 +299,6 @@ public class Game
      */
     private void handleMovableCollision(final Movable movable0, final Movable movable1) {
 	movable0.interactWith(movable1);
-    }
-
-    private boolean getRoomIsCleared() {
-	return roomIsCleared;
-    }
-
-    private void setRoomIsCleared(final boolean b) {
-	roomIsCleared = b;
     }
 
     public Player getPlayer() {

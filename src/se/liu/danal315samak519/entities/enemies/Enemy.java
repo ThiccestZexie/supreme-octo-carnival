@@ -162,11 +162,16 @@ public abstract class Enemy extends Person
 	chasePlayer();
     }
 
+    /**
+     * Enemies should be pushed around by the player, and obstacles, but not potions or their own weapons.
+     * They also should only take damage from other persons weapons, not their own.
+     * @param movable
+     */
     @Override public void interactWith(final Movable movable) {
 	super.interactWith(movable);
 	boolean isPotion = movable instanceof Potion;
 	boolean isOwnWeapon = movable instanceof Weapon && ((Weapon) movable).getOwner().equalWith(this);
-	boolean isNotPerson = !(movable instanceof Person);
+	boolean isPerson = (movable instanceof Person);
 	boolean isSelf = movable.equalWith(this);
 	boolean areNotIntersecting = !this.intersects(movable);
 	if (isPotion || isOwnWeapon || isSelf || areNotIntersecting) {
@@ -175,6 +180,8 @@ public abstract class Enemy extends Person
 	if(!(movable instanceof Weapon)){
 	    nudgeAwayFrom(movable.getHitBox());
 	}
-	takeDamage(movable.getDamage());
+	if(!isPerson){
+	    takeDamage(movable.getDamage());
+	}
     }
 }

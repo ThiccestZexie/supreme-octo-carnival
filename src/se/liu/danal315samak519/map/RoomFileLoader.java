@@ -30,7 +30,9 @@ public class RoomFileLoader
 
     /**
      * Loads a map file and dispenses tile images as needed.
+     *
      * @param mapFileName The name of the map file to load.
+     *
      * @throws IOException If the map file could not be loaded.
      */
     public RoomFileLoader(final String mapFileName) throws IOException {
@@ -90,6 +92,7 @@ public class RoomFileLoader
 	    obstacles.add(new Obstacle(openX, openY, closedX, closedY, w, h));
 	}
     }
+
     private float getProperty(Element object, String propertyName) throws IllegalArgumentException {
 	Element properties = object.selectFirst("properties");
 	if (properties == null) {
@@ -170,7 +173,7 @@ public class RoomFileLoader
 	return index;
     }
 
-    public List<Obstacle> getObstacles(){
+    public List<Obstacle> getObstacles() {
 	return obstacles;
     }
 
