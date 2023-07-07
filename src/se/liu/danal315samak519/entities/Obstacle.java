@@ -58,6 +58,12 @@ public class Obstacle extends Movable
     @Override public void nudgeAwayFrom(final Rectangle2D otherHitBox) {
     }
 
+    @Override public void interactWith(final Movable movable) {
+	super.interactWith(movable);
+	Person person = (Person) movable;
+	person.nudgeAwayFrom(this.getHitBox());
+    }
+
     /**
      * Make obstacle glide towards end position
      */

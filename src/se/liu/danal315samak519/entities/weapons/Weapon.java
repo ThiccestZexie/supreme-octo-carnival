@@ -45,5 +45,15 @@ public abstract class Weapon extends Movable
     @Override public int getDamage() {
 	return owner.getDamage();
     }
+
+    @Override public void interactWith(final Movable movable) {
+	super.interactWith(movable);
+	Person person = (Person) movable;
+	if(!person.equals(this.getOwner())){
+	    person.takeDamage(1);
+	    this.markAsGarbage();
+	}
+
+    }
 }
 

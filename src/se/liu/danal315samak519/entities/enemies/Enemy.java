@@ -5,7 +5,6 @@ import se.liu.danal315samak519.entities.Movable;
 import se.liu.danal315samak519.entities.Person;
 import se.liu.danal315samak519.entities.Player;
 import se.liu.danal315samak519.entities.Potion;
-import se.liu.danal315samak519.entities.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -169,19 +168,8 @@ public abstract class Enemy extends Person
      */
     @Override public void interactWith(final Movable movable) {
 	super.interactWith(movable);
-	boolean isPotion = movable instanceof Potion;
-	boolean isOwnWeapon = movable instanceof Weapon && ((Weapon) movable).getOwner().equalWith(this);
-	boolean isPerson = (movable instanceof Person);
-	boolean isSelf = movable.equalWith(this);
-	boolean areNotIntersecting = !this.intersects(movable);
-	if (isPotion || isOwnWeapon || isSelf || areNotIntersecting) {
-	    return;
-	}
-	if(!(movable instanceof Weapon)){
-	    nudgeAwayFrom(movable.getHitBox());
-	}
-	if(!isPerson){
-	    takeDamage(movable.getDamage());
-	}
+	Person person = (Person) movable;
+	this.nudgeAwayFrom(person.getHitBox());
+	person.takeDamage(this.getDamage());
     }
 }

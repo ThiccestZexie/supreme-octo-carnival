@@ -296,8 +296,10 @@ public class Game
      * Handle collisions where two movables are involved. They should always be pushed away from eachother, and also interact with
      * eachother, which means different things for different combinations.
      */
-    private void handleMovableCollision(final Movable movable0, final Movable movable1) {
-	movable0.interactWith(movable1);
+    private void handleMovableCollision(final Movable movable, final Movable other) {
+	if(other instanceof  Person){
+	    movable.interactWith(other);
+	}
     }
 
     public Player getPlayer() {

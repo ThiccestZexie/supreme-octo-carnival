@@ -2,7 +2,6 @@ package se.liu.danal315samak519.entities;
 
 import se.liu.danal315samak519.Decrees;
 import se.liu.danal315samak519.ImageLoader;
-import se.liu.danal315samak519.entities.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -146,17 +145,6 @@ public class Player extends Person
 	}
     }
 
-    @Override public void interactWith(final Movable movable) {
-	super.interactWith(movable);
-	boolean isPotion = movable instanceof Potion;
-	boolean isOwnWeapon = movable instanceof Weapon && ((Weapon) movable).getOwner().equalWith(this);
-	boolean isSelf = movable.equalWith(this);
-	boolean areNotIntersecting = !this.intersects(movable);
-	if (isPotion || isOwnWeapon || isSelf || areNotIntersecting) {
-	    return;
-	}
-	takeDamage(movable.getDamage());
-    }
 
     public int getKillsInRoom() {
 	return killsInRoom;

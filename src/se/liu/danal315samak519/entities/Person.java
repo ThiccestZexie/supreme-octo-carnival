@@ -197,15 +197,6 @@ public abstract class Person extends Movable
      *
      * @param movable
      */
-    @Override public void interactWith(Movable movable) {
-	if (!this.intersects(movable)) {
-	    return;
-	}
-	if (movable instanceof Obstacle && !movable.equalWith(this)) {
-	    nudgeAwayFrom(movable.getHitBox());
-	}
-    }
-
     @Override public void tick() {
 	super.tick();
 	tickAttackCooldown();

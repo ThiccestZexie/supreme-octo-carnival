@@ -51,9 +51,10 @@ public class Potion extends Movable
      * @param movable
      */
     @Override public void interactWith(final Movable movable) {
-	if (movable instanceof Player) {
+	if(movable instanceof Player){
 	    this.tryToBePickedUpBy((Player) movable);
 	}
+
     }
 
     public void storeCurrentSprite() {
