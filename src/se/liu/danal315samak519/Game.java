@@ -297,8 +297,11 @@ public class Game
      * eachother, which means different things for different combinations.
      */
     private void handleMovableCollision(final Movable movable, final Movable other) {
-	if(other instanceof  Person){
-	    movable.interactWith(other);
+
+	if(!movable.getHitBox().intersects(other.getHitBox())){
+	}
+	else if(other instanceof  Person){
+		movable.interactWith(other);
 	}
     }
 

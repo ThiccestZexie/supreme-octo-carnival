@@ -168,10 +168,9 @@ public abstract class Enemy extends Person
      */
     @Override public void interactWith(final Movable movable) {
 	Person person = (Person) movable;
-	if (this.hitBox.intersects(person.getHitBox())){
-	    this.nudgeAwayFrom(person.getHitBox());
-	    person.takeDamage(this.getDamage());
-	}
+	this.nudgeAwayFrom(person.getHitBox());
+	person.takeDamage(this.getDamage());
+
 
     }
 }
