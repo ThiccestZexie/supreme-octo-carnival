@@ -58,8 +58,8 @@ public abstract class Enemy extends Person
 	setCurrentFrames();
     }
 
-    @Override public void markAsGarbage() {
-	super.markAsGarbage();
+    @Override public void setIsGarbage() {
+	super.setIsGarbage();
 	player.incrementKillsInRoom();
 	Movable dropped = getDropped();
 	if (dropped != null) {

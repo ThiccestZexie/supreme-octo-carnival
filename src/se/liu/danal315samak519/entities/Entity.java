@@ -119,7 +119,7 @@ public abstract class Entity
 	setLocation(xCoord,yCoord );
     }
 
-    public void markAsGarbage() {
+    public void setIsGarbage() {
 	this.isGarbage = true;
     }
 

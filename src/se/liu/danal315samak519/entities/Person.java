@@ -184,7 +184,7 @@ public abstract class Person extends Movable
 	becomeInvincible();
 	if (this.hp < 1) {
 	    this.hp = 0;
-	    markAsGarbage();
+	    setIsGarbage();
 	}
     }
 

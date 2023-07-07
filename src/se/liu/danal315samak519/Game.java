@@ -191,7 +191,7 @@ public class Game
      */
     private void garbageEverything() {
 	for (Movable movable : getMovables()) {
-	    movable.markAsGarbage();
+	    movable.setIsGarbage();
 	}
     }
 

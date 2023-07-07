@@ -51,7 +51,7 @@ public abstract class Weapon extends Movable
 	Person person = (Person) movable;
 	if(!person.equals(this.getOwner())){
 	    person.takeDamage(1);
-	    this.markAsGarbage();
+	    this.setIsGarbage();
 	}
 
     }

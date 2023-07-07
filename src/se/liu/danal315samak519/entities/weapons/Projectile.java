@@ -72,7 +72,7 @@ public class Projectile extends Weapon
      * @return
      */
     @Override public int getDamage() {
-	markAsGarbage();
+	setIsGarbage();
 	return PROJECTILE_DAMAGE;
     }
 }

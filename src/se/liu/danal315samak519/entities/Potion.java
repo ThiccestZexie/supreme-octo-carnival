@@ -41,7 +41,7 @@ public class Potion extends Movable
     public void tryToBePickedUpBy(Player player) {
 	if (this.getHitBox().intersects(player.getHitBox())) {
 	    player.heal(HEALAMOUNT);
-	    this.markAsGarbage();
+	    this.setIsGarbage();
 	}
     }
 
