@@ -15,7 +15,7 @@ public class Potion extends Movable
     /**
      * Heals the player by 2 everytime.
      */
-    private static final int HEALAMOUNT = 2;
+    private static final int HEAL_AMOUNT = 2;
     private BufferedImage currentSprite = null;
 
     public Potion(final Point2D.Float coord) {
@@ -40,7 +40,7 @@ public class Potion extends Movable
      */
     public void tryToBePickedUpBy(Player player) {
 	if (this.getHitBox().intersects(player.getHitBox())) {
-	    player.heal(HEALAMOUNT);
+	    player.heal(HEAL_AMOUNT);
 	    this.setIsGarbage();
 	}
     }

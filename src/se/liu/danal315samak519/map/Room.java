@@ -99,17 +99,17 @@ public class Room
      * @return a flattened list of the foreground map layer, null elements removed.
      */
     public List<Tile> getForegroundTileList() {
-	List<Tile> foregroundTileList = new ArrayList<>();
+	List<Tile> foregroundTiles = new ArrayList<>();
 	int foregroundLayer = 1;
 
 	for (int y = 0; y < getRows(); y++) {
 	    for (int x = 0; x < getColumns(); x++) {
 		Tile tile = getTile(x, y, foregroundLayer);
 		if (tile != null) {
-		    foregroundTileList.add(tile);
+		    foregroundTiles.add(tile);
 		}
 	    }
 	}
-	return foregroundTileList;
+	return foregroundTiles;
     }
 }

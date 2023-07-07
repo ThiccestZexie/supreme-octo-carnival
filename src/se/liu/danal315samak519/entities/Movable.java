@@ -102,7 +102,7 @@ public abstract class Movable extends Entity
     /**
      * Sets direction according to velocity.
      */
-    private void setAppropiateDir() {
+    private void setCorrectDirection() {
 	Direction newDirection = Direction.velocityToDirection(getVelX(), getVelY());
 	if (newDirection != null) {
 	    setDirection(newDirection);
@@ -143,7 +143,7 @@ public abstract class Movable extends Entity
     public void setVelX(final float vx) {
 	if (getCanMove()) {
 	    this.velX = vx;
-	    setAppropiateDir();
+	    setCorrectDirection();
 	}
     }
 
@@ -154,7 +154,7 @@ public abstract class Movable extends Entity
     public void setVelY(final float vy) {
 	if (getCanMove()) {
 	    this.velY = vy;
-	    setAppropiateDir();
+	    setCorrectDirection();
 	}
     }
 
@@ -173,8 +173,7 @@ public abstract class Movable extends Entity
      *
      * @param movable
      */
-    public void interactWith(final Movable movable) {
-    }
+    public abstract void interactWith(final Movable movable);
 
     public boolean intersects(final Movable movable) {
 	return this.getHitBox().intersects(movable.getHitBox());

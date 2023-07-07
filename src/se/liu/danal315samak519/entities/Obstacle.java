@@ -59,7 +59,6 @@ public class Obstacle extends Movable
     }
 
     @Override public void interactWith(final Movable movable) {
-	super.interactWith(movable);
 	Person person = (Person) movable;
 	person.nudgeAwayFrom(this.getHitBox());
     }

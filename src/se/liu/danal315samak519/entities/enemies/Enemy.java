@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Enemy extends Person
 {
-    private static final int SPRITE_OFF_SET = 32;
+    private static final int SPRITE_OFFSET = 32;
     protected Player player;
 
     protected Enemy(final Point2D.Float coord, final Player player)
@@ -48,10 +48,10 @@ public abstract class Enemy extends Person
 	rightFrames = new BufferedImage[totalFrames];
 
 	for (int i = 0; i < totalFrames; i++) {
-	    leftFrames[i] = imageLoader.getSubImage(offsetX + SPRITE_OFF_SET - 2, offsetY, spriteWidth, spriteHeight);
-	    upFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 2, offsetY, spriteWidth, spriteHeight);
+	    leftFrames[i] = imageLoader.getSubImage(offsetX + SPRITE_OFFSET - 2, offsetY, spriteWidth, spriteHeight);
+	    upFrames[i] = imageLoader.getSubImage(offsetX + (SPRITE_OFFSET - 2) * 2, offsetY, spriteWidth, spriteHeight);
 	    rightFrames[i] =
-		    imageLoader.getSubImage(offsetX + (SPRITE_OFF_SET - 2) * 3, offsetY + SPRITE_OFF_SET * i, spriteWidth, spriteHeight);
+		    imageLoader.getSubImage(offsetX + (SPRITE_OFFSET - 2) * 3, offsetY + SPRITE_OFFSET * i, spriteWidth, spriteHeight);
 
 	}
 
@@ -95,32 +95,32 @@ public abstract class Enemy extends Person
 
     public boolean isPlayerInFront(int forwardVision, int sideVision) {
 	if (canAttack()) {
-	    Rectangle raycastRectangle = new Rectangle();
+	    Rectangle rayCastRectangle = new Rectangle();
 	    final float half = 2.0f;
 	    switch (getDirection()) {
 		case UP:
-		    raycastRectangle.setSize(sideVision, forwardVision);
-		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / half) - raycastRectangle.getWidth() / half),
-						 (int) (this.getY() - raycastRectangle.getHeight()));
+		    rayCastRectangle.setSize(sideVision, forwardVision);
+		    rayCastRectangle.setLocation((int) (this.getX() + (this.getWidth() / half) - rayCastRectangle.getWidth() / half),
+						 (int) (this.getY() - rayCastRectangle.getHeight()));
 		    break;
 		case DOWN:
-		    raycastRectangle.setSize(sideVision, forwardVision);
-		    raycastRectangle.setLocation((int) (this.getX() + (this.getWidth() / half) - raycastRectangle.getWidth() / half),
+		    rayCastRectangle.setSize(sideVision, forwardVision);
+		    rayCastRectangle.setLocation((int) (this.getX() + (this.getWidth() / half) - rayCastRectangle.getWidth() / half),
 						 (int) (this.getY() + (this.getHeight())));
 		    break;
 		case LEFT:
-		    raycastRectangle.setSize(forwardVision, sideVision);
-		    raycastRectangle.setLocation((int) (this.getX() - raycastRectangle.getWidth()),
-						 (int) ((this.getY() + (this.getHeight() / half)) - (raycastRectangle.getHeight() / half)));
+		    rayCastRectangle.setSize(forwardVision, sideVision);
+		    rayCastRectangle.setLocation((int) (this.getX() - rayCastRectangle.getWidth()),
+						 (int) ((this.getY() + (this.getHeight() / half)) - (rayCastRectangle.getHeight() / half)));
 		    break;
 		case RIGHT:
-		    raycastRectangle.setSize(forwardVision, sideVision);
-		    raycastRectangle.setLocation((int) (this.getX() + this.getWidth()),
-						 (int) ((this.getY() + (this.getHeight() / half)) - (raycastRectangle.getHeight() / half)));
+		    rayCastRectangle.setSize(forwardVision, sideVision);
+		    rayCastRectangle.setLocation((int) (this.getX() + this.getWidth()),
+						 (int) ((this.getY() + (this.getHeight() / half)) - (rayCastRectangle.getHeight() / half)));
 		    break;
 	    }
 
-	    if (raycastRectangle.intersects(player.getHitBox())) {
+	    if (rayCastRectangle.intersects(player.getHitBox())) {
 		return true;
 	    }
 	}
@@ -167,7 +167,6 @@ public abstract class Enemy extends Person
      * @param movable
      */
     @Override public void interactWith(final Movable movable) {
-	super.interactWith(movable);
 	Person person = (Person) movable;
 	this.nudgeAwayFrom(person.getHitBox());
 	person.takeDamage(this.getDamage());

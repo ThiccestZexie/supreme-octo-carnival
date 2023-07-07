@@ -21,12 +21,12 @@ public class RoomFileLoader
 {
     private static final String DATA_FOLDER = "resources/data/";
     private final int numLayers;
-    private int[] tileSetGIDs;
+    private int[] tileGIDs;
     private Tile[][][] tiles;
     private List<Obstacle> obstacles;
     private int rows, columns;
     private int tileWidth, tileHeight;
-    private ImageLoader[] tileSetLoaders;
+    private ImageLoader[] tileLoaders;
 
     /**
      * Loads a map file and dispenses tile images as needed.
@@ -50,17 +50,17 @@ public class RoomFileLoader
 	this.numLayers = Integer.parseInt(mapElement.attr("nextlayerid")) - 1;
 
 	// Handle multiple tilesets
-	Elements tileSetElements = doc.select("tileset");
-	int numTileSets = tileSetElements.size();
-	tileSetGIDs = new int[numTileSets];
-	tileSetLoaders = new ImageLoader[numTileSets];
-	for (int i = 0; i < numTileSets; i++) {
-	    Element element = tileSetElements.get(i);
-	    tileSetGIDs[i] = Integer.parseInt(element.attr("firstgid"));
+	Elements tileElements = doc.select("tileset");
+	int numTile = tileElements.size();
+	tileGIDs = new int[numTile];
+	tileLoaders = new ImageLoader[numTile];
+	for (int i = 0; i < numTile; i++) {
+	    Element element = tileElements.get(i);
+	    tileGIDs[i] = Integer.parseInt(element.attr("firstgid"));
 	    // Parse image
 	    String tilesetName = element.attr("source");
-	    String imageName = findTilesetsImage(tilesetName);
-	    tileSetLoaders[i] = new ImageLoader(imageName);
+	    String imageName = findTileImage(tilesetName);
+	    tileLoaders[i] = new ImageLoader(imageName);
 	}
 
 	// Read tile layers (the map)
@@ -126,7 +126,7 @@ public class RoomFileLoader
      *
      * @return the name of the image used
      */
-    private String findTilesetsImage(String tilesetName) throws IOException {
+    private String findTileImage(String tilesetName) throws IOException {
 	String filePath = DATA_FOLDER + tilesetName;
 	File file = new File(filePath);
 	Document doc = Jsoup.parse(file, "UTF-8");
@@ -151,8 +151,8 @@ public class RoomFileLoader
 	    return null;
 	}
 	int index = getTileSetOfValue(value);
-	int firstGID = tileSetGIDs[index];
-	ImageLoader imageLoader = tileSetLoaders[index];
+	int firstGID = tileGIDs[index];
+	ImageLoader imageLoader = tileLoaders[index];
 	int tilesetColumns = imageLoader.getWidth() / getTileWidth();
 	int tilesetRows = imageLoader.getHeight() / getTileHeight();
 	int col = (value - firstGID) % tilesetColumns;
@@ -164,8 +164,8 @@ public class RoomFileLoader
 
     private int getTileSetOfValue(int value) {
 	int index = -1;
-	for (int i = 0; i < tileSetGIDs.length; i++) {
-	    if (tileSetGIDs[i] > value) {
+	for (int i = 0; i < tileGIDs.length; i++) {
+	    if (tileGIDs[i] > value) {
 		break;
 	    }
 	    index = i;

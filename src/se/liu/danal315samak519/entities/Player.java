@@ -73,10 +73,10 @@ public class Player extends Person
 	// HARDCODED FOR EXACTLY 20 FRAMES
 	final int amountOfFrames = 20;
 	final int loopsForTen = amountOfFrames / 10;
-	final int loopsforones = amountOfFrames / 2;
+	final int loopsForOnes = amountOfFrames / 2;
 	levelUpFrames = new BufferedImage[amountOfFrames];
 	for (int tens = 0; tens < loopsForTen; tens++) {
-	    for (int ones = 0; ones < loopsforones; ones++) {
+	    for (int ones = 0; ones < loopsForOnes; ones++) {
 		ImageLoader levelUpFrameLoader = new ImageLoader("/levelUP/level_up" + tens + ones + ".png");
 		levelUpFrames[10 * tens + ones] = levelUpFrameLoader.getImage();
 	    }
@@ -156,5 +156,8 @@ public class Player extends Person
 
     public void setKillsInRoom(final int killsInRoom) {
 	this.killsInRoom = killsInRoom;
+    }
+
+    @Override public void interactWith(final Movable movable) {
     }
 }

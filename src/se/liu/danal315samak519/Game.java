@@ -90,7 +90,7 @@ public class Game
 	checkIfRoomCompleted();
 
 	// Iterate through all movables, handle collisions and tick
-	List<Movable> allMovables = getMovablesInclPlayer();
+	List<Movable> allMovables = getMovablesIncludingPlayer();
 	for (Movable movable0 : allMovables) {
 	    movable0.tick();
 	    handleDeath(movable0);
@@ -166,10 +166,10 @@ public class Game
     /**
      * @return a list of "all" movables, which includes the player. Makes iterating easier.
      */
-    private List<Movable> getMovablesInclPlayer() {
-	List<Movable> list = new ArrayList<>(getMovables());
-	list.add(getPlayer());
-	return list;
+    private List<Movable> getMovablesIncludingPlayer() {
+	List<Movable> tmpMovable = new ArrayList<>(getMovables());
+	tmpMovable.add(getPlayer());
+	return tmpMovable;
     }
 
     /**
@@ -373,7 +373,7 @@ public class Game
      */
     public List<Person> getPersons() {
 	List<Person> persons = new ArrayList<>();
-	for (Movable movable : getMovablesInclPlayer()) {
+	for (Movable movable : getMovablesIncludingPlayer()) {
 	    if (movable instanceof Person) {
 		persons.add((Person) movable);
 	    }
