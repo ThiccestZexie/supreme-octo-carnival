@@ -178,6 +178,7 @@ public class Game
      * @param room
      */
     private void changeRoom(Room room) {
+
 	garbageEverything();
 	setRoom(room);
 	getPlayer().setKillsInRoom(0);
@@ -298,7 +299,8 @@ public class Game
      */
     private void handleMovableCollision(final Movable movable, final Movable other) {
 
-	if(!movable.getHitBox().intersects(other.getHitBox())){
+	if(!movable.getHitBox().intersects(other.getHitBox()) || movable.equals(other)){
+	    return;
 	}
 	else if(other instanceof  Person){
 		movable.interactWith(other);
