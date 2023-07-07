@@ -28,7 +28,7 @@ public class Sentry extends Enemy
 	super.tick();
 	setDirection(getDirectionTowardsPlayer());
 	final int forwardVision = 500, sideVision = 100;
-	if (checkIfPlayerIsInFront(forwardVision, sideVision) && canAttack()) {
+	if (isPlayerInFront(forwardVision, sideVision) && canAttack()) {
 	    this.becomeAttacking();
 	    shoot();
 	}

@@ -93,7 +93,7 @@ public abstract class Enemy extends Person
 	return player.getCoord().distance(this.getCoord());
     }
 
-    public boolean checkIfPlayerIsInFront(int forwardVision, int sideVision) {
+    public boolean isPlayerInFront(int forwardVision, int sideVision) {
 	if (canAttack()) {
 	    Rectangle raycastRectangle = new Rectangle();
 	    final float half = 2.0f;
