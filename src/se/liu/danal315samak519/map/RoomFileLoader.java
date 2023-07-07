@@ -153,10 +153,10 @@ public class RoomFileLoader
 	int index = getTileSetOfValue(value);
 	int firstGID = tileGIDs[index];
 	ImageLoader imageLoader = tileLoaders[index];
-	int tilesetColumns = imageLoader.getWidth() / getTileWidth();
-	int tilesetRows = imageLoader.getHeight() / getTileHeight();
-	int col = (value - firstGID) % tilesetColumns;
-	int row = (value - firstGID) / tilesetRows;
+	int tileSetColumns = imageLoader.getWidth() / getTileWidth();
+	int tileSetRows = imageLoader.getHeight() / getTileHeight();
+	int col = (value - firstGID) % tileSetColumns;
+	int row = (value - firstGID) / tileSetRows;
 	int x = col * getTileWidth();
 	int y = row * getTileHeight();
 	return imageLoader.getSubImage(x, y, getTileWidth(), getTileHeight());

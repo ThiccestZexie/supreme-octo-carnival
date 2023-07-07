@@ -159,8 +159,8 @@ public class GameComponent extends JComponent implements FrameListener
 
 	//Sets decree types
 	if (randomizeOnce) {
-	    decree00 = new Decrees(Decrees.getRandomDecree());
-	    decree01 = new Decrees(Decrees.getRandomDecree());
+	    decree00 = new Decrees(decree00.getRandomDecree());
+	    decree01 = new Decrees(decree01.getRandomDecree());
 	    randomizeOnce = false;
 	}
 

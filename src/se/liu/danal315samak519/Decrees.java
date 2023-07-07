@@ -1,7 +1,6 @@
 package se.liu.danal315samak519;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -11,7 +10,7 @@ import java.util.random.RandomGenerator;
  */
 public class Decrees
 {
-    private static final RandomGenerator RANDOM_GENERATOR = new Random();
+    private final RandomGenerator randomGenerator = new Random();
     private DecreeEnums type;
     private float increase;
     private String effect = null;
@@ -34,9 +33,9 @@ public class Decrees
 
 
     }
-    public static DecreeEnums getRandomDecree() {
+    public DecreeEnums getRandomDecree() {
 	DecreeEnums[] decrees = DecreeEnums.values();
-	return decrees[RANDOM_GENERATOR.nextInt(decrees.length)];
+	return decrees[this.randomGenerator.nextInt(decrees.length)];
     }
 
     public float getIncrease() {
