@@ -42,6 +42,7 @@ public class RoomFileLoader
 	Document doc = Jsoup.parse(file, "UTF-8");
 
 	// Set fields from attributes in file
+
 	Element mapElement = doc.selectFirst("map");
 	this.columns = Integer.parseInt(mapElement.attr("width"));
 	this.rows = Integer.parseInt(mapElement.attr("height"));

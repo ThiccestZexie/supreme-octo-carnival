@@ -13,7 +13,7 @@ public class Decrees
     private final RandomGenerator randomGenerator = new Random();
     private DecreeEnums type;
     private float increase;
-    private String effect = null;
+    private String effect;
 
     private Map<DecreeEnums, Float> decreeEffects = new HashMap<>();
 
@@ -25,13 +25,10 @@ public class Decrees
     }
     private void setDecreeEffects(){
 	final float valueOfDecree = 2.0f;
-	decreeEffects.put(DecreeEnums.FULL_HEAL, 1.0f);
-	decreeEffects.put(DecreeEnums.MOVEMENT_INCREASE, valueOfDecree);
-	decreeEffects.put(DecreeEnums.ARROW_SIZE_INCREASE, valueOfDecree);
-	decreeEffects.put(DecreeEnums.FASTER_ARROWS, valueOfDecree);
-	decreeEffects.put(DecreeEnums.HEALTH_INCREASE, valueOfDecree);
-
-
+	DecreeEnums[] decreeEnums = DecreeEnums.values();
+	for (DecreeEnums decreeEffect :decreeEnums) {
+		decreeEffects.put(decreeEffect, valueOfDecree);
+	}
     }
     public DecreeEnums getRandomDecree() {
 	DecreeEnums[] decrees = DecreeEnums.values();

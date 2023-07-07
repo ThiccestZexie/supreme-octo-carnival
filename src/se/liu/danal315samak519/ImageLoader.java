@@ -3,6 +3,7 @@ package se.liu.danal315samak519;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -38,8 +39,9 @@ public class ImageLoader
 	String imagePath = "resources/images/" + imageName;
 	try {
 	    image = ImageIO.read(new File(imagePath));
-	} catch (IOException ignored) {
+	} catch (IOException e) {
 	    System.err.println("Failed to locate image with path: " + imagePath);
+	    e.printStackTrace();
 	}
 	return image;
     }

@@ -18,7 +18,7 @@ public class Sword extends Weapon
     @SuppressWarnings("MagicNumber") public Sword(final Person owner) {
 	super(owner);
 	float ownerSideCenter = owner.getWidth() / 2.0f;
-	float swordCenter = 0.0f;
+	float swordCenter;
 
 	switch (owner.getDirection()) {
 	    case UP:

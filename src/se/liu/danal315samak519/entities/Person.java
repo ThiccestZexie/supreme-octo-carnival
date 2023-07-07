@@ -19,13 +19,7 @@ public abstract class Person extends Movable
     protected static final int[] EXP_REQUIREMENTS = new int[] { 2, 3, 5, 8, 12, 20, 23, 30, 999 }; //Can move to Player level.
     protected static final int ATTACK_COOLDOWN = 20;
     private static final int INVINCIBILITY_TICKS = 20;
-    private static final int HEALTH_INCREASE_PER_LEVEL = 1;
-
     private static final int ATTACK_FRAME = 2;
-    private static final int PLAYER_WIDTH = 50;
-    private static final int PLAYER_HEIGHT = 50;
-    private static final int PROJECTILE_WIDTH = 15;
-    private static final int PROJECTILE_HEIGHT = 15;
     protected int walkCycleIndex = 0;
     protected int exp = 0;
     protected int level = 1;
@@ -47,14 +41,17 @@ public abstract class Person extends Movable
 
 
     protected Person(final Point2D.Float coord) {
-
+	final int projectileWidth = 15;
+	final int projectileHeight = 15;
+	final int playerWidth = 50;
+	final int playerHeight = 50;
 	setLocation(coord);
-	setSize(PLAYER_WIDTH, PLAYER_HEIGHT);
+	setSize(playerWidth, playerHeight);
 	setMaxSpeed(5);
 	setHitBox();
 	setProjectileVelocity(4);
-	setProjectileWidth(PROJECTILE_WIDTH);
-	setProjectileHeight(PROJECTILE_HEIGHT);
+	setProjectileWidth(projectileWidth);
+	setProjectileHeight(projectileHeight);
     }
 
     @Override public void setDirection(final Direction direction) {
@@ -151,7 +148,8 @@ public abstract class Person extends Movable
 
 	    exp -= currExpRequirement;
 	    level++;
-	    this.maxHP += HEALTH_INCREASE_PER_LEVEL;
+	    final int healthIncrease = 1;
+	    this.maxHP += healthIncrease;
 	    setHp(maxHP);
 	}
     }
