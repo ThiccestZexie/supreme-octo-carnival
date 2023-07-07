@@ -1,5 +1,6 @@
 package se.liu.danal315samak519.entities;
 
+import se.liu.danal315samak519.DecreeEnums;
 import se.liu.danal315samak519.Decrees;
 import se.liu.danal315samak519.ImageLoader;
 
@@ -40,18 +41,18 @@ public class Player extends Person
 
     public void applyDecrees() {
 	for (Decrees decree : decrees) {
-	    if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(0))) {
+	    if (Objects.equals(decree.getType(),(DecreeEnums.MOVEMENT_INCREASE))) {
 		setMaxSpeed(this.getMaxSpeed() * decree.getIncrease());
-	    } else if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(1))) {
+	    } else if (Objects.equals(decree.getType(), (DecreeEnums.HEALTH_INCREASE))) {
 		setMaxHP((int) (getMaxHp() + decree.getIncrease()));
 		setHp((int) (getHp() + decree.getIncrease()));
-	    } else if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(2))) {
+	    } else if (Objects.equals(decree.getType(), DecreeEnums.ARROW_SIZE_INCREASE)) {
 		setProjectileWidth((int) (getProjectileWidth() * decree.getIncrease()));
 
-	    } else if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(3))) {
+	    } else if (Objects.equals(decree.getType(), (DecreeEnums.FASTER_ARROWS))) {
 		this.setProjectileVelocity((int) (getProjectileVelocity() * decree.getIncrease()));
 
-	    } else if (Objects.equals(decree.getType(), decree.getDecreeEffects().get(4))) {
+	    } else if (Objects.equals(decree.getType(), (DecreeEnums.FULL_HEAL))) {
 		this.setHp(getMaxHp());
 	    }
 	    decrees.remove(decree);

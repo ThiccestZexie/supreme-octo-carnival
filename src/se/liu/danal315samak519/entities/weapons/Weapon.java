@@ -48,7 +48,7 @@ public abstract class Weapon extends Movable
 
     @Override public void interactWith(final Movable movable) {
 	Person person = (Person) movable;
-	if(!person.equals(this.getOwner())){
+	if(!person.equals(this.getOwner()) && this.hitBox.intersects(person.getHitBox())){
 	    person.takeDamage(1);
 	    this.setIsGarbage();
 	}

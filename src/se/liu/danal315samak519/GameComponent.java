@@ -30,7 +30,7 @@ public class GameComponent extends JComponent implements FrameListener
     private boolean randomizeOnce = true;
     private long lastFrameTime;
 
-    private Decrees decree00 = new Decrees("Movement Increase"), decree01 = new Decrees("Movement Increase");
+    private Decrees decree00 = new Decrees(DecreeEnums.HEALTH_INCREASE), decree01 = new Decrees(DecreeEnums.FULL_HEAL);
 
     public GameComponent()
     {
@@ -159,8 +159,8 @@ public class GameComponent extends JComponent implements FrameListener
 
 	//Sets decree types
 	if (randomizeOnce) {
-	    decree00 = new Decrees(decree00.getRandomDecree());
-	    decree01 = new Decrees(decree01.getRandomDecree());
+	    decree00 = new Decrees(Decrees.getRandomDecree());
+	    decree01 = new Decrees(Decrees.getRandomDecree());
 	    randomizeOnce = false;
 	}
 

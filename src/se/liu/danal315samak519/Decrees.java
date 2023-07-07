@@ -1,7 +1,8 @@
 package se.liu.danal315samak519;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
@@ -10,53 +11,39 @@ import java.util.random.RandomGenerator;
  */
 public class Decrees
 {
-    private static final int DECREE_AMOUNT = 5;
-    private final RandomGenerator randomGenerator = new Random();
-    private String type;
+    private static final RandomGenerator RANDOM_GENERATOR = new Random();
+    private DecreeEnums type;
     private float increase;
-    private String effect;
-    private List<String> decreeEffects =
-	    Arrays.asList("Movement Increase", "Health Increase", "Arrow Size Increase", "Faster Arrows", "Full Restore");
+    private String effect = null;
 
-    public Decrees(final String type) {
+    private Map<DecreeEnums, Float> decreeEffects = new HashMap<>();
+
+    public Decrees(final DecreeEnums type) {
 	this.type = type;
-	switch (type) {
-	    case "Movement Increase": // 50% faster
-		this.effect = "Increases Movespeed";
-		final float speedIncrease = 1.5f;
-		this.increase = speedIncrease;
-		break;
-	    case "Health Increase": // one extra heart
-		this.effect = "Increases Health Points";
-		final float healthIncrease = 2.0f;
-		this.increase = healthIncrease;
-		break;
-	    case "Arrow Size Increase":// Larger Arrows
-		this.effect = "Increases arrow width";
-		final float arrowWidthIncrease = 2.0f;
-		this.increase = arrowWidthIncrease;
-		break;
-	    case "Faster Arows": // Faster arrows
-		this.effect = "Faster arrow velocity";
-		final float arrowVelocityIncrease = 2.0f;
-		this.increase = arrowVelocityIncrease;
-		break;
-	    default:
-		this.effect = "Full Heal!";
-		break;
-	}
+	this.setDecreeEffects();
+	this.effect = String.valueOf((type));
+	this.increase =decreeEffects.get(type);
     }
+    private void setDecreeEffects(){
+	final float valueOfDecree = 2.0f;
+	decreeEffects.put(DecreeEnums.FULL_HEAL, 1.0f);
+	decreeEffects.put(DecreeEnums.MOVEMENT_INCREASE, valueOfDecree);
+	decreeEffects.put(DecreeEnums.ARROW_SIZE_INCREASE, valueOfDecree);
+	decreeEffects.put(DecreeEnums.FASTER_ARROWS, valueOfDecree);
+	decreeEffects.put(DecreeEnums.HEALTH_INCREASE, valueOfDecree);
 
 
-    public String getRandomDecree() {
-	return this.decreeEffects.get(randomGenerator.nextInt(DECREE_AMOUNT));
+    }
+    public static DecreeEnums getRandomDecree() {
+	DecreeEnums[] decrees = DecreeEnums.values();
+	return decrees[RANDOM_GENERATOR.nextInt(decrees.length)];
     }
 
     public float getIncrease() {
 	return increase;
     }
 
-    public String getType() {
+    public DecreeEnums getType() {
 	return type;
     }
 
@@ -64,7 +51,7 @@ public class Decrees
 	return this.effect;
     }
 
-    public List<String> getDecreeEffects() {
+    public Map<DecreeEnums, Float> getDecreeEffects() {
 	return decreeEffects;
     }
 }

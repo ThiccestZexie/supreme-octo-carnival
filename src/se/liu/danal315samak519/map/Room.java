@@ -98,7 +98,7 @@ public class Room
     /**
      * @return a flattened list of the foreground map layer, null elements removed.
      */
-    public List<Tile> getForegroundTileList() {
+    public List<Tile> getForegroundTiles() {
 	List<Tile> foregroundTiles = new ArrayList<>();
 	int foregroundLayer = 1;
 

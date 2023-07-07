@@ -167,9 +167,9 @@ public class Game
      * @return a list of "all" movables, which includes the player. Makes iterating easier.
      */
     private List<Movable> getMovablesIncludingPlayer() {
-	List<Movable> tmpMovable = new ArrayList<>(getMovables());
-	tmpMovable.add(getPlayer());
-	return tmpMovable;
+	List<Movable> movablesWithPlayer = new ArrayList<>(getMovables());
+	movablesWithPlayer.add(getPlayer());
+	return movablesWithPlayer;
     }
 
     /**
@@ -249,7 +249,7 @@ public class Game
 	if (getRoom().getLayers() < minLayerAmount) {
 	    throw new IndexOutOfBoundsException("There is no foreground layer in loaded room! Can't check wall collisions.");
 	}
-	for (Tile tile : room.getForegroundTileList()) {
+	for (Tile tile : room.getForegroundTiles()) {
 	    movable.nudgeAwayFrom(tile.getHitBox());
 	}
     }
